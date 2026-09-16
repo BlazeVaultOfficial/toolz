@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="MemeForge - Create memes online"
+    >
+
+    <title>MemeForge | Gen-Z Meme Maker</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+<head>
+
+    ...
+
+    <script src="https://pl31116097.profitableratecpmnetwork.com/e4/e4/35/e4e4352c4cc4fa5f977df011f0098840.js"></script>
+
+</head>
+
+
+</head>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <a
+        href="#"
+        class="logo"
+    >
+
+        <div class="logo-badge">
+            😂
+        </div>
+
+        MEME<span>FORGE</span>
+
+    </a>
+
+
+    <div class="header-actions">
+
+        <button
+            class="header-button secondary"
+            onclick="document.getElementById('trending').scrollIntoView({behavior:'smooth'})"
+        >
+            TRENDING
+        </button>
+
+
+        <button
+            class="header-button primary"
+            id="headerDownload"
+        >
+            DOWNLOAD ↓
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            FREE • NO ACCOUNT • NO BACKEND
+        </div>
+
+
+        <h1>
+            MAKE
+            <span class="accent">
+                MEMES
+            </span>
+            <br>
+            GO CRAZY.
+        </h1>
+
+
+        <p>
+            Create hilarious memes directly in your browser.
+            Upload your own image, pick a meme image from
+            MemeForge, or browse Google Images.
+        </p>
+
+
+        <div class="hero-actions">
+
+            <button
+                class="hero-button"
+                id="startMaker"
+            >
+                START MAKING →
+            </button>
+
+
+            <button
+                class="hero-button secondary"
+                id="randomTemplate"
+            >
+                🎲 RANDOM MEME
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ADVERTISEMENT -->
+
+<div class="ad-slot">
+    
+    <script>
+        atOptions = {
+            'key' : '42242f402fd4904089c2ef7a4b54f721',
+            'format' : 'iframe',
+            'height' : 60,
+            'width' : 468,
+            'params' : {}
+        };
+    </script>
+
+    <script src="https://www.highrevenueformat.com/42242f402fd4904089c2ef7a4b54f721/invoke.js"></script>
+
+</div>
+
+
+
+<!-- =====================================================
+     TRENDING
+===================================================== -->
+
+<section
+    class="trending-section"
+    id="trending"
+>
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>
+                01
+            </span>
+
+            <h2>
+                Trending Formats
+            </h2>
+
+        </div>
+
+
+        <div
+            class="trending-grid"
+            id="trendingGrid"
+        >
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     MAKER
+===================================================== -->
+
+<section
+    class="maker-section"
+    id="maker"
+>
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <span>
+                02
+            </span>
+
+            <h2>
+                Meme Maker
+            </h2>
+
+        </div>
+
+
+        <div class="maker-layout">
+
+
+            <!-- =================================================
+                 LEFT CONTROL PANEL
+            ================================================== -->
+
+            <aside class="panel">
+
+                <div class="panel-title">
+
+                    <strong>
+                        CONTROLS
+                    </strong>
+
+                    <span>
+                        CUSTOMIZE
+                    </span>
+
+                </div>
+
+
+                <!-- IMAGE -->
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Image
+                    </label>
+
+
+                    <button
+                        type="button"
+                        class="upload-box"
+                        id="openImagePicker"
+                    >
+
+                        <div class="upload-icon">
+                            🖼️
+                        </div>
+
+                        <strong>
+                            Choose Image
+                        </strong>
+
+                        <small>
+                            Device • MemeForge • Google
+                        </small>
+
+                    </button>
+
+
+                    <span id="imageStatus">
+                        No image
+                    </span>
+
+
+                    <!-- Hidden native upload -->
+
+                    <input
+                        type="file"
+                        id="imageUpload"
+                        accept="image/*"
+                        hidden
+                    >
+
+                </div>
+
+
+
+                <!-- CANVAS SIZE -->
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Canvas Size
+                    </label>
+
+
+                    <div class="input-row">
+
+                        <input
+                            type="number"
+                            id="canvasWidth"
+                            value="1080"
+                            min="200"
+                            max="3000"
+                            placeholder="Width"
+                        >
+
+
+                        <input
+                            type="number"
+                            id="canvasHeight"
+                            value="1080"
+                            min="200"
+                            max="3000"
+                            placeholder="Height"
+                        >
+
+                    </div>
+
+
+                    <br>
+
+
+                    <button
+                        class="action-button"
+                        id="applyCanvas"
+                    >
+                        APPLY SIZE
+                    </button>
+
+                </div>
+
+
+
+                <!-- TEXT -->
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Text Layers
+                    </label>
+
+
+                    <button
+                        class="action-button primary"
+                        id="addText"
+                    >
+                        + ADD TEXT
+                    </button>
+
+
+                    <div id="textControls">
+                    </div>
+
+                </div>
+
+
+
+                <!-- FONT -->
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Font
+                    </label>
+
+
+                    <select id="fontFamily">
+
+                        <option value="Arial">
+                            Arial
+                        </option>
+
+                        <option value="Impact">
+                            Impact
+                        </option>
+
+                        <option value="Verdana">
+                            Verdana
+                        </option>
+
+                        <option value="Georgia">
+                            Georgia
+                        </option>
+
+                        <option value="Trebuchet MS">
+                            Trebuchet MS
+                        </option>
+
+                        <option value="Courier New">
+                            Courier New
+                        </option>
+
+                        <option value="Comic Sans MS">
+                            Comic Sans MS
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- FONT SIZE -->
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Text Size
+                    </label>
+
+
+                    <input
+                        type="range"
+                        id="fontSize"
+                        min="15"
+                        max="180"
+                        value="60"
+                    >
+
+                </div>
+
+
+
+                <!-- COLORS -->
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Colors
+                    </label>
+
+
+                    <div class="input-row">
+
+                        <div>
+
+                            <small
+                                style="
+                                display:block;
+                                color:#555;
+                                font-size:8px;
+                                margin-bottom:5px;
+                                "
+                            >
+                                TEXT
+                            </small>
+
+                            <input
+                                type="color"
+                                id="fontColor"
+                                value="#ffffff"
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <small
+                                style="
+                                display:block;
+                                color:#555;
+                                font-size:8px;
+                                margin-bottom:5px;
+                                "
+                            >
+                                OUTLINE
+                            </small>
+
+                            <input
+                                type="color"
+                                id="outlineColor"
+                                value="#000000"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- OUTLINE -->
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Outline
+                    </label>
+
+
+                    <input
+                        type="range"
+                        id="outlineSize"
+                        min="0"
+                        max="25"
+                        value="6"
+                    >
+
+                </div>
+
+
+
+                <!-- SHADOW -->
+
+                <div class="control-section">
+
+                    <label class="checkbox-row">
+
+                        <input
+                            type="checkbox"
+                            id="textShadow"
+                            checked
+                        >
+
+                        Text Shadow
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- BACKGROUND -->
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Background
+                    </label>
+
+
+                    <input
+                        type="color"
+                        id="backgroundColor"
+                        value="#111111"
+                    >
+
+                </div>
+
+
+
+                <!-- WATERMARK -->
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Watermark
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="watermark"
+                        placeholder="@yourname"
+                    >
+
+
+                    <br><br>
+
+
+                    <label class="checkbox-row">
+
+                        <input
+                            type="checkbox"
+                            id="watermarkEnabled"
+                            checked
+                        >
+
+                        Show watermark
+
+                    </label>
+
+                </div>
+
+            </aside>
+
+
+
+            <!-- =================================================
+                 CANVAS
+            ================================================== -->
+
+            <main class="canvas-area">
+
+                <div class="canvas-header">
+
+                    <strong>
+                        LIVE CANVAS
+                    </strong>
+
+                    <span>
+                        DRAG TEXT • EDIT • CREATE
+                    </span>
+
+                </div>
+
+
+                <div class="canvas-wrapper">
+
+                    <canvas
+                        id="memeCanvas"
+                        width="1080"
+                        height="1080"
+                    >
+                    </canvas>
+
+                </div>
+
+
+                <div class="canvas-footer">
+
+                    <span>
+                        🖱️ Drag text to move
+                    </span>
+
+                    <strong>
+                        PNG EXPORT
+                    </strong>
+
+                </div>
+
+            </main>
+
+
+
+<div class="vertical-ad">
+    <script>
+        atOptions = {
+            'key' : '2568d8fc73b08ae1376493b125b04455',
+            'format' : 'iframe',
+            'height' : 600,
+            'width' : 160,
+            'params' : {}
+        };
+    </script>
+
+    <script src="https://www.highrevenueformat.com/2568d8fc73b08ae1376493b125b04455/invoke.js"></script>
+</div>
+
+
+
+            <!-- =================================================
+                 RIGHT PANEL
+            ================================================== -->
+
+            <aside class="panel right-panel">
+
+                <div class="panel-title">
+
+                    <strong>
+                        ACTIONS
+                    </strong>
+
+                    <span>
+                        TOOLS
+                    </span>
+
+                </div>
+
+
+                <div class="tool-grid">
+
+                    <button
+                        class="action-button primary"
+                        id="downloadMeme"
+                    >
+                        DOWNLOAD
+                    </button>
+
+
+                    <button
+                        class="action-button"
+                        id="randomTemplate"
+                    >
+                        RANDOM
+                    </button>
+
+
+                    <button
+                        class="action-button danger"
+                        id="clearCanvas"
+                    >
+                        CLEAR
+                    </button>
+
+
+                    <button
+                        class="action-button"
+                        id="resetAll"
+                    >
+                        RESET
+                    </button>
+
+                </div>
+
+
+                <br>
+
+
+                <div class="control-section">
+
+                    <label class="control-label">
+                        Quick Tips
+                    </label>
+
+
+                    <p
+                        style="
+                        color:#555;
+                        font-size:9px;
+                        line-height:1.8;
+                        "
+                    >
+                        Add multiple text layers,
+                        drag them around the image,
+                        change fonts and colors,
+                        then export your meme as PNG.
+                    </p>
+
+                </div>
+
+            </aside>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     IMAGE PICKER MODAL
+===================================================== -->
+
+<div
+    class="image-picker-overlay"
+    id="imagePickerModal"
+    aria-hidden="true"
+>
+
+
+    <div class="image-picker">
+
+
+        <!-- CLOSE -->
+
+        <button
+            type="button"
+            class="close-picker"
+            id="closeImagePicker"
+        >
+            ×
+        </button>
+
+
+
+        <!-- TITLE -->
+
+        <div class="picker-title">
+
+            <div class="picker-badge">
+                IMAGE SOURCE
+            </div>
+
+
+            <h2>
+                Pick Your Meme Fuel.
+            </h2>
+
+
+            <p>
+                Choose an image from your device,
+                MemeForge's built-in meme folder,
+                or open Google Images to find one.
+            </p>
+
+        </div>
+
+
+
+        <!-- SOURCE BUTTONS -->
+
+        <div class="image-source-buttons">
+
+
+            <!-- DEVICE -->
+
+            <button
+                type="button"
+                class="source-button"
+                id="deviceImageButton"
+            >
+
+                <span>
+                    📱
+                </span>
+
+                <strong>
+                    My Device
+                </strong>
+
+                <small>
+                    Upload an image
+                </small>
+
+            </button>
+
+
+
+            <!-- SITE -->
+
+            <button
+                type="button"
+                class="source-button"
+                id="siteImageButton"
+            >
+
+                <span>
+                    🗂️
+                </span>
+
+                <strong>
+                    MemeForge
+                </strong>
+
+                <small>
+                    Choose from 11 images
+                </small>
+
+            </button>
+
+
+
+            <!-- GOOGLE -->
+
+            <button
+                type="button"
+                class="source-button"
+                id="googleImageButton"
+            >
+
+                <span>
+                    🔎
+                </span>
+
+                <strong>
+                    Google Images
+                </strong>
+
+                <small>
+                    Search for an image
+                </small>
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             SITE IMAGES
+        ================================================== -->
+
+        <div
+            class="site-images-panel"
+            id="siteImagesPanel"
+        >
+
+            <div class="panel-heading">
+
+                <div>
+
+                    <strong>
+                        MemeForge Images
+                    </strong>
+
+                    <small>
+                        Select one of the 11 local images
+                    </small>
+
+                </div>
+
+
+                <span>
+                    11 IMAGES
+                </span>
+
+            </div>
+
+
+            <div
+                class="site-image-grid"
+                id="siteImageGrid"
+            >
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             GOOGLE
+        ================================================== -->
+
+        <div
+            class="google-search-panel"
+            id="googleSearchPanel"
+        >
+
+            <div class="google-info">
+
+                <span>
+                    🔎
+                </span>
+
+                <strong>
+                    Google Images
+                </strong>
+
+            </div>
+
+
+            <p>
+                Clicking the button opens Google Images
+                in a new tab. Find your image there,
+                download it to your device, then use
+                <b>My Device</b> to upload it here.
+            </p>
+
+
+            <button
+                type="button"
+                class="google-open-button"
+                id="openGoogleSearch"
+            >
+                OPEN GOOGLE IMAGES →
+            </button>
+
+
+</head>
+
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    Built for the internet's
+    <strong>
+        funniest moments.
+    </strong>
+
+    <br><br>
+
+    MemeForge • Browser Based • No Backend
+
+</footer>
+
+
+
+<!-- =====================================================
+     SCRIPT
+===================================================== -->
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
