@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sri Lanka ID Card Details Checker - Toolz.run.place</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body{background:#08080d;color:#fff;min-height:100vh}
+.top{position:sticky;top:0;z-index:99;background:rgba(8,8,13,0.9);backdrop-filter:blur(16px);border-bottom:1px solid #19192a}
+.nav{max-width:1280px;margin:0 auto;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:800;font-size:22px}.logo span{color:#8b5cf6}
+.btn{padding:9px 16px;border-radius:100px;font-size:12.5px;font-weight:700;border:1px solid #22223a;background:#12121e;color:#a1a1b5;text-decoration:none}
+.btn.primary{background:#fff;color:#000;border:none}
+.wrap{max-width:700px;margin:0 auto;padding:40px 24px}
+.hero{text-align:center;margin-bottom:30px}
+.hero h1{font-size:36px;font-weight:800;letter-spacing:-1.5px;line-height:1.1}
+.hero h1 em{background:linear-gradient(90deg,#8b5cf6,#ec4899 50%,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-style:normal}
+.hero p{color:#71717a;margin-top:10px;font-size:14px}
+.card-main{background:#12121d;border:1px solid #1e1e32;border-radius:22px;padding:24px}
+.label{font-size:12px;color:#a1a1b5;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px;display:block}
+.input-wrap{display:flex;gap:10px}
+.input{flex:1;background:#08080d;border:1px solid #22223a;border-radius:14px;padding:14px 16px;color:#fff;font-size:15px;font-weight:600;outline:none;transition:.2s}
+.input:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px #8b5cf61a}
+.btn-check{background:linear-gradient(90deg,#8b5cf6,#ec4899);border:none;border-radius:14px;padding:14px 22px;color:#fff;font-weight:800;font-size:14px;cursor:pointer;transition:.2s}
+.btn-check:hover{transform:translateY(-1px);box-shadow:0 10px 20px #8b5cf644}
+.hint{color:#3f3f5a;font-size:11.5px;margin-top:10px;line-height:1.6}
+.result{display:none;margin-top:22px;animation:fade.3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.grid-res{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.box{background:#0e0e17;border:1px solid #1e1e32;border-radius:14px;padding:14px}
+.box.full{grid-column:1/-1}
+.box small{color:#6b7280;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;display:block;margin-bottom:4px}
+.box b{font-size:15px;font-weight:800}
+.box b.green{color:#22c55e}.box b.purple{color:#8b5cf6}.box b.orange{color:#f59e0b}
+.error{display:none;margin-top:14px;background:#1a0f0f;border:1px solid #3a1a1a;color:#ef4444;padding:12px 14px;border-radius:12px;font-size:13px;font-weight:600}
+.footer{margin-top:40px;text-align:center;color:#3f3f55;font-size:11px;border-top:1px solid #181828;padding-top:20px}
+.copy-btn{margin-top:14px;width:100%;background:#1a1a2e;border:1px solid #22223a;border-radius:12px;padding:12px;color:#a1a1b5;font-weight:700;font-size:12px;cursor:pointer}
+.copy-btn:hover{background:#22223a;color:#fff}
+@media(max-width:600px){.hero h1{font-size:28px}.grid-res{grid-template-columns:1fr}.input-wrap{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="top"><div class="nav"><a href="index.html" class="logo">toolz<span>.run.place</span></a><a href="index.html" class="btn primary">← Home</a></div></div>
+
+<div class="wrap">
+<div class="hero">
+<h1>Sri Lanka ID Card<br><em>Details Checker</em></h1>
+<p>Old & New NIC Supported • 100% Offline & Private • No data sent to server</p>
+</div>
+
+<div class="card-main">
+<label class="label">Enter Your NIC Number</label>
+<div class="input-wrap">
+<input id="nic" class="input" placeholder="Ex: 199827502345 or 982751234V" maxlength="12">
+<button onclick="checkNIC()" class="btn-check">Check Details →</button>
+</div>
+<div class="hint">✔ Supports: Old NIC (982751234V) & New NIC (199827502345)<br>✔ 100% Private - Everything happens in your browser</div>
+
+<div id="error" class="error"></div>
+
+<div id="result" class="result">
+<div class="grid-res">
+<div class="box"><small>Birthday</small><b id="bday">-</b></div>
+<div class="box"><small>Gender</small><b id="gender">-</b></div>
+<div class="box"><small>Age</small><b id="age" class="purple">-</b></div>
+<div class="box"><small>Voting Eligibility</small><b id="vote">-</b></div>
+<div class="box"><small>Born Day</small><b id="bornDay">-</b></div>
+<div class="box"><small>Zodiac Sign</small><b id="zodiac">-</b></div>
+<div class="box full"><small>NIC Information</small><b id="nicInfo" style="font-size:13px;color:#a1a1b5">-</b></div>
+</div>
+<button class="copy-btn" onclick="copyRes()">Copy Result</button>
+</div>
+</div>
+
+<div class="footer">© 2026 toolz.run.place | 100% Private & Offline Tool | Made by Prabhasha Laknindu</div>
+</div>
+
+<script>
+function checkNIC(){
+  let nic = document.getElementById('nic').value.trim().toUpperCase().replace(/\s/g,'');
+  let err = document.getElementById('error');
+  let res = document.getElementById('result');
+  err.style.display='none'; res.style.display='none';
+  if(!nic){showErr('Please enter your NIC number!');return;}
+
+  let year, dayNo;
+  if(/^[0-9]{12}$/.test(nic)){
+    year = parseInt(nic.substring(0,4));
+    dayNo = parseInt(nic.substring(4,7));
+  } else if(/^[0-9]{9}[VX]$/.test(nic)){
+    year = 1900 + parseInt(nic.substring(0,2));
+    dayNo = parseInt(nic.substring(2,5));
+  } else {
+    showErr('Invalid NIC format! Use Old: 982751234V or New: 199827502345');
+    return;
+  }
+
+  if(dayNo <1 || dayNo>866){showErr('Invalid day number in NIC!');return;}
+  if(year<1900 || year>2026){showErr('Invalid year in NIC!');return;}
+
+  let isFemale = dayNo>500;
+  if(isFemale) dayNo -= 500;
+  if(dayNo>366){showErr('Day number cannot be more than 366!');return;}
+
+  let birthDate = new Date(year,0,1);
+  birthDate.setDate(dayNo);
+
+  let gender = isFemale? 'Female' : 'Male';
+  let bdayStr = birthDate.toISOString().split('T')[0];
+  let dayName = birthDate.toLocaleDateString('en-US',{weekday:'long'});
+
+  let today = new Date();
+  let ageY = today.getFullYear() - birthDate.getFullYear();
+  let m = today.getMonth() - birthDate.getMonth();
+  if(m<0 || (m===0 && today.getDate() < birthDate.getDate())) ageY--;
+  let ageM = (today.getMonth() - birthDate.getMonth() + 12)%12;
+  if(today.getDate() < birthDate.getDate()){ ageM = (ageM-1+12)%12; }
+
+  let voting = ageY>=18? 'Yes, Eligible' : 'No, Not Eligible';
+  let zodiac = getZodiac(birthDate.getMonth()+1, birthDate.getDate());
+
+  document.getElementById('bday').innerText = bdayStr;
+  document.getElementById('gender').innerText = gender;
+  document.getElementById('age').innerText = ageY + ' Years, ' + ageM + ' Months';
+  document.getElementById('vote').innerText = voting;
+  document.getElementById('vote').className = ageY>=18? 'green' : '';
+  document.getElementById('bornDay').innerText = dayName;
+  document.getElementById('zodiac').innerText = zodiac;
+  document.getElementById('nicInfo').innerText = (isFemale?'Female | ':'Male | ') + (nic.length==12?'New NIC (12 digits)':'Old NIC (9 digits + V)') + ' | Day No: ' + dayNo;
+
+  res.style.display='block';
+}
+function getZodiac(m,d){
+  if((m==3&&d>=21)||(m==4&&d<=19))return "Aries";
+  if((m==4&&d>=20)||(m==5&&d<=20))return "Taurus";
+  if((m==5&&d>=21)||(m==6&&d<=20))return "Gemini";
+  if((m==6&&d>=21)||(m==7&&d<=22))return "Cancer";
+  if((m==7&&d>=23)||(m==8&&d<=22))return "Leo";
+  if((m==8&&d>=23)||(m==9&&d<=22))return "Virgo";
+  if((m==9&&d>=23)||(m==10&&d<=22))return "Libra";
+  if((m==10&&d>=23)||(m==11&&d<=21))return "Scorpio";
+  if((m==11&&d>=22)||(m==12&&d<=21))return "Sagittarius";
+  if((m==12&&d>=22)||(m==1&&d<=19))return "Capricorn";
+  if((m==1&&d>=20)||(m==2&&d<=18))return "Aquarius";
+  return "Pisces";
+}
+function showErr(msg){
+  let e = document.getElementById('error');
+  e.innerText='⚠️ ' + msg;
+  e.style.display='block';
+}
+function copyRes(){
+  let txt = `NIC: ${document.getElementById('nic').value}\nBirthday: ${document.getElementById('bday').innerText}\nGender: ${document.getElementById('gender').innerText}\nAge: ${document.getElementById('age').innerText}\nVoting: ${document.getElementById('vote').innerText}\nBorn: ${document.getElementById('bornDay').innerText}\nZodiac: ${document.getElementById('zodiac').innerText}`;
+  navigator.clipboard.writeText(txt);
+  alert('Result Copied!');
+}
+document.getElementById('nic').addEventListener('keypress',function(e){if(e.key==='Enter')checkNIC()});
+</script>
+</body>
+</html>
