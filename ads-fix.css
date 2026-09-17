@@ -1,0 +1,16 @@
+ins.adsbygoogle {
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+.ad-container, .ads, .ad-banner {
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  margin: 15px auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
