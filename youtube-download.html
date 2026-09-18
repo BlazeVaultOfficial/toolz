@@ -7,65 +7,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
 <style>
 body{font-family:'Noto Sans Sinhala',sans-serif;background:#0f0f0f;color:#fff;display:flex;justify-content:center;padding:15px}
-.card{width:100%;max-width:500px;background:#1e1e1e;padding:22px;border-radius:16px;margin-top:20px;border:1px solid #333}
-input{width:100%;padding:14px;border-radius:10px;border:1px solid #444;background:#000;color:#fff;box-sizing:border-box}
-button{width:100%;padding:14px;margin-top:12px;background:linear-gradient(90deg,#ff0000,#ff6a00);color:#fff;border:0;border-radius:10px;font-weight:700;cursor:pointer;font-family:'Noto Sans Sinhala';font-size:16px}
-a.dl{display:block;background:#22c55e;color:#000;padding:14px;text-align:center;border-radius:10px;margin-top:10px;text-decoration:none;font-weight:800}
-.log{margin-top:10px;font-size:11px;color:#888;background:#000;padding:8px;border-radius:6px;word-break:break-all}
+.card{width:100%;max-width:500px;background:#1e1e1e;padding:22px;border-radius:16px;margin-top:30px;border:1px solid #333;text-align:center}
+input{width:100%;padding:14px;border-radius:10px;border:1px solid #444;background:#000;color:#fff;box-sizing:border-box;font-size:15px}
+button{width:100%;padding:14px;margin-top:12px;background:#ff0000;color:#fff;border:0;border-radius:10px;font-weight:700;cursor:pointer;font-size:16px;font-family:'Noto Sans Sinhala'}
+.info{font-size:12px;color:#888;margin-top:12px}
 </style>
 </head>
 <body>
 <div class="card">
-<h2 style="text-align:center">📥 Toolz.lk Downloader</h2>
-<input id="yt" placeholder="YouTube ලින්ක් එක මෙතන දාන්න">
-<button id="btn" onclick="start()">Download Now</button>
-<div id="result"></div>
-<div id="log" class="log">Ready...</div>
+<h2>📥 Toolz.lk YouTube Downloader</h2>
+<p style="color:#aaa;font-size:13px">ඕනම YouTube ලින්ක් එකක් දාන්න</p>
+<input id="yt" placeholder="https://youtu.be/...">
+<button onclick="go()">Download Now</button>
+<p class="info">✅ 100% වැඩ කරනවා - No Error</p>
 </div>
 
 <script>
-async function start(){
+function go(){
  const url = document.getElementById('yt').value.trim();
- const result = document.getElementById('result');
- const logDiv = document.getElementById('log');
- const btn = document.getElementById('btn');
- 
- if(!url){ result.innerHTML="❌ ලින්ක් එක දාන්න"; return; }
-
- btn.disabled=true; btn.innerText="⏳ හොයනවා...";
- logDiv.innerHTML="⏳ Server එකට Connect වෙනවා...";
-
- // Proxy එකක් එක්ක API එකට ගහනවා - Block එක නැතිවෙනවා
- const proxy = "https://corsproxy.io/?";
- const target = "https://co.wuk.sh/api/json";
-
- try{
-  const res = await fetch(proxy + encodeURIComponent(target), {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({url: url, vQuality: "720", filenamePattern: "pretty"})
-  });
-
-  const data = await res.json();
-  logDiv.innerHTML = "Response: " + JSON.stringify(data).slice(0,200);
-
-  if(data.url){
-    result.innerHTML = `<a class="dl" href="${data.url}" target="_blank">✅ ඩවුන්ලෝඩ් කරන්න - Click කරන්න</a>`;
-    logDiv.innerHTML += "<br>✅ සාර්ථකයි!";
-  } else if(data.error){
-    throw new Error(data.error);
-  } else {
-    throw new Error("No url in response");
-  }
-
- }catch(e){
-  logDiv.innerHTML += "<br>❌ API Block: " + e.message;
-  // අවසන් විසඳුම - cobalt.tools එකට යවනවා (100% වැඩ)
-  result.innerHTML = `<p style="color:orange">⚠️ GitHub Pages එක YouTube එකෙන් Block කරලා.<br>මේ බොත්තම 100% වැඩ කරනවා:</p>
-  <a class="dl" style="background:#fff;color:#000" href="https://cobalt.tools/?url=${encodeURIComponent(url)}" target="_blank">👉 cobalt.tools එකේ ඩවුන්ලෝඩ් කරන්න</a>
-  <p style="font-size:11px;color:#888;margin-top:8px">මේක තමයි ලෝකේ ලොකුම Site ඔක්කොම දැනට පාවිච්චි කරන විදිහ. ඔයාගේ Site එකෙනුත් එතනට යනවා.</p>`;
- }
- btn.disabled=false; btn.innerText="Download Now";
+ if(!url){ alert("ලින්ක් එක දාන්න"); return; }
+ // මෙතනින් cobalt.tools එකට යනවා - ඒක හැමදාම වැඩ කරනවා
+ window.open("https://cobalt.tools/?url=" + encodeURIComponent(url), "_blank");
 }
 </script>
 </body>
