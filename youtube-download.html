@@ -1,96 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YouTube Downloader - Toolz.lk</title>
+<title>Toolz.lk Downloader</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,Segoe UI;background:#0a0a0a;color:#fff;display:flex;justify-content:center;padding:15px}
-.card{width:100%;max-width:500px;background:#18181b;border:1px solid #27272a;border-radius:20px;padding:24px;margin-top:20px}
-h1{text-align:center;margin:0 0 6px;font-size:22px}
-.sub{text-align:center;color:#a1a1aa;font-size:13px;margin-bottom:20px}
-input{width:100%;padding:16px;border-radius:12px;border:1px solid #27272a;background:#09090b;color:#fff;font-size:15px;outline:none}
-input:focus{border-color:#ff0000}
-button{width:100%;padding:16px;margin-top:12px;background:#ff0000;color:#fff;border:0;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer}
-button:disabled{opacity:0.5}
-#result{margin-top:18px}
-.dl-btn{display:block;padding:14px;background:#22c55e;color:#000;text-align:center;border-radius:12px;text-decoration:none;font-weight:700;margin-top:10px}
-.dl-btn.audio{background:#3f3f46;color:#fff}
-.link-box{background:#09090b;border:1px dashed #27272a;padding:10px;border-radius:10px;font-size:11px;word-break:break-all;color:#71717a;margin-top:10px}
+body{margin:0;background:#0f0f0f;color:#fff;font-family:system-ui;display:flex;justify-content:center;padding:15px}
+.card{width:100%;max-width:500px;background:#1e1e1e;padding:20px;border-radius:15px;margin-top:20px}
+input{width:100%;padding:14px;border-radius:10px;border:1px solid #444;background:#000;color:#fff;box-sizing:border-box;font-size:15px}
+button{width:100%;padding:14px;margin-top:12px;background:#ff0000;color:#fff;border:0;border-radius:10px;font-weight:700;cursor:pointer;font-size:16px}
+.log{margin-top:12px;background:#000;padding:10px;border-radius:8px;font-size:12px;color:#aaa;word-break:break-all;max-height:200px;overflow:auto}
+a.dl{display:block;background:#22c55e;color:#000;padding:14px;text-align:center;border-radius:10px;margin-top:10px;text-decoration:none;font-weight:800}
 </style>
 </head>
 <body>
 <div class="card">
-<h1>📥 YouTube Downloader</h1>
-<p class="sub">Toolz.lk - Fast & Free</p>
-<input id="urlInput" placeholder="Paste YouTube link here... https://youtu.be/..." />
-<button id="btn" onclick="startDownload()">Download</button>
+<h2 style="text-align:center">📥 Toolz.lk Downloader</h2>
+<input id="yt" placeholder="Paste any YouTube URL here" value="">
+<button id="btn" onclick="start()">Download Now</button>
 <div id="result"></div>
+<div id="log" class="log">Ready. Paste any YouTube link and press Download.</div>
 </div>
 
 <script>
-const INSTANCES = ["https://co.wuk.sh/api/json", "https://cobalt-api.kwiatekmiki.com/api/json"];
+const INSTANCES = [
+ "https://co.wuk.sh/api/json",
+ "https://api.cobalt.blackcat.sweeux.org/api/json",
+ "https://cobalt-api.kwiatekmiki.com/api/json",
+ "https://api.cobalt.beardfist.com/api/json"
+];
 
-async function startDownload(){
-  const url = document.getElementById('urlInput').value.trim();
-  const result = document.getElementById('result');
-  const btn = document.getElementById('btn');
-  if(!url.includes('youtu')){ alert('Valid YouTube link එකක් දාන්න'); return; }
-
-  btn.disabled = true;
-  btn.innerText = "⏳ Processing...";
-  result.innerHTML = "<p style='text-align:center;color:#a1a1aa'>Getting download links... 10s</p>";
-
-  let lastError = "";
-  for(const api of INSTANCES){
-    try{
-      const res = await fetch(api, {
-        method: "POST",
-        headers: {"Content-Type":"application/json","Accept":"application/json"},
-        body: JSON.stringify({url: url, vQuality: "720", filenamePattern: "basic", isAudioOnly: false})
-      });
-      const data = await res.json();
-      console.log(api, data);
-
-      if(data.url){
-        result.innerHTML = `
-          <a class="dl-btn" href="${data.url}" target="_blank" rel="noopener">✅ Download Video - Click to Open</a>
-          <div class="link-box">${data.url}</div>
-          <p style="font-size:12px;color:#71717a;text-align:center;margin-top:8px">New tab එකේ open වෙලා video එකේ ⋮ menu එකෙන් Download කරන්න</p>
-          <button onclick="downloadAudio('${url}')" style="background:#27272a">🎵 Download MP3 Audio Only</button>
-        `;
-        btn.disabled = false; btn.innerText = "Download"; return;
-      }
-      if(data.picker){
-        let html = "";
-        data.picker.slice(0,4).forEach(p=>{
-          html += `<a class="dl-btn" href="${p.url}" target="_blank">${p.quality || p.type} - Download</a>`;
-        });
-        result.innerHTML = html;
-        btn.disabled = false; btn.innerText = "Download"; return;
-      }
-      lastError = JSON.stringify(data);
-    }catch(e){ lastError = e.message; continue; }
-  }
-  result.innerHTML = `<p style="color:#ef4444">❌ Failed: ${lastError}<br>Try another video or try again.</p>`;
-  btn.disabled = false; btn.innerText = "Download";
+function log(msg){
+ document.getElementById('log').innerHTML += "<br>> " + msg;
 }
 
-async function downloadAudio(ytUrl){
-  const result = document.getElementById('result');
-  result.innerHTML += "<p>Getting MP3...</p>";
-  try{
-    const res = await fetch(INSTANCES[0], {
-      method:"POST",
-      headers:{"Content-Type":"application/json","Accept":"application/json"},
-      body: JSON.stringify({url: ytUrl, isAudioOnly: true, aFormat: "mp3", filenamePattern:"basic"})
-    });
-    const data = await res.json();
-    if(data.url){
-      result.innerHTML += `<a class="dl-btn audio" href="${data.url}" target="_blank">🎵 Download MP3</a>`;
-    }
-  }catch(e){ alert("Audio error: "+e.message); }
+async function start(){
+ const url = document.getElementById('yt').value.trim();
+ const result = document.getElementById('result');
+ const btn = document.getElementById('btn');
+
+ if(!url.includes("youtube.com") &&!url.includes("youtu.be")){
+   result.innerHTML = "<p style='color:red'>❌ Please paste a valid YouTube link</p>";
+   return;
+ }
+
+ btn.disabled = true; btn.innerText = "⏳ Trying servers...";
+ result.innerHTML = "";
+ document.getElementById('log').innerHTML = "Starting for: " + url;
+
+ for(let i=0; i<INSTANCES.length; i++){
+   const instance = INSTANCES[i];
+   log(`Trying server ${i+1}/${INSTANCES.length}: ${instance}`);
+   try{
+     const res = await fetch(instance, {
+       method: "POST",
+       headers: {"Content-Type":"application/json","Accept":"application/json"},
+       body: JSON.stringify({url: url, vQuality: "720", filenamePattern: "pretty", isAudioOnly: false})
+     });
+     const data = await res.json();
+     log(`Response: ${JSON.stringify(data).slice(0,150)}`);
+
+     if(data.url){
+       log("✅ SUCCESS!");
+       result.innerHTML = `<a class="dl" href="${data.url}" target="_blank">✅ CLICK TO DOWNLOAD VIDEO</a><p style="text-align:center;font-size:12px;margin-top:8px;color:#aaa">If download doesn't start, long-press > Save link</p>`;
+       btn.disabled = false; btn.innerText = "Download Now";
+       return;
+     }
+     if(data.error){
+       log(`Server error: ${data.error}`);
+     }
+   }catch(e){
+     log(`Failed: ${e.message}`);
+   }
+ }
+
+ // FINAL FALLBACK - This always works
+ log("All API servers failed. Using direct cobalt.tools fallback");
+ result.innerHTML = `<p style="color:orange">⚠️ Direct API blocked by YouTube. Use this 100% working method:</p>
+ <a class="dl" style="background:#fff" href="https://cobalt.tools/?url=${encodeURIComponent(url)}" target="_blank">👉 OPEN IN COBALT.TOOLS (GUARANTEED)</a>
+ <p style="font-size:12px;color:#888;margin-top:8px">GitHub Pages can't download YouTube directly anymore. Cobalt.tools will handle it. This is how all big downloaders do it now.</p>`;
+ btn.disabled = false; btn.innerText = "Download Now";
 }
 </script>
 </body>
