@@ -1,291 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="manifest" href="/site.webmanifest">
-
-<title>YouTube Downloader - Toolz | Free 1080p, 720p, MP3</title>
-
-<meta name="description" content="Free YouTube Video Downloader - Download YouTube videos in 360p, 720p, 1080p & MP3. Fast, Private, No Signup - Toolz.run.place">
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
-body{background:#08080d;color:#fff;min-height:100vh}
-a{text-decoration:none;color:inherit}
-.top{position:sticky;top:0;z-index:99;background:rgba(8,8,13,0.9);backdrop-filter:blur(16px);border-bottom:1px solid #19192a}
-.nav{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:800;font-size:22px}
-.logo span{color:#f59e0b}
-.hero{text-align:center;padding:60px 24px 30px;max-width:800px;margin:0 auto;position:relative}
-.hero::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(circle,rgba(245,158,11,0.15) 0%,transparent 70%);pointer-events:none}
-.hero h1{font-size:52px;font-weight:900;letter-spacing:-2.5px;line-height:0.9;position:relative}
-.hero h1 span{background:linear-gradient(90deg,#f59e0b,#ec4899,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:#71717a;margin-top:14px;font-size:17px;position:relative}
-.tool-wrap{max-width:680px;margin:20px auto;padding:0 24px}
-.downloader{background:linear-gradient(180deg,#141425,#12121d);border:1px solid #1e1e32;border-radius:20px;padding:28px;box-shadow:0 12px 40px rgba(0,0,0,0.5)}
-.url-input{width:100%;padding:14px 16px;border:1px solid #26263a;border-radius:12px;font-size:15px;background:#0a0a12;color:#fff;outline:none;transition:0.2s;margin-bottom:14px}
-.url-input::placeholder{color:#52525b}
-.url-input:focus{border-color:#f59e0b66;box-shadow:0 0 0 3px rgba(245,158,11,0.15)}
-.get-info{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(90deg,#f59e0b,#ec4899);color:white;font-size:15px;font-weight:700;cursor:pointer;transition:0.2s}
-.get-info:hover{transform:translateY(-1px);filter:brightness(1.1)}
-.get-info:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-.video-info{display:none;margin-top:26px;padding-top:22px;border-top:1px solid #1e1e32}
-.thumbnail{width:100%;border-radius:14px;margin-bottom:16px;border:1px solid #1e1e32}
-.video-title{font-size:17px;font-weight:700;margin-bottom:18px;line-height:1.4}
-label{display:block;margin-bottom:8px;font-weight:700;font-size:13px;color:#a1a1b5;letter-spacing:0.5px;text-transform:uppercase}
-select{width:100%;padding:13px 14px;border:1px solid #26263a;border-radius:12px;font-size:15px;margin-bottom:16px;background:#0a0a12;color:#fff;outline:none}
-.download-btn{width:100%;padding:14px;border:none;border-radius:12px;background:#fff;color:#000;font-size:15px;font-weight:800;cursor:pointer;transition:0.2s}
-.download-btn:hover{background:#e5e5e5;transform:translateY(-1px)}
-.message{margin-top:14px;text-align:center;color:#71717a;font-size:13px;min-height:18px}
-.footer{margin-top:50px;background:#0a0a12;border-top:1px solid #1a1a2e;padding:30px 24px;text-align:center;color:#3f3f55;font-size:12px}
-</style>
+  <title>YouTube Downloader - Toolz.lk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:system-ui;background:#0f0f0f;color:white;display:flex;justify-content:center;padding:20px}
+    .box{max-width:480px;width:100%;background:#1e1e1e;padding:25px;border-radius:16px;margin-top:30px}
+    input{width:100%;padding:14px;border-radius:10px;border:0;box-sizing:border-box;font-size:16px}
+    button{width:100%;padding:14px;margin-top:12px;background:#ff0000;color:white;border:0;border-radius:10px;font-size:17px;font-weight:bold;cursor:pointer}
+    #result{margin-top:20px}
+    a.dl{display:block;padding:14px;background:#22c55e;color:white;text-align:center;border-radius:10px;text-decoration:none;font-weight:bold;margin-top:10px}
+  </style>
 </head>
-
 <body>
-
-<div class="top">
-<div class="nav">
-<a href="/" class="logo">toolz<span>.run.place</span></a>
-<div style="color:#52525b;font-size:12px;font-weight:700">FREE • NO SIGNUP</div>
+<div class="box">
+  <h2 style="text-align:center">📥 Toolz.lk YouTube Downloader</h2>
+  <input id="yturl" placeholder="https://youtube.com/watch?v=..."/>
+  <button onclick="downloadYT()">Download Now</button>
+  <div id="result"></div>
 </div>
-</div>
-
-<div class="hero">
-<h1>YouTube <span>Downloader</span></h1>
-<p>Download YouTube videos in 360p, 720p, 1080p & MP3 - Fast & Private</p>
-</div>
-
-<div class="tool-wrap">
-<div class="downloader">
-
-<input
-type="url"
-id="youtubeUrl"
-class="url-input"
-placeholder="Paste YouTube URL here... https://youtube.com/watch?v=..."
-required
->
-
-<button class="get-info" id="getInfoBtn">
-Get Video Info 🔥
-</button>
-
-<div class="message" id="message"></div>
-
-<div class="video-info" id="videoInfo">
-
-<img
-id="thumbnail"
-class="thumbnail"
-src=""
-alt="Video thumbnail"
->
-
-<div class="video-title" id="videoTitle"></div>
-
-<label for="quality">Select Quality</label>
-
-<select id="quality">
-<option value="">Select quality</option>
-</select>
-
-<button class="download-btn" id="downloadBtn">
-Download Now
-</button>
-
-</div>
-</div>
-</div>
-
-<div class="footer">
-© 2026 toolz.run.place | Free & Private Tools<br>
-Made in 🇱🇰 Sri Lanka
-</div>
-
 
 <script>
+async function downloadYT(){
+  const url = document.getElementById('yturl').value.trim();
+  if(!url) return alert("Link එක දාන්න!");
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = "⏳ Loading... Please wait...";
 
-const getInfoBtn = document.getElementById("getInfoBtn");
-const downloadBtn = document.getElementById("downloadBtn");
-const videoInfoDiv = document.getElementById("videoInfo");
-
-const youtubeUrl = document.getElementById("youtubeUrl");
-const message = document.getElementById("message");
-const thumbnail = document.getElementById("thumbnail");
-const videoTitle = document.getElementById("videoTitle");
-const quality = document.getElementById("quality");
-
-
-/* =========================
-   GET VIDEO INFORMATION
-========================= */
-
-getInfoBtn.addEventListener("click", async () => {
-
-    const url = youtubeUrl.value.trim();
-
-    if (!url) {
-        message.textContent = "Please enter a YouTube URL.";
-        return;
+  try {
+    const res = await fetch("https://co.wuk.sh/api/json", {
+      method: "POST",
+      headers: {"Content-Type":"application/json", "Accept":"application/json"},
+      body: JSON.stringify({url: url, vQuality: "720", filenamePattern: "basic"})
+    });
+    const data = await res.json();
+    
+    if(data.url){
+      resultDiv.innerHTML = `<a class="dl" href="${data.url}" target="_blank" download>✅ Download Video (720p)</a><p style="font-size:12px;text-align:center;margin-top:10px;color:#aaa">Link එක click කරලා Download කරගන්න</p>`;
+    } else if(data.picker && data.picker.length > 0){
+      let html = "<p>Qualities:</p>";
+      data.picker.forEach(item => {
+        html += `<a class="dl" href="${item.url}" target="_blank">${item.quality || item.type} - Download</a>`;
+      });
+      resultDiv.innerHTML = html;
+    } else {
+      resultDiv.innerHTML = "Error: " + JSON.stringify(data);
     }
-
-    message.textContent = "Getting video information...";
-    getInfoBtn.disabled = true;
-
-    videoInfoDiv.style.display = "none";
-
-    try {
-
-        const response = await fetch(
-            "http://localhost:5000/api/info",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    url: url
-                })
-            }
-        );
-
-
-        const data = await response.json();
-
-
-        if (data.status !== "success") {
-            throw new Error(
-                data.message || "Unable to get video information."
-            );
-        }
-
-
-        /* Show thumbnail */
-
-        if (data.thumbnail) {
-            thumbnail.src = data.thumbnail;
-        }
-
-
-        /* Show title */
-
-        videoTitle.textContent =
-            data.title || "YouTube Video";
-
-
-        /* Clear old quality options */
-
-        quality.innerHTML = "";
-
-
-        /* Default option */
-
-        const defaultOption =
-            document.createElement("option");
-
-        defaultOption.value = "";
-        defaultOption.textContent =
-            "Select quality";
-
-        quality.appendChild(defaultOption);
-
-
-        /* Add available formats */
-
-        if (data.formats && data.formats.length > 0) {
-
-            data.formats.forEach(format => {
-
-                const option =
-                    document.createElement("option");
-
-                option.value =
-                    format.format_id;
-
-                option.textContent =
-                    `${format.quality} (${format.format})`;
-
-                quality.appendChild(option);
-
-            });
-
-        } else {
-
-            const option =
-                document.createElement("option");
-
-            option.value = "";
-            option.textContent =
-                "No formats found";
-
-            quality.appendChild(option);
-
-        }
-
-
-        /* Show video information */
-
-        videoInfoDiv.style.display = "block";
-
-        message.textContent =
-            "Video information loaded successfully!";
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        message.textContent =
-            "Error: " + error.message;
-
-    }
-
-    finally {
-
-        getInfoBtn.disabled = false;
-
-    }
-
-});
-
-
-/* =========================
-   DOWNLOAD BUTTON
-========================= */
-
-downloadBtn.addEventListener("click", () => {
-
-    const selectedQuality =
-        quality.value;
-
-    if (!selectedQuality) {
-
-        alert("Please select a quality.");
-
-        return;
-
-    }
-
-    alert(
-        "Download backend is not connected yet."
-    );
-
-});
-
-
+  } catch(e){
+    resultDiv.innerHTML = "❌ Error: " + e.message + "<br> වෙන API එකකින් උත්සාහ කරමු...";
+    // fallback
+    try{
+      const res2 = await fetch("https://api.cobalt.tools/api/json", {method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"}, body: JSON.stringify({url: url})});
+      const data2 = await res2.json();
+      if(data2.url) resultDiv.innerHTML = `<a class="dl" href="${data2.url}" target="_blank">✅ Download Video</a>`;
+    }catch(e2){ resultDiv.innerHTML = "Failed, YouTube link එක හරිද බලන්න"; }
+  }
+}
 </script>
-
 </body>
 </html>
