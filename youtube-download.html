@@ -3,76 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OLD PIECES - Downloader</title>
+<title>OLD PIECES - Player</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body{font-family: sans-serif; background:#0a0a0a; color:#e5e5e5;}
-.glass{ background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);}
+body{background:#0a0a0a;color:#fff;font-family:sans-serif}
+.glass{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+video{width:100%;border-radius:16px;background:#000}
 </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
-<div class="w-full max-w-3xl mt-10">
-  <div class="glass rounded-[24px] p-6">
-    <input id="urlInput" type="text" placeholder="https://..." class="w-full bg-black border border-white/10 rounded-full px-6 py-4 outline-none">
-    <div class="flex gap-2 mt-4">
-      <select id="quality" class="flex-1 bg-black border border-white/10 rounded-full px-4 py-3"><option value="720" selected>720p Video</option><option value="1080">1080p</option><option value="max">Max</option></select>
-      <select id="mode" class="flex-1 bg-black border border-white/10 rounded-full px-4 py-3"><option value="auto">Video</option><option value="audio">Audio MP3</option></select>
-      <button onclick="fetchVideo()" id="goBtn" class="bg-white text-black rounded-full px-8 py-3 font-bold">GO</button>
+
+<div class="w-full max-w-3xl mt-6">
+  <!-- Input -->
+  <div class="glass rounded-[24px] p-5">
+    <h1 class="tracking-[0.3em] opacity-60 text-sm mb-4">OLD PIECES.</h1>
+    <div class="flex gap-2">
+      <input id="urlInput" placeholder="Paste YouTube / TikTok link..." class="flex-1 bg-black border border-white/10 rounded-full px-5 py-3 outline-none">
+      <button onclick="fetchVideo()" id="goBtn" class="bg-white text-black rounded-full px-6 py-3 font-bold">GO</button>
     </div>
   </div>
 
-  <div id="resultCard" class="hidden mt-6 glass rounded-[24px] p-6">
+  <!-- Player Card -->
+  <div id="resultCard" class="hidden mt-6 glass rounded-[24px] p-5">
     <img id="thumb" class="w-full rounded-xl mb-4">
-    <h3 id="vTitle" class="text-lg mb-2"></h3>
-    <p id="vStatus" class="text-xs opacity-50 mb-4"></p>
+    <h3 id="vTitle" class="font-semibold mb-3"></h3>
 
-    <!-- මේක තමයි වැදගත්ම Fix එක -->
-    <a id="realDownloadLink" href="#" target="_blank" class="block w-full text-center bg-white text-black rounded-full py-4 font-bold tracking-widest">OPEN DOWNLOAD LINK</a>
-    <p class="text-xs text-center mt-3 opacity-40">Link එක Open වෙලා Video එක Play වුනොත්, තිත් 3 ඔබලා Download / Save Video ඔබන්න. Android වලට ඒක තමයි හරියනම විදිහ.</p>
-    <p id="status" class="text-xs text-center mt-2 opacity-60"></p>
+    <!-- VIDEO PLAYER - මේක තමයි ඔයා ඉල්ලපු එක -->
+    <video id="player" controls playsinline controlsList="download" preload="metadata"></video>
+
+    <div class="mt-4 bg-white/5 rounded-xl p-4 text-xs opacity-70 leading-relaxed">
+      👆 Video එක මෙතන Play වෙනවා<br>
+      👉 දකුණු පැත්තේ යට තියෙන <b>⋮ 3 dots</b> ඔබන්න<br>
+      👉 <b>Download</b> ඔබන්න. එතකොට Failed වෙන්නේ නෑ.
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 mt-4">
+      <a id="openNewTab" target="_blank" class="text-center bg-white/10 rounded-full py-3 text-sm">Open in New Tab</a>
+      <button onclick="shareLink()" class="bg-white text-black rounded-full py-3 text-sm font-bold">Share</button>
+    </div>
+    <p id="status" class="text-center text-xs mt-3 opacity-50"></p>
   </div>
-  <div id="errorBox" class="hidden mt-4 bg-red-500/20 p-4 rounded-xl text-center text-sm"></div>
+
+  <div id="errorBox" class="hidden mt-4 bg-red-500/20 p-3 rounded-xl text-center text-sm"></div>
 </div>
 
 <script>
 const API = "https://cobalt-tools-production-5ad7.up.railway.app/";
-let lastResponse = null;
 
 async function fetchVideo(){
   const url = document.getElementById('urlInput').value.trim();
   if(!url) return;
   document.getElementById('goBtn').innerText = "...";
   document.getElementById('errorBox').classList.add('hidden');
+
   try{
     const res = await fetch(API, {
-      method: "POST",
-      headers: { "Accept": "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({ url: url, videoQuality: document.getElementById('quality').value, downloadMode: document.getElementById('mode').value, audioFormat: "mp3" })
+      method:"POST",
+      headers:{"Accept":"application/json","Content-Type":"application/json"},
+      body: JSON.stringify({
+        url: url,
+        videoQuality: "720",
+        downloadMode: "auto",
+        filenameStyle: "basic"
+      })
     });
     const data = await res.json();
-    if(data.status === "error") throw new Error(data.error.code || JSON.stringify(data.error));
+    if(data.status==="error") throw new Error(data.error.code);
 
-    lastResponse = data;
     document.getElementById('resultCard').classList.remove('hidden');
     document.getElementById('thumb').src = data.thumb || "";
-    document.getElementById('vTitle').innerText = data.filename || "Ready";
-    document.getElementById('vStatus').innerText = data.status.toUpperCase();
+    document.getElementById('vTitle').innerText = data.filename || "Video Ready";
+    document.getElementById('status').innerText = "Player Ready ✓ - 3 dots > Download ඔබන්න";
 
-    // Fix: කෙලින්ම Tunnel Link එක Button එකට දානවා, Blob කරන්නේ නෑ
-    const linkEl = document.getElementById('realDownloadLink');
-    linkEl.href = data.url;
-    document.getElementById('status').innerText = "Verified ✓ - බොත්තම ඔබන්න";
+    // Player එකට කෙලින්ම Link එක දානවා
+    const player = document.getElementById('player');
+    player.src = data.url;
+    player.load();
 
-    // Auto open once on mobile to trigger download
-    // window.open(data.url, "_blank");
+    document.getElementById('openNewTab').href = data.url;
+    document.getElementById('thumb').style.display = "none"; // thumb හංගනවා player එක ආවම
 
   }catch(e){
-    document.getElementById('errorBox').innerText = e.message;
+    document.getElementById('errorBox').innerText = "Error: "+e.message;
     document.getElementById('errorBox').classList.remove('hidden');
   }finally{
     document.getElementById('goBtn').innerText = "GO";
   }
 }
+
+function shareLink(){
+  const player = document.getElementById('player');
+  if(navigator.share && player.src){
+    navigator.share({title: "Video", url: player.src});
+  } else {
+    navigator.clipboard.writeText(player.src);
+    alert("Link Copied!");
+  }
+}
 </script>
 </body>
-</html>
+    </html>
