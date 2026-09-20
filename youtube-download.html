@@ -1,76 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OLD PIECES.</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>Downloader</title>
 </head>
-<body class="bg-[#0a0a0a] text-white flex justify-center p-4">
-<div class="w-full max-w-xl mt-8">
+<body style="background:#000;color:#fff;font-family:sans-serif;padding:20px;display:flex;justify-content:center">
+<div style="max-width:420px;width:100%">
+<input id="u" placeholder="Paste YouTube link" style="width:100%;padding:16px;border-radius:30px;background:#111;border:1px solid #222;color:#fff">
+<button onclick="go()" id="b" style="width:100%;margin-top:10px;padding:16px;border-radius:30px;background:#fff;color:#000;font-weight:bold;border:0">GET VIDEO</button>
 
-  <div class="bg-white/[0.06] border border-white/10 rounded-[28px] p-6">
-    <h1 class="text-xs tracking-[0.4em] opacity-30">OLD PIECES.</h1>
-    <input id="urlInput" placeholder="Paste YouTube link..." class="w-full mt-4 bg-black border border-white/10 rounded-full px-6 py-4 text-sm outline-none">
-    <button onclick="getVideo()" id="goBtn" class="w-full mt-3 bg-white text-black rounded-full py-4 font-bold text-sm">GET VIDEO</button>
-  </div>
-
-  <div id="result" class="hidden mt-6 bg-white/[0.06] border border-white/10 rounded-[28px] p-5">
-    <img id="thumb" class="w-full rounded-2xl bg-black mb-4">
-    <h3 id="title" class="text-sm mb-4"></h3>
-
-    <!-- 1. Preview Player -->
-    <video id="player" controls playsinline class="w-full rounded-2xl bg-black"></video>
-
-    <!-- 2. Main Button - Opens in New Tab (No Download Manager) -->
-    <a id="openBtn" target="_blank" class="mt-4 block w-full text-center bg-white text-black rounded-full py-4 font-bold text-sm">OPEN & DOWNLOAD</a>
-
-    <p class="text-[11px] opacity-50 mt-3 text-center leading-6">
-      Button එක ඔබලා අලුත් Tab එකේ Open කරලා<br>
-      එතන තියෙන <b>⋮ > Download</b> ඔබන්න<br>
-      එතකොට `Failed` වෙන්නේ නෑ
-    </p>
-  </div>
-
-  <p id="error" class="hidden mt-4 text-xs text-center text-red-400 bg-red-500/10 p-3 rounded-xl"></p>
-
+<div id="r" style="display:none;margin-top:20px">
+<video id="v" controls playsinline controlsList="download" style="width:100%;border-radius:20px;background:#111"></video>
+<p style="font-size:12px;opacity:.6;margin-top:12px;text-align:center">Video එක උඩ Long Press කරලා > Download video ඔබන්න.<br>එතකොට Failed වෙන්නේ නෑ.</p>
+<a id="o" target="_blank" style="display:block;margin-top:12px;text-align:center;background:#222;color:#fff;padding:14px;border-radius:30px;text-decoration:none">Open in New Tab</a>
+</div>
+<p id="e" style="display:none;color:#ff5555;font-size:12px;margin-top:10px;text-align:center"></p>
 </div>
 
 <script>
-async function getVideo(){
-  const url = document.getElementById('urlInput').value.trim();
-  if(!url) return;
-  const btn = document.getElementById('goBtn');
-  btn.innerText = "Loading...";
-
-  try{
-    // ඔයාගේ Railway API එක විතරයි
-    const res = await fetch("https://cobalt-tools-production-5ad7.up.railway.app/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({ url: url, videoQuality: "720" })
-    });
-
-    const data = await res.json();
-    console.log(data);
-
-    if(data.status === "error") throw new Error(data.error.code || "Error");
-    let videoUrl = data.url;
-    if(!videoUrl) throw new Error("No video URL");
-
-    document.getElementById('result').classList.remove('hidden');
-    document.getElementById('thumb').src = data.thumb || "";
-    document.getElementById('title').innerText = data.filename || "Ready";
-    document.getElementById('player').src = videoUrl;
-    document.getElementById('openBtn').href = videoUrl;
-
-  }catch(e){
-    document.getElementById('error').innerText = "Error: " + e.message + " - Railway App එක Sleep වෙලා නම් 30s ඉඳලා ආයේ Try කරන්න";
-    document.getElementById('error').classList.remove('hidden');
-  }finally{
-    btn.innerText = "GET VIDEO";
-  }
+async function go(){
+ const url=document.getElementById('u').value.trim();
+ if(!url)return;
+ const btn=document.getElementById('b');
+ btn.textContent='Loading...';
+ try{
+  const res=await fetch('https://cobalt-tools-production-5ad7.up.railway.app/',{
+   method:'POST',
+   headers:{'Content-Type':'application/json','Accept':'application/json'},
+   body:JSON.stringify({url:url})
+  });
+  const d=await res.json();
+  if(!d.url) throw new Error(d.error?.code || 'API failed');
+  document.getElementById('r').style.display='block';
+  document.getElementById('v').src=d.url;
+  document.getElementById('o').href=d.url;
+ }catch(err){
+  document.getElementById('e').style.display='block';
+  document.getElementById('e').innerText=err.message;
+ }finally{btn.textContent='GET VIDEO'}
 }
 </script>
+</div>
 </body>
- </html>
+</html>
