@@ -1,27 +1,21 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Download</title></head>
-<body style="background:#000;color:#fff;font-family:sans-serif;display:flex;justify-content:center;padding:20px">
-<div style="width:100%;max-width:400px">
-<input id="u" placeholder="Paste link" style="width:100%;padding:16px;border-radius:30px;border:1px solid #333;background:#111;color:#fff">
-<button onclick="go()" style="width:100%;margin-top:10px;padding:16px;border-radius:30px;background:#fff;color:#000;font-weight:bold">GET</button>
-<div id="out" style="margin-top:20px;display:none;text-align:center">
-<a id="btn" target="_blank" style="display:block;background:#fff;color:#000;padding:18px;border-radius:30px;text-decoration:none;font-weight:bold">OPEN VIDEO - 3 dots > Download</a>
-<p style="font-size:11px;opacity:0.5;margin-top:10px">බොත්තම ඔබලා අලුත් Tab එකේ Video එක Open කරලා ⋮ > Download ඔබන්න</p>
-</div>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+</head><body style="background:#000;color:#fff;padding:20px;font-family:sans-serif">
+<input id="u" style="width:100%;padding:15px;border-radius:20px;background:#111;color:#fff" placeholder="link">
+<button onclick="go()" style="width:100%;padding:15px;margin-top:10px;border-radius:20px;background:#fff;font-weight:bold">GET</button>
+<div id="o" style="display:none;margin-top:20px">
+<video id="v" controls playsinline controlsList="download" style="width:100%;border-radius:15px;background:#111"></video>
+<a id="a" target="_blank" style="display:block;margin-top:10px;background:#222;padding:15px;border-radius:20px;text-align:center;color:#fff;text-decoration:none">නොපෙනේ නම් මෙතන ඔබන්න</a>
 </div>
 <script>
 async function go(){
-const url=document.getElementById('u').value.trim();
-if(!url)return;
-const res=await fetch("https://cobalt-tools-production-5ad7.up.railway.app/",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:url})});
-const data=await res.json();
-if(data.url){
-document.getElementById('out').style.display='block';
-document.getElementById('btn').href=data.url;
-window.open(data.url,"_blank");
-}else{alert(JSON.stringify(data))}
+ let url=document.getElementById('u').value;
+ let r=await fetch('https://co.wuk.sh/api/json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:url})});
+ let d=await r.json();
+ let link=d.url;
+ document.getElementById('o').style.display='block';
+ document.getElementById('v').src=link;
+ document.getElementById('a').href=link;
 }
 </script>
-</body>
-</html>
+</body></html>
