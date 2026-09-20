@@ -1,105 +1,107 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OLD PIECES - Player</title>
+<title>OLD PIECES. - Downloader</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{background:#0a0a0a;color:#fff;font-family:sans-serif}
-.glass{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
-video{width:100%;border-radius:16px;background:#000}
+.glass{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(10px)}
 </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
-
 <div class="w-full max-w-3xl mt-6">
-  <!-- Input -->
   <div class="glass rounded-[24px] p-5">
-    <h1 class="tracking-[0.3em] opacity-60 text-sm mb-4">OLD PIECES.</h1>
+    <h1 class="tracking-[0.3em] opacity-50 text-xs mb-4">OLD PIECES.</h1>
     <div class="flex gap-2">
-      <input id="urlInput" placeholder="Paste YouTube / TikTok link..." class="flex-1 bg-black border border-white/10 rounded-full px-5 py-3 outline-none">
-      <button onclick="fetchVideo()" id="goBtn" class="bg-white text-black rounded-full px-6 py-3 font-bold">GO</button>
+      <input id="urlInput" placeholder="https://youtu.be/..." class="flex-1 bg-black border border-white/10 rounded-full px-5 py-3.5 outline-none text-sm">
+      <button onclick="fetchVideo()" id="goBtn" class="bg-white text-black rounded-full px-8 py-3.5 font-bold text-sm">GO</button>
+    </div>
+    <div class="flex gap-2 mt-3">
+      <select id="quality" class="bg-black/50 border border-white/10 rounded-full px-4 py-2 text-xs"><option value="720" selected>720p</option><option value="1080">1080p</option><option value="max">Max</option></select>
+      <select id="mode" class="bg-black/50 border border-white/10 rounded-full px-4 py-2 text-xs"><option value="auto">Video</option><option value="audio">Audio MP3</option></select>
     </div>
   </div>
 
-  <!-- Player Card -->
   <div id="resultCard" class="hidden mt-6 glass rounded-[24px] p-5">
-    <img id="thumb" class="w-full rounded-xl mb-4">
-    <h3 id="vTitle" class="font-semibold mb-3"></h3>
+    <img id="thumb" class="w-full aspect-video object-cover rounded-xl mb-4 bg-black">
+    <h3 id="vTitle" class="font-semibold text-sm mb-3 line-clamp-2"></h3>
 
-    <!-- VIDEO PLAYER - මේක තමයි ඔයා ඉල්ලපු එක -->
-    <video id="player" controls playsinline controlsList="download" preload="metadata"></video>
+    <!-- PLAYER - ඔයා කොළ පාටින් mark කරපු තැන -->
+    <video id="player" controls playsinline controlsList="download" crossorigin="anonymous" class="w-full rounded-xl bg-black hidden"></video>
+    <div id="playerPlaceholder" class="w-full aspect-video rounded-xl bg-black flex items-center justify-center text-xs opacity-40">Video loading...</div>
 
-    <div class="mt-4 bg-white/5 rounded-xl p-4 text-xs opacity-70 leading-relaxed">
+    <div class="mt-4 bg-white/5 rounded-xl p-3 text-[11px] opacity-60 leading-relaxed">
       👆 Video එක මෙතන Play වෙනවා<br>
-      👉 දකුණු පැත්තේ යට තියෙන <b>⋮ 3 dots</b> ඔබන්න<br>
-      👉 <b>Download</b> ඔබන්න. එතකොට Failed වෙන්නේ නෑ.
+      👉 Player එකේ යට තියෙන <b>⋮ 3 dots > Download</b> ඔබන්න
     </div>
 
     <div class="grid grid-cols-2 gap-3 mt-4">
-      <a id="openNewTab" target="_blank" class="text-center bg-white/10 rounded-full py-3 text-sm">Open in New Tab</a>
-      <button onclick="shareLink()" class="bg-white text-black rounded-full py-3 text-sm font-bold">Share</button>
+      <a id="openNewTab" target="_blank" class="text-center bg-white/10 hover:bg-white/15 rounded-full py-3 text-xs">Open in New Tab</a>
+      <button onclick="downloadViaProxy()" class="bg-white text-black rounded-full py-3 text-xs font-bold">DOWNLOAD</button>
     </div>
-    <p id="status" class="text-center text-xs mt-3 opacity-50"></p>
+    <p id="status" class="text-center text-[11px] mt-3 opacity-40"></p>
   </div>
-
-  <div id="errorBox" class="hidden mt-4 bg-red-500/20 p-3 rounded-xl text-center text-sm"></div>
+  <div id="errorBox" class="hidden mt-4 bg-red-500/10 border border-red-500/20 p-3 rounded-xl text-center text-xs"></div>
 </div>
 
 <script>
 const API = "https://cobalt-tools-production-5ad7.up.railway.app/";
+let currentUrl = "";
 
 async function fetchVideo(){
   const url = document.getElementById('urlInput').value.trim();
   if(!url) return;
-  document.getElementById('goBtn').innerText = "...";
+  const goBtn = document.getElementById('goBtn');
+  goBtn.innerText = "...";
   document.getElementById('errorBox').classList.add('hidden');
 
   try{
     const res = await fetch(API, {
       method:"POST",
       headers:{"Accept":"application/json","Content-Type":"application/json"},
-      body: JSON.stringify({
-        url: url,
-        videoQuality: "720",
-        downloadMode: "auto",
-        filenameStyle: "basic"
-      })
+      body: JSON.stringify({url: url, videoQuality: document.getElementById('quality').value, downloadMode: document.getElementById('mode').value, audioFormat:"mp3", filenameStyle:"basic"})
     });
     const data = await res.json();
-    if(data.status==="error") throw new Error(data.error.code);
+    console.log(data);
+    if(data.status==="error") throw new Error(data.error.code || JSON.stringify(data.error));
 
+    let videoUrl = data.url || (data.picker && data.picker[0].url);
+    if(!videoUrl) throw new Error("No URL returned");
+
+    currentUrl = videoUrl;
     document.getElementById('resultCard').classList.remove('hidden');
-    document.getElementById('thumb').src = data.thumb || "";
-    document.getElementById('vTitle').innerText = data.filename || "Video Ready";
-    document.getElementById('status').innerText = "Player Ready ✓ - 3 dots > Download ඔබන්න";
+    document.getElementById('thumb').src = data.thumb || data.picker?.[0]?.thumb || "";
+    document.getElementById('vTitle').innerText = data.filename || data.picker?.[0]?.type || "Video Ready";
 
-    // Player එකට කෙලින්ම Link එක දානවා
+    // Proxy හරහා Player එකට දානවා - මේක තමයි Fix එක
+    const proxiedUrl = "proxy.php?url=" + encodeURIComponent(videoUrl);
+
     const player = document.getElementById('player');
-    player.src = data.url;
+    const placeholder = document.getElementById('playerPlaceholder');
+
+    player.classList.remove('hidden');
+    placeholder.classList.add('hidden');
+    player.src = proxiedUrl;
     player.load();
 
-    document.getElementById('openNewTab').href = data.url;
-    document.getElementById('thumb').style.display = "none"; // thumb හංගනවා player එක ආවම
+    document.getElementById('openNewTab').href = proxiedUrl;
+    document.getElementById('status').innerText = "Player Ready ✓ - 3 dots > Download";
 
   }catch(e){
     document.getElementById('errorBox').innerText = "Error: "+e.message;
     document.getElementById('errorBox').classList.remove('hidden');
   }finally{
-    document.getElementById('goBtn').innerText = "GO";
+    goBtn.innerText = "GO";
   }
 }
 
-function shareLink(){
-  const player = document.getElementById('player');
-  if(navigator.share && player.src){
-    navigator.share({title: "Video", url: player.src});
-  } else {
-    navigator.clipboard.writeText(player.src);
-    alert("Link Copied!");
-  }
+function downloadViaProxy(){
+  if(!currentUrl) return;
+  const proxiedUrl = "proxy.php?url=" + encodeURIComponent(currentUrl);
+  window.open(proxiedUrl, "_blank");
 }
 </script>
 </body>
-    </html>
+</html>
