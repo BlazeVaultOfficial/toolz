@@ -1,21 +1,76 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-</head><body style="background:#000;color:#fff;padding:20px;font-family:sans-serif">
-<input id="u" style="width:100%;padding:15px;border-radius:20px;background:#111;color:#fff" placeholder="link">
-<button onclick="go()" style="width:100%;padding:15px;margin-top:10px;border-radius:20px;background:#fff;font-weight:bold">GET</button>
-<div id="o" style="display:none;margin-top:20px">
-<video id="v" controls playsinline controlsList="download" style="width:100%;border-radius:15px;background:#111"></video>
-<a id="a" target="_blank" style="display:block;margin-top:10px;background:#222;padding:15px;border-radius:20px;text-align:center;color:#fff;text-decoration:none">නොපෙනේ නම් මෙතන ඔබන්න</a>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OLD PIECES.</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0a0a0a] text-white flex justify-center p-4">
+<div class="w-full max-w-xl mt-8">
+
+  <div class="bg-white/[0.06] border border-white/10 rounded-[28px] p-6">
+    <h1 class="text-xs tracking-[0.4em] opacity-30">OLD PIECES.</h1>
+    <input id="urlInput" placeholder="Paste YouTube link..." class="w-full mt-4 bg-black border border-white/10 rounded-full px-6 py-4 text-sm outline-none">
+    <button onclick="getVideo()" id="goBtn" class="w-full mt-3 bg-white text-black rounded-full py-4 font-bold text-sm">GET VIDEO</button>
+  </div>
+
+  <div id="result" class="hidden mt-6 bg-white/[0.06] border border-white/10 rounded-[28px] p-5">
+    <img id="thumb" class="w-full rounded-2xl bg-black mb-4">
+    <h3 id="title" class="text-sm mb-4"></h3>
+
+    <!-- 1. Preview Player -->
+    <video id="player" controls playsinline class="w-full rounded-2xl bg-black"></video>
+
+    <!-- 2. Main Button - Opens in New Tab (No Download Manager) -->
+    <a id="openBtn" target="_blank" class="mt-4 block w-full text-center bg-white text-black rounded-full py-4 font-bold text-sm">OPEN & DOWNLOAD</a>
+
+    <p class="text-[11px] opacity-50 mt-3 text-center leading-6">
+      Button එක ඔබලා අලුත් Tab එකේ Open කරලා<br>
+      එතන තියෙන <b>⋮ > Download</b> ඔබන්න<br>
+      එතකොට `Failed` වෙන්නේ නෑ
+    </p>
+  </div>
+
+  <p id="error" class="hidden mt-4 text-xs text-center text-red-400 bg-red-500/10 p-3 rounded-xl"></p>
+
 </div>
+
 <script>
-async function go(){
- let url=document.getElementById('u').value;
- let r=await fetch('https://co.wuk.sh/api/json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:url})});
- let d=await r.json();
- let link=d.url;
- document.getElementById('o').style.display='block';
- document.getElementById('v').src=link;
- document.getElementById('a').href=link;
+async function getVideo(){
+  const url = document.getElementById('urlInput').value.trim();
+  if(!url) return;
+  const btn = document.getElementById('goBtn');
+  btn.innerText = "Loading...";
+
+  try{
+    // ඔයාගේ Railway API එක විතරයි
+    const res = await fetch("https://cobalt-tools-production-5ad7.up.railway.app/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({ url: url, videoQuality: "720" })
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if(data.status === "error") throw new Error(data.error.code || "Error");
+    let videoUrl = data.url;
+    if(!videoUrl) throw new Error("No video URL");
+
+    document.getElementById('result').classList.remove('hidden');
+    document.getElementById('thumb').src = data.thumb || "";
+    document.getElementById('title').innerText = data.filename || "Ready";
+    document.getElementById('player').src = videoUrl;
+    document.getElementById('openBtn').href = videoUrl;
+
+  }catch(e){
+    document.getElementById('error').innerText = "Error: " + e.message + " - Railway App එක Sleep වෙලා නම් 30s ඉඳලා ආයේ Try කරන්න";
+    document.getElementById('error').classList.remove('hidden');
+  }finally{
+    btn.innerText = "GET VIDEO";
+  }
 }
 </script>
-</body></html>
+</body>
+ </html>
