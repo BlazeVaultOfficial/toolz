@@ -5,183 +5,72 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OLD PIECES - Downloader</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Space Grotesk', sans-serif; background:#0a0a0a; color:#e5e5e5;}
-.glass{ background:rgba(255,255,255,0.04); backdrop-filter: blur(12px); border:1px solid rgba(255,255,255,0.08);}
+body{font-family: sans-serif; background:#0a0a0a; color:#e5e5e5;}
+.glass{ background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);}
 </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-4 md:p-8">
-
-<div class="w-full max-w-5xl flex justify-between items-center mb-12 opacity-70">
-  <h1 class="text-xl tracking-[0.3em] font-light">OLD PIECES.</h1>
-  <span class="text-xs tracking-widest opacity-50">COBALT v11.7.1 - FIXED</span>
-</div>
-
-<div class="w-full max-w-3xl">
-  <div class="glass rounded-[24px] p-6 md:p-8">
-    <h2 class="text-3xl md:text-4xl font-light mb-2">Paste link to <span class="opacity-50">verify.</span></h2>
-    <p class="text-sm opacity-40 mb-6">youtube / tiktok / fb / insta / twitter - all supported</p>
-    <div class="flex gap-3">
-      <input id="urlInput" type="text" placeholder="https://..." class="flex-1 bg-black/50 border border-white/10 rounded-full px-6 py-4 outline-none focus:border-white/30 transition">
-      <button onclick="fetchVideo()" id="goBtn" class="bg-white text-black rounded-full px-8 py-4 font-semibold hover:bg-white/90 transition">GO</button>
+<body class="min-h-screen flex flex-col items-center p-4">
+<div class="w-full max-w-3xl mt-10">
+  <div class="glass rounded-[24px] p-6">
+    <input id="urlInput" type="text" placeholder="https://..." class="w-full bg-black border border-white/10 rounded-full px-6 py-4 outline-none">
+    <div class="flex gap-2 mt-4">
+      <select id="quality" class="flex-1 bg-black border border-white/10 rounded-full px-4 py-3"><option value="720" selected>720p Video</option><option value="1080">1080p</option><option value="max">Max</option></select>
+      <select id="mode" class="flex-1 bg-black border border-white/10 rounded-full px-4 py-3"><option value="auto">Video</option><option value="audio">Audio MP3</option></select>
+      <button onclick="fetchVideo()" id="goBtn" class="bg-white text-black rounded-full px-8 py-3 font-bold">GO</button>
     </div>
   </div>
 
-  <div id="resultCard" class="hidden mt-8 glass rounded-[24px] p-6 md:p-8">
-    <div class="grid md:grid-cols-[320px_1fr] gap-6">
-      <img id="thumb" class="w-full aspect-video object-cover rounded-xl bg-black" src="">
-      <div>
-        <h3 id="vTitle" class="text-xl leading-tight mb-3 line-clamp-3"></h3>
-        <p id="vAuthor" class="text-sm opacity-50 mb-6"></p>
-        <div class="space-y-4">
-          <div>
-            <label class="text-xs tracking-widest opacity-40">MODE</label>
-            <div class="flex gap-2 mt-2">
-              <button onclick="setMode('auto')" id="modeAuto" class="modeBtn bg-white text-black px-5 py-2 rounded-full text-sm">Video</button>
-              <button onclick="setMode('audio')" id="modeAudio" class="modeBtn bg-white/10 px-5 py-2 rounded-full text-sm">Audio Only</button>
-            </div>
-          </div>
-          <div id="qualityBox">
-            <label class="text-xs tracking-widest opacity-40">QUALITY</label>
-            <select id="quality" class="mt-2 w-full bg-black/50 border border-white/10 rounded-full px-4 py-3 outline-none">
-              <option value="max">Max (1080p+)</option>
-              <option value="1080">1080p</option>
-              <option value="720" selected>720p</option>
-              <option value="480">480p</option>
-              <option value="360">360p</option>
-            </select>
-          </div>
-          <div id="audioBox" class="hidden">
-            <label class="text-xs tracking-widest opacity-40">AUDIO FORMAT</label>
-            <select id="aFormat" class="mt-2 w-full bg-black/50 border border-white/10 rounded-full px-4 py-3 outline-none">
-              <option value="mp3" selected>MP3</option>
-              <option value="opus">OPUS - best</option>
-              <option value="wav">WAV</option>
-            </select>
-          </div>
-        </div>
-        <button onclick="downloadNow()" id="dlBtn" class="w-full mt-8 bg-white text-black rounded-full py-4 font-semibold tracking-widest hover:bg-white/90">DOWNLOAD</button>
-        <p id="status" class="text-xs text-center mt-3 opacity-40"></p>
-      </div>
-    </div>
-    <!-- Picker List for multiple qualities -->
-    <div id="pickerList" class="hidden mt-6 space-y-2"></div>
+  <div id="resultCard" class="hidden mt-6 glass rounded-[24px] p-6">
+    <img id="thumb" class="w-full rounded-xl mb-4">
+    <h3 id="vTitle" class="text-lg mb-2"></h3>
+    <p id="vStatus" class="text-xs opacity-50 mb-4"></p>
+
+    <!-- මේක තමයි වැදගත්ම Fix එක -->
+    <a id="realDownloadLink" href="#" target="_blank" class="block w-full text-center bg-white text-black rounded-full py-4 font-bold tracking-widest">OPEN DOWNLOAD LINK</a>
+    <p class="text-xs text-center mt-3 opacity-40">Link එක Open වෙලා Video එක Play වුනොත්, තිත් 3 ඔබලා Download / Save Video ඔබන්න. Android වලට ඒක තමයි හරියනම විදිහ.</p>
+    <p id="status" class="text-xs text-center mt-2 opacity-60"></p>
   </div>
-  <div id="errorBox" class="hidden mt-6 bg-red-500/10 border border-red-500/20 rounded-full px-6 py-3 text-sm text-red-300 text-center"></div>
+  <div id="errorBox" class="hidden mt-4 bg-red-500/20 p-4 rounded-xl text-center text-sm"></div>
 </div>
 
 <script>
 const API = "https://cobalt-tools-production-5ad7.up.railway.app/";
-let currentMode = "auto";
 let lastResponse = null;
-
-function setMode(m){
-  currentMode = m;
-  document.getElementById('modeAuto').className = m==='auto'? 'modeBtn bg-white text-black px-5 py-2 rounded-full text-sm' : 'modeBtn bg-white/10 px-5 py-2 rounded-full text-sm';
-  document.getElementById('modeAudio').className = m==='audio'? 'modeBtn bg-white text-black px-5 py-2 rounded-full text-sm' : 'modeBtn bg-white/10 px-5 py-2 rounded-full text-sm';
-  document.getElementById('qualityBox').classList.toggle('hidden', m==='audio');
-  document.getElementById('audioBox').classList.toggle('hidden', m!=='audio');
-}
 
 async function fetchVideo(){
   const url = document.getElementById('urlInput').value.trim();
   if(!url) return;
-  const btn = document.getElementById('goBtn');
-  btn.innerText = "...";
+  document.getElementById('goBtn').innerText = "...";
   document.getElementById('errorBox').classList.add('hidden');
-  document.getElementById('pickerList').classList.add('hidden');
-
   try{
     const res = await fetch(API, {
       method: "POST",
       headers: { "Accept": "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({
-        url: url,
-        videoQuality: document.getElementById('quality').value,
-        downloadMode: currentMode,
-        audioFormat: document.getElementById('aFormat').value,
-        filenameStyle: "basic"
-      })
+      body: JSON.stringify({ url: url, videoQuality: document.getElementById('quality').value, downloadMode: document.getElementById('mode').value, audioFormat: "mp3" })
     });
     const data = await res.json();
-    console.log(data);
     if(data.status === "error") throw new Error(data.error.code || JSON.stringify(data.error));
 
     lastResponse = data;
     document.getElementById('resultCard').classList.remove('hidden');
+    document.getElementById('thumb').src = data.thumb || "";
+    document.getElementById('vTitle').innerText = data.filename || "Ready";
+    document.getElementById('vStatus').innerText = data.status.toUpperCase();
 
-    if(data.status === "picker"){
-      document.getElementById('thumb').src = data.picker[0].thumb || "";
-      document.getElementById('vTitle').innerText = "Quality එකක් තෝරන්න - " + data.picker.length + " Options";
-      document.getElementById('vAuthor').innerText = "Picker Mode";
-      document.getElementById('pickerList').classList.remove('hidden');
-      let html = "";
-      data.picker.forEach(p=>{
-        html += `<button onclick="downloadPicker('${p.url}','${p.filename || 'video'}')" class="w-full text-left bg-white/5 border border-white/10 rounded-full px-5 py-3 text-sm hover:bg-white/10 flex justify-between"><span>${p.type || ''} ${p.ext? '('+p.ext+')' : ''}</span><span>↓</span></button>`;
-      });
-      document.getElementById('pickerList').innerHTML = html;
-      document.getElementById('status').innerText = "Verified ✓";
-    } else {
-      document.getElementById('thumb').src = data.thumb || `https://picsum.photos/seed/${Date.now()}/640/360`;
-      document.getElementById('vTitle').innerText = data.filename? data.filename.replace(/\.[^/.]+$/, "") : "Video Ready - Verified";
-      document.getElementById('vAuthor').innerText = data.status.toUpperCase() + " • " + (data.filename || '');
-      document.getElementById('status').innerText = "Verified ✓ - DOWNLOAD ඔබන්න";
-    }
-  } catch(e){
-    document.getElementById('errorBox').innerText = "Error: " + e.message;
-    document.getElementById('errorBox').classList.remove('hidden');
-  } finally {
-    btn.innerText = "GO";
-  }
-}
+    // Fix: කෙලින්ම Tunnel Link එක Button එකට දානවා, Blob කරන්නේ නෑ
+    const linkEl = document.getElementById('realDownloadLink');
+    linkEl.href = data.url;
+    document.getElementById('status').innerText = "Verified ✓ - බොත්තම ඔබන්න";
 
-// --- මේක තමයි Fix එක ---
-async function downloadNow(){
-  if(!lastResponse ||!lastResponse.url) return;
-  const dlBtn = document.getElementById('dlBtn');
-  const statusText = document.getElementById('status');
-  dlBtn.innerText = "PREPARING...";
-  statusText.innerText = "Downloading... File එක හදනවා, ටිකක් ඉන්න...";
+    // Auto open once on mobile to trigger download
+    // window.open(data.url, "_blank");
 
-  try {
-    const response = await fetch(lastResponse.url);
-    if(!response.ok) throw new Error("fetch failed");
-    const blob = await response.blob();
-    const blobUrl = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = blobUrl;
-    a.download = lastResponse.filename || "old-pieces-video.mp4";
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(()=>{ window.URL.revokeObjectURL(blobUrl); a.remove(); }, 1000);
-    statusText.innerText = "Downloaded ✓ | Save වුණා";
-    dlBtn.innerText = "DOWNLOAD AGAIN";
-  } catch (err) {
-    console.error(err);
-    // Blob fail වුනොත් පරණ විදිහට Tab එකක Open කරනවා
-    window.open(lastResponse.url, "_blank");
-    statusText.innerText = "Browser එකෙන් Try කරනවා...";
-    dlBtn.innerText = "DOWNLOAD";
-  }
-}
-
-async function downloadPicker(url, filename){
-  const statusText = document.getElementById('status');
-  statusText.innerText = "Downloading " + filename + "...";
-  try{
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const blobUrl = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = blobUrl;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(()=>{ window.URL.revokeObjectURL(blobUrl); a.remove(); }, 1000);
   }catch(e){
-    window.open(url, "_blank");
+    document.getElementById('errorBox').innerText = e.message;
+    document.getElementById('errorBox').classList.remove('hidden');
+  }finally{
+    document.getElementById('goBtn').innerText = "GO";
   }
 }
 </script>
