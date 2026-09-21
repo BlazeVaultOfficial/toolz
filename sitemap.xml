@@ -50,4 +50,10 @@
   <priority>0.5</priority>
 </url>
 
+  <url>
+  <loc>https://toolz.run.place/contact.html</loc>
+  <lastmod>2026-09-21</lastmod>
+  <priority>0.5</priority>
+</url>
+
 </urlset>
