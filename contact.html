@@ -1,0 +1,385 @@
+<!DOCTYPE html><html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="manifest" href="/site.webmanifest"><link rel="stylesheet" href="/ads-fix.css"><title>Contact Toolz - Get in Touch | Toolz.run.place</title><meta name="description" content="Contact Toolz.run.place for questions, feedback, bug reports, suggestions and other inquiries about our free online tools."><meta name="robots" content="index, follow"><link rel="canonical" href="https://toolz.run.place/contact.html"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet"><style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,sans-serif
+}
+
+body{
+background:#08080d;
+color:#fff;
+min-height:100vh;
+line-height:1.8
+}
+
+a{
+color:inherit
+}
+
+.top{
+position:sticky;
+top:0;
+z-index:99;
+background:rgba(8,8,13,0.9);
+backdrop-filter:blur(16px);
+border-bottom:1px solid #19192a
+}
+
+.nav{
+max-width:1100px;
+margin:0 auto;
+padding:14px 24px;
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.logo{
+font-weight:800;
+font-size:22px
+}
+
+.logo span{
+color:#f59e0b
+}
+
+.back{
+color:#a1a1b5;
+font-size:12px;
+font-weight:700;
+text-decoration:none
+}
+
+.back:hover{
+color:#f59e0b
+}
+
+.hero{
+text-align:center;
+padding:60px 24px 30px;
+max-width:850px;
+margin:0 auto;
+position:relative
+}
+
+.hero::before{
+content:"";
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:600px;
+height:300px;
+background:radial-gradient(circle,rgba(245,158,11,0.15) 0%,transparent 70%);
+pointer-events:none
+}
+
+.hero h1{
+font-size:48px;
+font-weight:900;
+letter-spacing:-2.5px;
+position:relative
+}
+
+.hero h1 span{
+background:linear-gradient(90deg,#f59e0b,#ec4899,#8b5cf6);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent
+}
+
+.hero p{
+color:#71717a;
+margin-top:12px;
+font-size:15px;
+position:relative
+}
+
+.content{
+max-width:900px;
+margin:20px auto 50px;
+padding:0 24px
+}
+
+.contact-card{
+background:linear-gradient(180deg,#141425,#12121d);
+border:1px solid #1e1e32;
+border-radius:20px;
+padding:32px
+}
+
+.contact-card h2{
+color:#fff;
+font-size:22px;
+font-weight:800;
+margin-bottom:10px
+}
+
+.contact-card p{
+color:#a1a1b5;
+font-size:14px;
+margin-bottom:18px
+}
+
+.contact-box{
+margin-top:25px;
+background:#0e0e17;
+border:1px solid #1e1e32;
+border-radius:16px;
+padding:22px
+}
+
+.contact-label{
+color:#52525b;
+font-size:10px;
+font-weight:800;
+letter-spacing:1.5px;
+text-transform:uppercase
+}
+
+.contact-email{
+display:inline-block;
+margin-top:5px;
+color:#f59e0b;
+font-size:16px;
+font-weight:700;
+text-decoration:none;
+overflow-wrap:anywhere
+}
+
+.contact-email:hover{
+text-decoration:underline
+}
+
+.topics{
+margin-top:28px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px
+}
+
+.topic{
+background:#12121d;
+border:1px solid #1e1e32;
+border-radius:14px;
+padding:16px
+}
+
+.topic strong{
+display:block;
+color:#fff;
+font-size:13px;
+margin-bottom:3px
+}
+
+.topic span{
+color:#71717a;
+font-size:12px
+}
+
+.note{
+margin-top:25px;
+padding:15px 18px;
+background:rgba(245,158,11,0.06);
+border:1px solid rgba(245,158,11,0.15);
+border-radius:14px;
+color:#a1a1b5;
+font-size:12px
+}
+
+.ad-box{
+max-width:1100px;
+margin:20px auto;
+padding:0 24px;
+display:flex;
+justify-content:center;
+overflow:hidden
+}
+
+.footer{
+margin-top:40px;
+background:#0a0a12;
+border-top:1px solid #1a1a2e;
+padding:50px 24px 30px;
+text-align:center
+}
+
+.footer-links{
+color:#3f3f55;
+font-size:12px;
+margin-bottom:25px
+}
+
+.footer-links a{
+color:#52525b;
+text-decoration:underline;
+margin:0 8px
+}
+
+.special-bottom{
+max-width:500px;
+margin:0 auto;
+background:linear-gradient(135deg,#12121d,#1a1a2e);
+border:1px solid #26263a;
+border-radius:20px;
+padding:18px 24px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:16px
+}
+
+.special-bottom .item{
+text-align:left
+}
+
+.special-bottom .label{
+color:#52525b;
+font-size:10px;
+font-weight:800;
+letter-spacing:1.5px;
+text-transform:uppercase
+}
+
+.special-bottom .value{
+color:#fff;
+font-size:13px;
+font-weight:700;
+margin-top:2px
+}
+
+.special-bottom .value span{
+color:#f59e0b
+}
+
+.special-bottom .divider{
+width:1px;
+height:35px;
+background:#26263a
+}
+
+.special-bottom .flag{
+font-size:24px
+}
+
+html,
+body{
+width:100%;
+max-width:100%;
+overflow-x:hidden
+}
+
+@media(max-width:600px){
+
+.hero{
+padding-top:45px
+}
+
+.hero h1{
+font-size:36px;
+letter-spacing:-1.8px
+}
+
+.contact-card{
+padding:22px
+}
+
+.topics{
+grid-template-columns:1fr
+}
+
+.special-bottom{
+flex-direction:column;
+align-items:flex-start
+}
+
+.special-bottom .divider{
+width:100%;
+height:1px
+}
+
+}
+
+</style></head><body><!-- =========================
+     NAVBAR
+     ========================= --><div class="top"><div class="nav"><div class="logo">
+toolz<span>.run.place</span>
+</div><a href="/" class="back">
+← All Tools
+</a></div></div><!-- =========================
+     HERO
+     ========================= --><div class="hero"><h1>
+Contact <span>Toolz</span>
+</h1><p>
+Have a question, suggestion or problem? We'd love to hear from you.
+</p></div><!-- =========================
+     CONTENT
+     ========================= --><div class="content"><div class="contact-card"><h2>Get in Touch</h2><p>
+Toolz.run.place is built to provide simple, fast and useful online tools.
+If you have a question, find a problem, or have an idea that could improve Toolz,
+you can contact us by email.
+</p><div class="contact-box"><div class="contact-label">
+Email
+</div><a
+href="mailto:lakninduk@gmail.com"
+class="contact-email">
+lakninduk@gmail.com
+</a>
+
+</div><div class="topics"><div class="topic">
+<strong>🐞 Bug Reports</strong>
+<span>Tell us about a tool that is not working correctly.</span>
+</div><div class="topic">
+<strong>💡 Suggestions</strong>
+<span>Suggest a new tool or feature for Toolz.</span>
+</div><div class="topic">
+<strong>❓ General Questions</strong>
+<span>Ask us about Toolz and our online tools.</span>
+</div><div class="topic">
+<strong>🔒 Privacy</strong>
+<span>Contact us about privacy or data-related questions.</span>
+</div></div><div class="note">
+<strong>Before contacting us:</strong>
+Please include the name of the tool you are referring to and a short description
+of the problem or question. This helps us understand and respond to your request more effectively.
+</div></div></div><!-- =========================
+     AD
+     ========================= --><div class="ad-box" data-nosnippet><div id="ad-bottom"><script>
+atOptions = {
+'key' : 'fa40223cbaa35a71666874d8c4f6de9d',
+'format' : 'iframe',
+'height' : 90,
+'width' : 728,
+'params' : {}
+};
+</script><script src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script></div></div><!-- =========================
+     FOOTER
+     ========================= --><div class="footer" data-nosnippet><div class="footer-links">© 2026 toolz.run.place | All Tools Free & Private
+<br>
+
+<a href="privacy.html">
+Privacy Policy
+</a><a href="contact.html">
+Contact
+</a></div><div class="special-bottom"><div class="item"><div class="label">
+Made In
+</div><div class="value">
+🇱🇰 Southern Province,
+<span>Sri Lanka</span>
+</div></div><div class="divider"></div><div class="item"><div class="label">
+Created By
+</div><div class="value">
+<span>Prabhasha Laknindu</span>
+</div></div><div class="flag">
+🌴
+</div></div></div></body>
+</html>
