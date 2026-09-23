@@ -9,16 +9,11 @@
 <meta name="author" content="Prabhasha Laknindu">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://toolz.run.place/image-compressor.html">
-
 <meta property="og:title" content="Image Compressor - Free & Offline">
 <meta property="og:description" content="Compress images up to 80% free, private and offline. No server upload.">
 <meta property="og:url" content="https://toolz.run.place/image-compressor.html">
 <meta property="og:type" content="website">
-
-<!-- YOUR NEW AD CODE -->
 <script src="https://pl31374026.profitableratecpmnetwork.com/33/28/9c/33289c1dd3808d1699259423a63b7e9f.js"></script>
-
-<!-- SCHEMA FOR THIS TOOL -->
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -43,7 +38,6 @@
   ]
 }
 </script>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
@@ -81,16 +75,21 @@ a{text-decoration:none;color:inherit}
 .special-bottom.value{color:#fff;font-size:13px;font-weight:700;margin-top:2px}
 .special-bottom.value span{color:#f59e0b}
 .special-bottom.divider{width:1px;height:35px;background:#26263a}
+/* FIXED - BANNER FIT TO SCREEN */
+.ad-box{width:100%;overflow:hidden;box-sizing:border-box}
+#ad-bottom{width:100%;max-width:728px;overflow:hidden;display:flex;justify-content:center;margin:0 auto}
+#ad-bottom iframe{max-width:100%!important;width:100%!important}
+@media(max-width:768px){
+  #ad-bottom{max-width:100%}
+ .ad-box{padding:0 12px}
+}
 </style>
 </head>
 <body>
-
 <div class="top"><div class="nav"><a href="/" class="logo">toolz<span>.run.place</span></a><div style="color:#52525b;font-size:12px;font-weight:700">100% OFFLINE • PRIVATE</div></div></div>
-
 <div class="wrap">
 <h1 class="h1">Image <span>Compressor</span></h1>
 <p class="sub">Compress JPG, PNG, WEBP up to 80% - 100% Offline, No upload to server</p>
-
 <div class="box">
 <div class="drop" id="drop">
 <input type="file" id="file" accept="image/*">
@@ -98,7 +97,6 @@ a{text-decoration:none;color:inherit}
 <div style="font-weight:700;margin-top:8px">Click or Drag & Drop Image Here</div>
 <div style="color:#6b7280;font-size:12px;margin-top:4px">JPG, PNG, WEBP Supported - Max 10MB</div>
 </div>
-
 <div class="controls" id="controls">
 <div style="margin-top:10px"><label style="font-size:12px;color:#a1a1b5">Quality: <span id="qval" style="color:#f59e0b">80%</span></label><input type="range" id="quality" min="10" max="100" value="80" style="width:100%;margin-top:6px;accent-color:#f59e0b"></div>
 <div class="row">
@@ -111,13 +109,10 @@ a{text-decoration:none;color:inherit}
 </div>
 </div>
 </div>
-
 <div class="seo">
 <h2>Free Online Image Compressor - Compress Images Without Losing Quality</h2>
 <p>Our Image Compressor is 100% free, private and offline. Your images never leave your device - all compression happens in your browser. Support JPG, PNG, WEBP. Reduce image size up to 80% perfect for web, social media, email and storage. No signup, no watermark.</p>
 </div>
-
-<!-- BOTTOM AD ONLY - YOUR AD CODE -->
 <div class="ad-box">
 <div id="ad-bottom">
 <script>
@@ -132,7 +127,6 @@ a{text-decoration:none;color:inherit}
 <script src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script>
 </div>
 </div>
-
 <div class="footer">
 <div class="footer-links">© 2026 toolz.run.place | <a href="/">Home</a> <a href="privacy.html">Privacy</a></div>
 <div class="special-bottom">
@@ -142,7 +136,6 @@ a{text-decoration:none;color:inherit}
 <div class="flag">🌴</div>
 </div>
 </div>
-
 <script>
 const drop=document.getElementById('drop'),file=document.getElementById('file'),quality=document.getElementById('quality'),qval=document.getElementById('qval'),controls=document.getElementById('controls'),orig=document.getElementById('orig'),comp=document.getElementById('comp'),saved=document.getElementById('saved'),imgOrig=document.getElementById('imgOrig'),imgComp=document.getElementById('imgComp'),download=document.getElementById('download');
 let originalFile=null, compressedBlob=null;
@@ -183,6 +176,5 @@ download.addEventListener('click',()=>{
  a.click();
 });
 </script>
-
 </body>
   </html>
