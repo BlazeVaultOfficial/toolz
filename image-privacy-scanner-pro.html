@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Image Privacy Scanner & Metadata Remover PRO | EXIF GPS Cleaner | Toolz.run.place</title>
+<meta name="description" content="Free professional Image Privacy Scanner and Metadata Remover. Detect EXIF, GPS, camera, date, XMP and IPTC metadata, calculate a privacy risk score, clean images locally, scan multiple images and download a ZIP. No upload or signup.">
+<meta name="keywords" content="image privacy scanner, EXIF remover, EXIF viewer, metadata remover, GPS metadata remover, photo privacy checker, image metadata cleaner, EXIF GPS scanner, remove photo location, batch metadata remover, privacy risk score">
+<link rel="canonical" href="https://toolz.run.place/image-privacy-scanner.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/exifr/dist/lite.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:#08080d;color:#f5f5f7;font-family:Inter,Arial,sans-serif}
+nav{position:sticky;top:0;z-index:10;background:rgba(8,8,13,.92);backdrop-filter:blur(14px);border-bottom:1px solid #1e1e32}
+.nav-inner{max-width:900px;margin:auto;padding:15px 18px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:21px;font-weight:800;color:#fff}.logo span{color:#a855f7}
+.back{color:#fff;text-decoration:none;background:#171725;border:1px solid #292941;padding:9px 14px;border-radius:10px;font-size:13px;font-weight:700}
+main{max-width:760px;margin:auto;padding:36px 16px 60px}
+.hero{text-align:center;margin-bottom:25px}.hero h1{font-size:42px;line-height:1.08;margin:0 0 13px;font-weight:800;background:linear-gradient(90deg,#8b5cf6,#ec4899);-webkit-background-clip:text;color:transparent}
+.hero p{color:#a6a6b4;line-height:1.65;margin:0 auto;max-width:650px}
+.ad-wrap{max-width:520px;margin:18px auto;overflow:hidden;text-align:center;min-height:90px}
+.box{max-width:520px;margin:0 auto;background:#12121d;border:1px solid #1e1e32;border-radius:20px;padding:22px;box-shadow:0 15px 50px rgba(0,0,0,.25)}
+.drop{border:2px dashed #34344e;border-radius:16px;padding:30px 18px;text-align:center;cursor:pointer;transition:.2s;background:#0e0e17}
+.drop:hover,.drop.drag{border-color:#a855f7;background:#11101c}
+.drop strong{display:block;font-size:17px;margin-bottom:7px}.drop small{color:#8f8fa1}
+input[type=file]{display:none}
+.btn{border:0;border-radius:11px;padding:12px 15px;font:700 14px Inter;cursor:pointer;color:#fff;background:linear-gradient(90deg,#8b5cf6,#ec4899)}
+.btn.secondary{background:#1b1b2a;border:1px solid #303047}.btn:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.status{margin-top:14px;padding:12px;border-radius:11px;background:#0e0e17;color:#aaaabd;font-size:13px}
+.progress{height:7px;background:#202033;border-radius:20px;overflow:hidden;margin-top:10px;display:none}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8b5cf6,#ec4899)}
+.preview{display:none;margin-top:18px;text-align:center}.preview img{max-width:100%;max-height:280px;border-radius:12px;border:1px solid #25253a}
+.result{display:none;margin-top:20px}
+.risk{padding:17px;border-radius:15px;text-align:center;background:#0e0e17;border:1px solid #24243a;margin-bottom:14px}
+.risk .score{font-size:34px;font-weight:800}.risk .label{font-weight:800;margin-top:3px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.item{background:#0e0e17;border:1px solid #202035;border-radius:12px;padding:12px}
+.item b{display:block;font-size:11px;color:#85859a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}.item span{font-size:13px;word-break:break-word}
+.good{color:#4ade80}.warn{color:#fbbf24}.bad{color:#fb7185}
+.batch{margin-top:16px}.batch h3{font-size:16px;margin:0 0 10px}.row{padding:11px;border-bottom:1px solid #222237;font-size:13px}.row:last-child{border-bottom:0}
+.seo{margin-top:28px;background:#0e0e17;border:1px solid #1e1e32;border-radius:18px;padding:22px;line-height:1.75;color:#b2b2c1}.seo h2,.seo h3{color:#fff}.seo h2{font-size:21px}.seo h3{font-size:16px;margin-top:22px}
+footer{text-align:center;color:#77778a;font-size:12px;padding:25px 16px;border-top:1px solid #171726}
+@media(max-width:600px){.hero h1{font-size:34px}.box{padding:17px}.grid{grid-template-columns:1fr}.nav-inner{padding:13px 14px}.back{font-size:12px}}
+</style>
+
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"SoftwareApplication",
+ "name":"Image Privacy Scanner & Metadata Remover PRO",
+ "applicationCategory":"UtilitiesApplication",
+ "operatingSystem":"Web Browser",
+ "description":"Browser-based image privacy scanner and metadata remover with EXIF, GPS, camera, date, batch scanning and ZIP cleaning.",
+ "url":"https://toolz.run.place/image-privacy-scanner.html",
+ "author":{"@type":"Person","name":"Prabhasha Laknindu"},
+ "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}
+</script>
+</head>
+<body>
+
+<nav><div class="nav-inner">
+<div class="logo">toolz<span>.run.place</span></div>
+<a class="back" href="/">← All Tools</a>
+</div></nav>
+
+<main>
+<section class="hero">
+<h1>Image Privacy Scanner</h1>
+<p>Detect hidden photo metadata, GPS location, camera details and timestamps. Clean your images locally and download privacy-safe copies.</p>
+</section>
+
+<div class="ad-wrap">
+<script>
+atOptions={'key':'fa40223cbaa35a71666874d8c4f6de9d','format':'iframe','height':90,'width':728,'params':{}};
+</script>
+<script src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script>
+</div>
+
+<section class="box">
+<div class="drop" id="drop">
+<strong>🔐 Drop images here</strong>
+<small>JPG, JPEG, PNG, WebP and other browser-supported images • Single or multiple files</small>
+<input id="files" type="file" accept="image/*" multiple>
+</div>
+
+<div class="actions">
+<button class="btn" id="choose">Choose Images</button>
+<button class="btn secondary" id="scan" disabled>🔍 Scan Privacy</button>
+<button class="btn secondary" id="cleanAll" disabled>🧹 Clean All</button>
+<button class="btn secondary" id="zip" disabled>📦 Download ZIP</button>
+</div>
+
+<div class="status" id="status">Select one or more images to begin.</div>
+<div class="progress" id="progress"><i></i></div>
+<div class="preview" id="preview"></div>
+
+<div class="result" id="result">
+<div class="risk">
+<div>Privacy Risk Score</div>
+<div class="score" id="score">0/100</div>
+<div class="label" id="riskLabel">Not scanned</div>
+</div>
+<div class="grid" id="details"></div>
+<div class="batch" id="batch"></div>
+</div>
+</section>
+
+<div class="ad-wrap">
+<script>
+atOptions={'key':'fa40223cbaa35a71666874d8c4f6de9d','format':'iframe','height':90,'width':728,'params':{}};
+</script>
+<script src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script>
+</div>
+
+<section class="seo">
+<h2>Free Image Privacy Scanner & Metadata Remover</h2>
+<p>This browser-based privacy tool checks image metadata that can reveal information about a photograph. It can detect EXIF fields such as GPS coordinates, camera information, capture date, software and other available metadata.</p>
+
+<h3>What can photo metadata reveal?</h3>
+<p>Photos may contain location coordinates, camera model, lens information, timestamps, software names and other embedded information. Before sharing a sensitive image online, scanning its metadata can help you understand what information is attached to the file.</p>
+
+<h3>Private browser processing</h3>
+<p>The scanning and cleaning logic runs in your browser. Your selected images are not intentionally uploaded to a Toolz server. GPS reverse-geocoding is only performed when you explicitly use a location lookup and requires an external map service request.</p>
+
+<h3>How the cleaner works</h3>
+<p>The cleaner creates a fresh browser-generated image copy rather than modifying the original file. This normally removes source EXIF metadata from the generated copy. Always verify the output when handling highly sensitive files because browser image formats and metadata support can vary.</p>
+</section>
+</main>
+
+<footer>© 2026 toolz.run.place | Made by Prabhasha Laknindu | Private & Free</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const fileInput=$("files"),drop=$("drop"),choose=$("choose"),scanBtn=$("scan"),cleanBtn=$("cleanAll"),zipBtn=$("zip");
+let files=[], reports=[], cleaned=[];
+
+choose.onclick=()=>fileInput.click();
+drop.onclick=e=>{if(e.target!==fileInput)fileInput.click()};
+["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("drag")}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("drag")}));
+drop.addEventListener("drop",e=>setFiles([...e.dataTransfer.files]));
+fileInput.addEventListener("change",e=>setFiles([...e.target.files]));
+
+function setFiles(arr){
+ files=arr.filter(f=>f.type.startsWith("image/"));
+ reports=[]; cleaned=[];
+ $("result").style.display="none"; $("preview").style.display="none";
+ scanBtn.disabled=!files.length; cleanBtn.disabled=!files.length; zipBtn.disabled=true;
+ $("status").textContent=files.length?`${files.length} image${files.length>1?"s":""} selected. Click Scan Privacy.`:"No supported images selected.";
+}
+
+async function parseMetadata(file){
+ try{return await exifr.parse(file,{gps:true,xmp:true,iptc:true,icc:true,translateValues:true,translateKeys:true});}
+ catch(e){return null}
+}
+
+function first(meta,...keys){
+ for(const k of keys){if(meta && meta[k]!==undefined && meta[k]!==null && meta[k]!=="")return meta[k]}
+ return null;
+}
+function fmt(v){
+ if(v instanceof Date)return v.toLocaleString();
+ if(typeof v==="number")return Number.isInteger(v)?String(v):v.toFixed(6);
+ return String(v);
+}
+function hasAny(meta,keys){return !!first(meta,...keys)}
+
+function risk(meta){
+ let s=0;
+ if(hasAny(meta,["latitude","GPSLatitude","latitudeRef"]))s+=40;
+ if(hasAny(meta,["Make","Model","LensModel","CameraModelName"]))s+=15;
+ if(hasAny(meta,["SerialNumber","InternalSerialNumber","BodySerialNumber"]))s+=25;
+ if(hasAny(meta,["DateTimeOriginal","CreateDate","ModifyDate"]))s+=10;
+ if(hasAny(meta,["Software","ProcessingSoftware"]))s+=5;
+ if(hasAny(meta,["Artist","Copyright"]))s+=5;
+ return Math.min(100,s);
+}
+
+function riskText(s){return s>=70?"HIGH":s>=35?"MEDIUM":s>0?"LOW":"CLEAN"}
+
+function card(label,value,cls=""){
+ return `<div class="item"><b>${label}</b><span class="${cls}">${value}</span></div>`;
+}
+
+scanBtn.onclick=async()=>{
+ if(!files.length)return;
+ reports=[]; $("status").textContent="Scanning metadata locally…";
+ $("progress").style.display="block";
+ for(let i=0;i<files.length;i++){
+  const f=files[i], meta=await parseMetadata(f), score=risk(meta);
+  reports.push({file:f,meta,score});
+  $("progress").firstElementChild.style.width=((i+1)/files.length*100)+"%";
+ }
+ renderReport();
+ $("status").textContent=`Scan complete: ${files.length} image${files.length>1?"s":""} checked locally.`;
+ zipBtn.disabled=false;
+};
+
+function renderReport(){
+ const r=reports[0],m=r.meta||{},s=r.score;
+ $("result").style.display="block";
+ $("score").textContent=s+"/100";
+ $("riskLabel").textContent=riskText(s);
+ $("riskLabel").className=s>=70?"bad":s>=35?"warn":"good";
+ const gps=first(m,"latitude","GPSLatitude");
+ const lon=first(m,"longitude","GPSLongitude");
+ const camera=[first(m,"Make"),first(m,"Model")].filter(Boolean).join(" ")||null;
+ const serial=first(m,"SerialNumber","InternalSerialNumber","BodySerialNumber");
+ const date=first(m,"DateTimeOriginal","CreateDate","ModifyDate");
+ const software=first(m,"Software","ProcessingSoftware");
+ const copyright=first(m,"Copyright","Artist");
+ $("details").innerHTML=
+ card("GPS Location",gps!==null?`${fmt(gps)}, ${fmt(lon)}`:"Not found",gps!==null?"bad":"good")+
+ card("Camera",camera||"Not found",camera?"warn":"good")+
+ card("Capture Date",date?fmt(date):"Not found",date?"warn":"good")+
+ card("Serial Number",serial?"Found":"Not found",serial?"bad":"good")+
+ card("Software",software||"Not found",software?"warn":"good")+
+ card("Copyright / Artist",copyright||"Not found",copyright?"warn":"good")+
+ card("EXIF",m&&Object.keys(m).length?"Detected":"Not detected",Object.keys(m).length?"warn":"good")+
+ card("File",r.file.name,"");
+ let html=`<h3>Scan Results (${reports.length})</h3>`;
+ reports.forEach(x=>html+=`<div class="row">🖼️ ${escapeHtml(x.file.name)} — <strong class="${x.score>=70?"bad":x.score>=35?"warn":"good"}">${x.score}/100 ${riskText(x.score)}</strong></div>`);
+ $("batch").innerHTML=html;
+}
+
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+
+async function cleanFile(file){
+ const bitmap=await createImageBitmap(file);
+ const canvas=document.createElement("canvas");
+ canvas.width=bitmap.width; canvas.height=bitmap.height;
+ const ctx=canvas.getContext("2d",{alpha:true});
+ ctx.drawImage(bitmap,0,0);
+ bitmap.close?.();
+ const type=file.type==="image/png"?"image/png":"image/jpeg";
+ const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create image")),type,.95));
+ return {blob,name:file.name.replace(/\.[^.]+$/,"")+"_clean."+ (type==="image/png"?"png":"jpg")};
+}
+
+cleanBtn.onclick=async()=>{
+ if(!files.length)return;
+ cleaned=[]; $("status").textContent="Creating clean copies locally…"; $("progress").style.display="block";
+ for(let i=0;i<files.length;i++){
+  try{cleaned.push(await cleanFile(files[i]));}catch(e){}
+  $("progress").firstElementChild.style.width=((i+1)/files.length*100)+"%";
+ }
+ $("status").textContent=`Created ${cleaned.length} clean image${cleaned.length!==1?"s":""}.`;
+ zipBtn.disabled=!cleaned.length;
+ if(cleaned.length===1)downloadBlob(cleaned[0].blob,cleaned[0].name);
+};
+
+zipBtn.onclick=async()=>{
+ if(!cleaned.length){await cleanBtn.onclick();return}
+ const zip=new JSZip();
+ cleaned.forEach(x=>zip.file(x.name,x.blob));
+ $("status").textContent="Building ZIP…";
+ const blob=await zip.generateAsync({type:"blob"});
+ downloadBlob(blob,"toolz-clean-images.zip");
+ $("status").textContent="ZIP ready.";
+};
+
+function downloadBlob(blob,name){
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);a.download=name;a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+// Optional GPS reverse lookup, only after explicit user action.
+async function lookupGPS(lat,lon){
+ const url=`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`;
+ const r=await fetch(url,{headers:{"Accept":"application/json"}});
+ if(!r.ok)throw new Error("Location lookup failed");
+ return r.json();
+}
+</script>
+
+<script src="https://pl31374026.profitableratecpmnetwork.com/33/28/9c/33289c1dd3808d1699259423a63b7e9f.js"></script>
+</body>
+</html>
