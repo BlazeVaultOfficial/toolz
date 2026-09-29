@@ -56,4 +56,32 @@
   <priority>0.5</priority>
 </url>
 
+  <url>
+  <loc>https://toolz.run.place/ip-checker.html</loc>
+  <lastmod>2026-09-30</lastmod>
+  <priority>0.5</priority>
+</url>
+
+  <url>
+  <loc>https://toolz.run.place/ocr.html</loc>
+  <lastmod>2026-09-30</lastmod>
+  <priority>0.5</priority>
+</url>
+  
+  <url>
+  <loc>https://toolz.run.place/image-privacy-scanner-pro.html</loc>
+  <lastmod>2026-09-30</lastmod>
+  <priority>0.5</priority>
+</url>
+
+
+  <url>
+  <loc>https://toolz.run.place/url-encoder-decoder.html</loc>
+  <lastmod>2026-09-30</lastmod>
+  <priority>0.5</priority>
+</url>
+  
+  
+  
+
 </urlset>
