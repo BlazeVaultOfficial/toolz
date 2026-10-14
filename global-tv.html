@@ -189,6 +189,22 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
             }
         }
     </style>
+
+  <style>
+    /* Pushes your website's main wrapper content down so the bar doesn't cover it */
+    body {
+        padding-top: 65px !important; /* Matches desktop bar height */
+    }
+
+    /* Automatically adjusts the padding when the bar shrinks on mobile screens */
+    @media (max-width: 768px) {
+        body {
+            padding-top: 45px !important; /* Matches mobile bar height */
+        }
+    }
+  </style>
+  
+  
 </div>
   
   
