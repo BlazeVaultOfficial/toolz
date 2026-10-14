@@ -231,55 +231,6 @@ button,input{font:inherit}
 </head>
 
 <body>
-
-     <div class="global-tv-bar">
-    <div class="tv-txt">&#9889; <span style="color:#00ffff">Important Notice:</span> Please use Full Screen TV mode for the best experience. Some devices may experience performance issues otherwise. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#9888; <span style="color:#ff3366">Notice:</span> Some channels may temporarily not be working due to server maintenance.</div>
-    
-    <style>
-        /* Base styles for Desktop & Large Screens */
-        .global-tv-bar {
-            width: 100%;
-            background: linear-gradient(90deg, #000000, #1a0033, #001a4d);
-            color: #fff;
-            overflow: hidden;
-            white-space: nowrap;
-            padding: 16px 0;
-            font-size: 24px; /* Big font on desktop */
-            font-weight: bold;
-            font-family: sans-serif;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 9999;
-            border-bottom: 2px solid #8a2be2;
-            box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
-            backdrop-filter: blur(5px);
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        .tv-txt {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 16s linear infinite; /* Normal speed for large screens */
-            text-shadow: 0 0 8px #00ffff, 0 0 12px #8a2be2;
-        }
-        @keyframes marquee {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
-
-        /* 📱 Mobile & Tablet View Adjustments (Screens smaller than 768px) */
-        @media (max-width: 768px) {
-            .global-tv-bar {
-                padding: 10px 0;
-                font-size: 15px; /* Safely shrinks font size so it doesn't overwhelm mobile view */
-            }
-            .tv-txt {
-                animation: marquee 24s linear infinite; /* Slows down the speed significantly for mobile reading comfort */
-            }
-        }
-    </style>
-     </div>
      
 
 <div class="top">
