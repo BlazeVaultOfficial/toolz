@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About the Developer | Prabhasha Kulathunga — Toolz</title>
+  <meta name="description" content="Meet Prabhasha Kulathunga, the student and emerging developer behind Toolz.run.place, learning HTML and Python and building useful online tools.">
+  <meta name="author" content="Prabhasha Laknindu Mudalige Ubeywardhana Kulathunga">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://toolz.run.place/about-developer.html">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Toolz">
+  <meta property="og:title" content="About the Developer | Prabhasha Kulathunga">
+  <meta property="og:description" content="Student, emerging software developer and content creator behind Toolz.">
+  <meta property="og:url" content="https://toolz.run.place/about-developer.html">
+  <meta property="og:image" content="https://toolz.run.place/prabha.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About the Developer | Prabhasha Kulathunga">
+  <meta name="twitter:description" content="Meet the student and emerging developer behind Toolz.">
+  <meta name="twitter:image" content="https://toolz.run.place/prabha.jpg">
+  <meta name="theme-color" content="#080b14">
+  <style>
+    :root {
+      /* Matches Toolz's dark, blue-accented glass UI. */
+      --bg:#080b14; --panel:#101727; --panel2:#0d1321; --line:#243149;
+      --text:#eef4ff; --muted:#a3b0c6; --blue:#5aa8ff; --cyan:#56e0ed;
+      --accent:linear-gradient(110deg,#5aa8ff,#56e0ed);
+      --radius:22px; --max:1080px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(ellipse at 15% 0%,rgba(40,105,190,.16),transparent 38%),var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:inherit}
+    .wrap{width:min(var(--max),calc(100% - 32px));margin:auto}
+    .topbar{height:70px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid rgba(130,160,210,.13)}
+    .brand{font-weight:850;letter-spacing:-.04em;font-size:1.35rem;text-decoration:none}
+    .brand span{background:var(--accent);color:transparent;background-clip:text}
+    .back{color:var(--muted);text-decoration:none;font-size:.92rem}
+    .back:hover{color:var(--cyan)}
+    .hero{padding:30px 0 0}
+    .cover{position:relative;overflow:hidden;aspect-ratio:16/9;max-height:370px;min-height:190px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(120deg,#101a30,#132d4b 55%,#0b1628);isolation:isolate}
+    .cover-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.82}
+    .cover:before,.cover:after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(1px)}
+    .cover:before{width:42%;aspect-ratio:1;right:5%;top:-30%;border:1px solid rgba(86,224,237,.45);box-shadow:0 0 75px rgba(86,224,237,.13),inset 0 0 55px rgba(90,168,255,.12)}
+    .cover:after{width:48%;aspect-ratio:1;right:18%;bottom:-70%;border:1px solid rgba(90,168,255,.3);box-shadow:0 0 90px rgba(90,168,255,.16)}
+    .cover-grid{position:absolute;inset:0;opacity:.17;background-image:linear-gradient(rgba(130,180,240,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(130,180,240,.3) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(90deg,black,transparent)}
+    .cover-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(20px,5vw,58px);max-width:75%}
+    .eyebrow{font-size:.76rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+    .cover h1{font-size:clamp(1.7rem,5vw,3.5rem);line-height:1.08;letter-spacing:-.045em;margin:12px 0}
+    .cover p{margin:0;color:#c7d8ee;max-width:520px}
+    .cover-code{position:absolute;right:5%;top:14%;font:clamp(.8rem,2.1vw,1.2rem)/1.9 ui-monospace,SFMono-Regular,Consolas,monospace;color:rgba(125,219,255,.8);text-align:right}
+    .profile{display:grid;grid-template-columns:160px 1fr;gap:24px;align-items:end;margin:-64px 28px 0;position:relative}
+    .avatar{width:160px;aspect-ratio:1;border-radius:50%;border:5px solid var(--bg);background:linear-gradient(135deg,#15233a,#0c1320);display:grid;place-items:center;overflow:hidden;box-shadow:0 10px 36px rgba(0,0,0,.32)}
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .avatar-fallback{font-size:3rem;font-weight:850;letter-spacing:-.08em;color:var(--cyan)}
+    .identity{padding:0 0 6px}
+    .identity h2{font-size:clamp(1.65rem,4vw,2.5rem);line-height:1.12;letter-spacing:-.04em;margin:0 0 7px}
+    .identity .subtitle{margin:0;color:#c4d1e5}
+    .meta{display:flex;flex-wrap:wrap;gap:9px 15px;margin-top:10px;color:var(--muted);font-size:.9rem}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 15px;border-radius:12px;text-decoration:none;font-weight:750;font-size:.92rem;border:1px solid var(--line);background:#101a2b;transition:transform .18s,border-color .18s}
+    .btn:hover{transform:translateY(-2px);border-color:var(--blue)}
+    .btn.primary{border:0;background:var(--accent);color:#06111c}
+    main{padding:38px 0 60px}
+    .layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(250px,.85fr);gap:18px}
+    .stack{display:grid;gap:18px;align-content:start}
+    .card{background:linear-gradient(145deg,rgba(17,26,43,.96),rgba(11,17,29,.96));border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:0 12px 36px rgba(0,0,0,.12)}
+    .card h2{font-size:1.15rem;letter-spacing:-.02em;margin:0 0 12px}
+    .card p{color:#bdc9dc;margin:0 0 10px}
+    .card p:last-child{margin-bottom:0}
+    .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+    .tag{font-size:.83rem;padding:6px 10px;border-radius:999px;border:1px solid #2a4563;background:#101e31;color:#cfeaff}
+    .skill{margin:15px 0 0}
+    .skill-head{display:flex;justify-content:space-between;gap:12px;font-weight:700;font-size:.92rem}
+    .skill-head span:last-child{font-weight:500;color:var(--muted)}
+    .track{height:7px;background:#202b3f;border-radius:99px;margin-top:8px;overflow:hidden}
+    .track span{height:100%;display:block;border-radius:99px;background:var(--accent)}
+    .project{border:1px solid #293950;border-radius:16px;padding:17px;background:rgba(7,13,23,.45)}
+    .project h3{margin:0 0 6px;font-size:1rem}
+    .project p{font-size:.92rem;margin-bottom:12px}
+    .text-link{color:var(--cyan);font-weight:750;text-decoration:none}
+    .text-link:hover{text-decoration:underline}
+    .social-list{display:grid;gap:10px}
+    .social{display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;padding:12px 14px;border-radius:13px;background:#0b1220;border:1px solid #26354b}
+    .social:hover{border-color:var(--blue);background:#101d30}
+    .social small{display:block;color:var(--muted);font-size:.78rem}
+    .social strong{font-size:.94rem}
+    .arrow{color:var(--cyan);font-size:1.2rem}
+    .learning{display:flex;gap:12px;align-items:flex-start}
+    .learning-icon{flex:0 0 42px;height:42px;display:grid;place-items:center;border-radius:12px;background:#132c3b;font-size:1.25rem}
+    .learning strong{display:block;margin-bottom:3px}
+    .learning p{font-size:.9rem}
+    footer{border-top:1px solid rgba(130,160,210,.15);padding:22px 0 30px;color:var(--muted);font-size:.86rem}
+    footer .foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .note{font-size:.82rem;color:#8798b2}
+    @media(max-width:760px){.profile{grid-template-columns:104px 1fr;gap:14px;margin:-44px 16px 0;align-items:end}.avatar{width:104px;border-width:4px}.avatar-fallback{font-size:2rem}.cover-content{max-width:90%}.cover-code{display:none}.layout{grid-template-columns:1fr}.card{padding:20px}.cover{min-height:200px}}
+    @media(max-width:440px){.topbar{height:62px}.profile{grid-template-columns:1fr;margin:-52px 14px 0;justify-items:start}.avatar{width:104px}.identity{padding-top:2px}.cover h1{font-size:1.8rem}.cover p{font-size:.9rem}.actions .btn{flex:1}.hero{padding-top:18px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"ProfilePage",
+    "name":"About the Developer — Prabhasha Kulathunga",
+    "url":"https://toolz.run.place/about-developer.html",
+    "mainEntity":{
+      "@type":"Person",
+      "@id":"https://toolz.run.place/about-developer.html#prabhasha-kulathunga",
+      "name":"Prabhasha Laknindu Mudalige Ubeywardhana Kulathunga",
+      "alternateName":"Prabhasha Kulathunga",
+      "url":"https://toolz.run.place/about-developer.html",
+      "jobTitle":"Student and Emerging Software Developer",
+      "description":"A student from Matara, Sri Lanka, learning HTML and Python and creating digital tools and content.",
+      "homeLocation":{"@type":"Place","name":"Matara, Sri Lanka"},
+      "sameAs":[
+        "https://www.linkedin.com/in/prabhasha-kulathunga-858203444/",
+        "https://github.com/BlazeVaultOfficial",
+        "https://www.facebook.com/profile.php?id=61586131559025",
+        "https://vm.tiktok.com/ZS9UDsdWFQVcS-YIOUQ/"
+      ],
+      "knowsAbout":["HTML","Python","Web development","Online tools","Content creation"],
+      "worksFor":{"@type":"WebSite","name":"Toolz","url":"https://toolz.run.place/"}
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="wrap topbar">
+    <a class="brand" href="https://toolz.run.place/" aria-label="Toolz home">toolz<span>.</span></a>
+    <a class="back" href="https://toolz.run.place/">← Back to Toolz</a>
+  </header>
+
+  <section class="wrap hero" aria-labelledby="page-title">
+    <div class="cover" role="img" aria-label="16 by 9 developer-themed cover banner">
+      <img class="cover-photo" src="prabha.jpg" alt="" onerror="this.style.display='none'">
+      <div class="cover-grid"></div>
+      <div class="cover-content">
+        <div class="eyebrow">THE PERSON BEHIND TOOLZ</div>
+        <h1 id="page-title">Building my future<br>with code.</h1>
+        <p>Student today. Growing developer, creator and problem-solver for tomorrow.</p>
+      </div>
+      <div class="cover-code" aria-hidden="true">&lt;code /&gt;<br>01001010<br>{ build: future }</div>
+    </div>
+
+    <div class="profile">
+      <div class="avatar" aria-label="Profile photo placeholder">
+        <img src="prabha1.jpg" alt="Prabhasha Kulathunga" onerror="this.remove();this.parentElement.innerHTML='<span class=&quot;avatar-fallback&quot; aria-label=&quot;PK initials&quot;>PK</span>'">
+      </div>
+      <div class="identity">
+        <h2>Prabhasha Kulathunga</h2>
+        <p class="subtitle">Student · Emerging Software Developer · Content Creator</p>
+        <div class="meta"><span>📍 Matara, Sri Lanka</span><span>🌱 Learning and building</span></div>
+        <div class="actions">
+          <a class="btn primary" href="https://toolz.run.place/" rel="noopener">Explore Toolz ↗</a>
+          <a class="btn" href="https://github.com/BlazeVaultOfficial" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a class="btn" href="https://www.linkedin.com/in/prabhasha-kulathunga-858203444/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <div class="layout">
+      <div class="stack">
+        <section class="card" aria-labelledby="about-title">
+          <h2 id="about-title">About me</h2>
+          <p>Hi, I’m Prabhasha — a student from Matara, Sri Lanka, building my skills in technology and digital creation. I’m at the beginning of my software development journey, currently learning the fundamentals of HTML and Python.</p>
+          <p>I enjoy exploring ideas, creating useful online experiences and improving through hands-on projects. Toolz is one of my projects: a collection of online utilities designed to make everyday digital tasks easier.</p>
+          <p>My goal is to keep learning, build better projects, grow as a content creator and work toward future opportunities in software development.</p>
+          <div class="tag-row"><span class="tag">Student</span><span class="tag">Beginner HTML</span><span class="tag">Beginner Python</span><span class="tag">Content creation</span></div>
+        </section>
+
+        <section class="card" aria-labelledby="project-title">
+          <h2 id="project-title">Project spotlight</h2>
+          <div class="project">
+            <h3>🧰 Toolz — Free Online Tools</h3>
+            <p>A growing collection of web utilities for everyday tasks. Visit the live site to explore the tools currently available.</p>
+            <a class="text-link" href="https://toolz.run.place/" target="_blank" rel="noopener noreferrer">Visit toolz.run.place ↗</a>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="skills-title">
+          <h2 id="skills-title">Skills I’m developing</h2>
+          <div class="skill">
+            <div class="skill-head"><span>HTML</span><span>Beginner</span></div>
+            <div class="track" aria-label="HTML skill level: beginner"><span style="width:28%"></span></div>
+          </div>
+          <div class="skill">
+            <div class="skill-head"><span>Python</span><span>Beginner</span></div>
+            <div class="track" aria-label="Python skill level: beginner"><span style="width:22%"></span></div>
+          </div>
+          <p class="note" style="margin-top:14px">These labels reflect my current learning stage, not professional certification or expert-level ability.</p>
+        </section>
+      </div>
+
+      <aside class="stack">
+        <section class="card" aria-labelledby="social-title">
+          <h2 id="social-title">Find me online</h2>
+          <div class="social-list">
+            <a class="social" href="https://www.linkedin.com/in/prabhasha-kulathunga-858203444/" target="_blank" rel="noopener noreferrer"><span><strong>LinkedIn</strong><small>Professional profile</small></span><span class="arrow">↗</span></a>
+            <a class="social" href="https://github.com/BlazeVaultOfficial" target="_blank" rel="noopener noreferrer"><span><strong>GitHub</strong><small>Code and projects</small></span><span class="arrow">↗</span></a>
+            <a class="social" href="https://vm.tiktok.com/ZS9UDsdWFQVcS-YIOUQ/" target="_blank" rel="noopener noreferrer"><span><strong>TikTok</strong><small>@prabhashakulathunga</small></span><span class="arrow">↗</span></a>
+            <a class="social" href="https://www.facebook.com/profile.php?id=61586131559025" target="_blank" rel="noopener noreferrer"><span><strong>Facebook</strong><small>Social profile</small></span><span class="arrow">↗</span></a>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="learning-title">
+          <h2 id="learning-title">Learning journey</h2>
+          <div class="learning">
+            <div class="learning-icon" aria-hidden="true">📘</div>
+            <div><strong>DP Coding Sri Lanka</strong><p>Learning through coding courses and continuing to build foundational programming skills.</p></div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="goals-title">
+          <h2 id="goals-title">What I’m working toward</h2>
+          <p>🚀 Building useful digital projects</p>
+          <p>💻 Growing my software development skills</p>
+          <p>🎬 Developing as a content creator</p>
+          <p>🤝 Exploring future collaboration and work opportunities</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>© <span id="year">2026</span> Prabhasha Kulathunga · Part of Toolz</span>
+      <a class="back" href="https://toolz.run.place/">Visit Toolz home</a>
+    </div>
+  </footer>
+</body>
+</html>
