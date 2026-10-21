@@ -1,46 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Downloader</title>
-</head>
-<body style="background:#000;color:#fff;font-family:sans-serif;padding:20px;display:flex;justify-content:center">
-<div style="max-width:420px;width:100%">
-<input id="u" placeholder="Paste YouTube link" style="width:100%;padding:16px;border-radius:30px;background:#111;border:1px solid #222;color:#fff">
-<button onclick="go()" id="b" style="width:100%;margin-top:10px;padding:16px;border-radius:30px;background:#fff;color:#000;font-weight:bold;border:0">GET VIDEO</button>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YouTube Downloader — Toolz</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#08080d;--surface:#101019;--surface2:#141421;--border:#25253a;--text:#f7f7fb;--muted:#a1a1b5;--subtle:#69697f;--accent:#f59e0b;--accent2:#ec4899}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav{max-width:1320px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;width:100%}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;text-decoration:none;color:var(--text)}
+.brand-mark{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#090910}
+.pill{padding:6px 10px;border:1px solid var(--border);border-radius:999px;background:var(--surface);color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1px}
+.icon-btn{width:38px;height:38px;border:1px solid var(--border);background:var(--surface);border-radius:11px;cursor:pointer;color:var(--text)}
+.main-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 20px;gap:14px;width:100%;max-width:900px;margin:0 auto}
+.hero{text-align:center;position:relative}
+.hero::before{content:"";position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:500px;height:200px;background:radial-gradient(circle,rgba(245,158,11,0.15) 0%,transparent 70%);pointer-events:none}
+.hero h1{font-size:clamp(28px,5vw,46px);letter-spacing:-2.2px;line-height:.9;position:relative}
+.hero h1 span{background:linear-gradient(90deg,#f59e0b,#ec4899,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);font-size:13px;margin-top:8px;position:relative}
+.player-card{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px}
+.field{width:100%;border:1px solid var(--border);border-radius:12px;background:var(--surface2);color:var(--text);padding:14px 14px;outline:none;font-size:14px}
+.field:focus{border-color:#f59e0b66;box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.select{width:100%;border:1px solid var(--border);border-radius:12px;background:var(--surface2);color:var(--text);padding:12px;outline:none;font-size:13px}
+.primary-btn{width:100%;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;margin-top:10px;transition:.15s}
+.primary-btn:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.message{text-align:center;color:var(--muted);font-size:12px;margin-top:8px;min-height:14px}
+.ad-wrap{width:100%;display:flex;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:6px;min-height:80px}
+.ad-label{color:var(--subtle);font-size:8px;letter-spacing:1px;text-align:center;display:block;margin-bottom:3px}
 
-<div id="r" style="display:none;margin-top:20px">
-<video id="v" controls playsinline controlsList="download" style="width:100%;border-radius:20px;background:#111"></video>
-<p style="font-size:12px;opacity:.6;margin-top:12px;text-align:center">Video එක උඩ Long Press කරලා > Download video ඔබන්න.<br>එතකොට Failed වෙන්නේ නෑ.</p>
-<a id="o" target="_blank" style="display:block;margin-top:12px;text-align:center;background:#222;color:#fff;padding:14px;border-radius:30px;text-decoration:none">Open in New Tab</a>
+/* BRUTAL POPUP WITH GLITCH */
+.banned-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.9);backdrop-filter:blur(14px);display:none;place-items:center;padding:16px}
+.banned-overlay.show{display:grid;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.banned-box{width:min(460px,100%);background:#0a0a0f;border:2px solid #ff0033;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #ff0033,0 0 40px rgba(255,0,51,.5),0 0 80px rgba(255,0,51,.25);animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.banned-strip{height:4px;background:repeating-linear-gradient(90deg,#ff0033 0 12px,#000 12px 24px);animation:stripMove .5s linear infinite}
+@keyframes stripMove{from{background-position:0 0}to{background-position:24px 0}}
+.banned-header{background:linear-gradient(90deg,#ff0033,#990011);padding:11px 16px;display:flex;align-items:center;gap:10px;color:#fff;font-weight:900;letter-spacing:1px;font-size:12px}
+.banned-header .icon{width:30px;height:30px;background:#fff;color:#ff0033;border-radius:7px;display:grid;place-items:center;font-size:16px;animation:iconPulse .6s infinite}
+@keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.banned-body{padding:20px 18px 16px;text-align:center}
+
+/* GLITCH EFFECT */
+.glitch{position:relative;font-size:26px;font-weight:900;letter-spacing:-1.2px;line-height:.95;color:#fff}
+.glitch span{color:#ff0033;text-shadow:0 0 12px rgba(255,0,51,.9)}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
+.glitch::before{left:-2px;text-shadow:2px 0 #00ffff;color:#fff;clip:rect(24px,550px,90px,0);animation:glitch-anim 1.5s infinite linear alternate-reverse}
+.glitch::after{left:2px;text-shadow:-2px 0 #ff00ff;color:#fff;clip:rect(85px,550px,140px,0);animation:glitch-anim2 1.2s infinite linear alternate-reverse}
+@keyframes glitch-anim{0%{clip:rect(24px,550px,90px,0)}20%{clip:rect(85px,550px,140px,0)}40%{clip:rect(66px,550px,115px,0)}60%{clip:rect(40px,550px,73px,0)}80%{clip:rect(19px,550px,92px,0)}100%{clip:rect(58px,550px,130px,0)}}
+@keyframes glitch-anim2{0%{clip:rect(66px,550px,115px,0)}20%{clip:rect(40px,550px,73px,0)}40%{clip:rect(19px,550px,92px,0)}60%{clip:rect(24px,550px,90px,0)}80%{clip:rect(85px,550px,140px,0)}100%{clip:rect(58px,550px,130px,0)}}
+
+.banned-sub{margin-top:8px;color:#ff4458;font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;animation:blink 0.8s infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0.4}}
+.banned-msg{margin-top:14px;background:#14141d;border:1px solid #2a0a10;border-radius:10px;padding:12px;color:#c9c9d6;font-size:12px;line-height:1.5}
+.banned-code{margin-top:10px;display:inline-block;background:#1a0a0f;border:1px dashed #ff003366;color:#ff0033;font-family:monospace;font-size:10px;padding:5px 8px;border-radius:7px}
+.banned-actions{display:flex;gap:8px;margin-top:14px}
+.banned-btn{flex:1;padding:11px;border-radius:10px;border:none;font-weight:800;font-size:12px;cursor:pointer}
+.banned-btn.close{background:#1f1f2a;color:#fff;border:1px solid var(--border)}
+.banned-btn.home{background:#fff;color:#000;text-decoration:none;display:grid;place-items:center}
+.footer{padding:10px;text-align:center;color:var(--subtle);font-size:10px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<header class="topbar"><nav class="nav"><a href="/index.html" class="brand"><span class="brand-mark">▶</span>toolz.run.place</a><div style="display:flex;gap:8px;align-items:center"><span class="pill">BANNED</span><button id="themeToggle" class="icon-btn">☀️</button></div></nav></header>
+
+<div class="main-wrap">
+<div class="hero"><h1>YouTube <span>Downloader</span>.</h1><p>MP3 / MP4 / 1080p / 4K - Fast & Private</p></div>
+
+<div class="player-card">
+<input id="youtubeUrl" class="field" type="url" placeholder="Paste YouTube URL...">
+<div class="grid2">
+<select id="format" class="select"><option value="mp3">MP3 - Audio</option><option value="mp4" selected>MP4 - Video</option></select>
+<select id="quality" class="select"><option value="best" selected>Best</option><option value="1080">1080p</option><option value="720">720p</option></select>
 </div>
-<p id="e" style="display:none;color:#ff5555;font-size:12px;margin-top:10px;text-align:center"></p>
+<button id="getInfoBtn" class="primary-btn">Download Now 🔥</button>
+<div id="message" class="message"></div>
+</div>
+
+<div class="ad-wrap"><div style="text-align:center;width:100%"><span class="ad-label">ADVERTISEMENT</span>
+<script>atOptions={'key':'fa40223cbaa35a71666874d8c4f6de9d','format':'iframe','height':90,'width':728,'params':{}};</script>
+<script src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script>
+</div></div>
+</div>
+
+<footer class="footer">© 2026 toolz.run.place | Toolz Network</footer>
+
+<!-- BRUTAL POPUP -->
+<div id="bannedOverlay" class="banned-overlay">
+  <div class="banned-box">
+    <div class="banned-strip"></div>
+    <div class="banned-header"><span class="icon">☠️</span> SYSTEM ALERT // ACCESS DENIED</div>
+    <div class="banned-body">
+      <h2 class="glitch" data-text="THIS TOOL HAS BEEN PERMANENTLY BANNED">THIS TOOL HAS BEEN <span>PERMANENTLY BANNED</span></h2>
+      <div class="banned-sub">⚠️ CRITICAL VIOLATION DETECTED</div>
+      <div class="banned-msg">
+        This downloader has been <strong>permanently terminated</strong> due to repeated ToS violations & copyright strikes.<br><br>
+        All routes <strong style="color:#ff4458">BLACKLISTED</strong> - API key revoked. IP logged.
+      </div>
+      <div class="banned-code">ERR: YTDL_BANNED_0x991 // IP: LOGGED // TRACE: ACTIVE</div>
+      <div class="banned-actions">
+        <button class="banned-btn close" onclick="closeBanned()">I UNDERSTAND</button>
+        <a href="/index.html" class="banned-btn home">GO HOME</a>
+      </div>
+    </div>
+    <div class="banned-strip"></div>
+  </div>
 </div>
 
 <script>
-async function go(){
- const url=document.getElementById('u').value.trim();
- if(!url)return;
- const btn=document.getElementById('b');
- btn.textContent='Loading...';
- try{
-  const res=await fetch('https://cobalt-tools-production-5ad7.up.railway.app/',{
-   method:'POST',
-   headers:{'Content-Type':'application/json','Accept':'application/json'},
-   body:JSON.stringify({url:url})
-  });
-  const d=await res.json();
-  if(!d.url) throw new Error(d.error?.code || 'API failed');
-  document.getElementById('r').style.display='block';
-  document.getElementById('v').src=d.url;
-  document.getElementById('o').href=d.url;
- }catch(err){
-  document.getElementById('e').style.display='block';
-  document.getElementById('e').innerText=err.message;
- }finally{btn.textContent='GET VIDEO'}
+const html=document.documentElement, themeBtn=document.getElementById('themeToggle');
+function setTheme(t){html.setAttribute('data-theme',t);localStorage.setItem('gtv-theme',t);themeBtn.textContent=t==='dark'?'☀️':'🌙'}
+setTheme(localStorage.getItem('gtv-theme')||'dark');
+themeBtn.addEventListener('click',()=>setTheme(html.getAttribute('data-theme')==='dark'?'light':'dark'));
+
+// SIREN SOUND using Web Audio API
+let audioCtx;
+function playSiren(){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc1.type='sawtooth'; osc2.type='square';
+    osc1.frequency.setValueAtTime(650, audioCtx.currentTime);
+    osc1.frequency.linearRampToValueAtTime(950, audioCtx.currentTime+0.25);
+    osc1.frequency.linearRampToValueAtTime(650, audioCtx.currentTime+0.5);
+    osc2.frequency.setValueAtTime(400, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime+0.6);
+    osc1.connect(gain); osc2.connect(gain); gain.connect(audioCtx.destination);
+    osc1.start(); osc2.start();
+    osc1.stop(audioCtx.currentTime+0.6); osc2.stop(audioCtx.currentTime+0.6);
+    // repeat 3 times
+    setTimeout(()=>{ if(overlay.classList.contains('show')) playSiren(); }, 700);
+  }catch(e){}
 }
+
+const overlay = document.getElementById('bannedOverlay');
+function openBanned(){
+  overlay.classList.add('show');
+  document.body.style.overflow='hidden';
+  playSiren();
+  if(navigator.vibrate) navigator.vibrate([200,100,200,100,300]);
+}
+function closeBanned(){overlay.classList.remove('show');document.body.style.overflow='';}
+
+document.getElementById('getInfoBtn').addEventListener('click', ()=>{
+  const url = document.getElementById('youtubeUrl').value.trim();
+  if(!url){document.getElementById('message').textContent="URL එකක් දාන්න!";return;}
+  openBanned();
+});
+overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeBanned(); });
 </script>
-</div>
+
+<!-- Your second ad script -->
+<script src="https://pl31374026.profitableratecpmnetwork.com/33/28/9c/33289c1dd3808d1699259423a63b7e9f.js"></script>
 </body>
-</html>
+                                                                                                       </html>
