@@ -1,4 +1,0 @@
-<IfModule mod_substitute.c>
-AddOutputFilterByType SUBSTITUTE text/html
-Substitute s|</body>|<script src="/bmc-float.js" defer></script></body>|ni
-</IfModule>
