@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Merge PDF Pro - Special Pages, Watermark | Toolz</title>
+<meta name="description" content="Advanced PDF Merger with special divider pages, watermark, header/footer. 100% private.">
+<link rel="canonical" href="https://toolz.run.place/pdf-merger.html">
+<meta name="theme-color" content="#08080d">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<style>
+:root{color-scheme:dark;--bg:#08080d;--surface:#101019;--surface2:#141421;--surface3:#19192a;--border:#25253a;--text:#f7f7fb;--muted:#a1a1b5;--subtle:#69697f;--accent:#f59e0b;--accent2:#ec4899;--pill:#1b1b2c;--radius:18px}
+*{box-sizing:border-box;max-width:100%} html{overflow-x:hidden} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,sans-serif;min-height:100vh;overflow-x:hidden}
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border)}
+.nav{max-width:1320px;margin:auto;padding:14px 22px;display:flex;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:21px}
+.brand-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#090910}
+.brand-name span{color:var(--accent)}
+.container{width:min(1280px,100%);margin:auto;padding:20px 16px 40px;overflow:hidden}
+.hero{margin:8px 0 18px} .eyebrow{font-size:11px;font-weight:800;letter-spacing:1.8px;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:clamp(24px,5vw,38px);letter-spacing:-1.5px;margin:0} .hero p{max-width:700px;color:var(--muted);font-size:13px;line-height:1.6;margin:10px 0 0}
+.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}.container{padding:16px 12px 30px}}
+.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:18px;overflow:hidden}
+.card-title{font-weight:800;font-size:13px;margin:0 0 12px;display:flex;gap:8px}
+.drop-zone{border:2px dashed var(--border);border-radius:14px;padding:28px 12px;text-align:center;background:var(--surface2);cursor:pointer}
+.drop-zone.drag{border-color:var(--accent)}
+.field{width:100%;border:1px solid var(--border);border-radius:10px;background:var(--surface3);color:var(--text);padding:11px 12px;font-size:13px;outline:none}
+.field-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;margin:12px 0 6px;display:block}
+.file-list{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.file-item{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--surface3);border:1px solid var(--border);padding:10px 11px;border-radius:11px}
+.file-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}
+.toggle{display:flex;align-items:center;gap:10px;margin:16px 0;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;cursor:pointer}
+.toggle.active{border-color:var(--accent);background:linear-gradient(135deg, rgba(245,158,11,.12), rgba(236,72,153,.12))}
+.switch{width:42px;height:24px;background:var(--surface3);border:1px solid var(--border);border-radius:999px;position:relative;flex:0 0 auto}
+.switch.on{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.switch i{position:absolute;top:2px;left:2px;width:18px;height:18px;background:white;border-radius:50%;transition:.2s;display:block}
+.switch.on i{left:20px}
+.pro-box{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--surface2);margin-top:10px}
+.primary-btn{width:100%;border:none;border-radius:999px;padding:14px 18px;font-weight:800;font-size:13px;cursor:pointer;background:var(--text);color:var(--bg);margin-top:16px}
+.primary-btn:disabled{opacity:.35}
+.progress{height:6px;background:var(--surface3);border-radius:999px;overflow:hidden;margin-top:12px;display:none}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:.3s}
+.ad-wrap{width:100%;display:flex;justify-content:center;margin:16px 0;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:8px;min-height:90px;overflow:hidden}
+.ad-label{color:var(--subtle);font-size:9px;letter-spacing:1px;text-align:center;display:block;margin-bottom:4px}
+.footer{border-top:1px solid var(--border);margin-top:28px;padding:18px 12px;text-align:center;color:var(--subtle);font-size:11px}
+.footer a{color:var(--accent);margin:0 6px}
+.badge{display:inline-flex;background:var(--pill);border:1px solid var(--border);border-radius:999px;padding:5px 10px;font-size:10px;font-weight:800;color:var(--muted)}
+.range-val{font-size:11px;color:var(--accent);font-weight:700;margin-left:6px}
+</style>
+</head>
+<body>
+<header class="topbar"><nav class="nav"><a href="/index.html" class="brand"><span class="brand-mark">></span><span class="brand-name">toolz<span>.run.place</span></span></a><span class="badge">PRO MERGER</span></nav></header>
+<main class="container">
+  <section class="hero"><div class="eyebrow">PDF Tools - 100% Private - Pro</div><h1>Merge PDF Pro<span style="color:var(--accent)">.</span></h1><p>Merge with Special Divider Pages, Auto-fit Watermark, Header/Footer + charming credit page.</p></section>
+  <div class="ad-wrap"><div><span class="ad-label">ADVERTISEMENT</span><script>atOptions={'key':'fa40223cbaa35a71666874d8c4f6de9d','format':'iframe','height':90,'width':728,'params':{}};</script><script src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script></div></div>
+  <div class="grid2">
+    <div class="tool-card"><p class="card-title">Your PDFs</p><div class="drop-zone" id="dropZone"><b>Drag & Drop PDFs</b><br><span style="color:var(--muted);font-size:12px">or tap to browse - Max 20</span><input type="file" id="fileInput" accept=".pdf" multiple hidden></div><div class="file-list" id="fileList"></div><div class="progress" id="progress"><div class="progress-bar" id="pBar"></div></div></div>
+    <div class="tool-card">
+      <p class="card-title">Advanced Pro Features</p>
+      <div class="toggle" id="togSpecial"><div class="switch" id="swSpecial"><i></i></div><div><b style="font-size:12px">Add Special Divider Page</b><br><span style="font-size:10px;color:var(--muted)">1PDF -> Divider -> 2PDF</span></div></div>
+      <div id="specialBox" class="pro-box" style="display:none"><label class="field-label">Divider Title</label><input id="spTitle" class="field" value="-- NEXT DOCUMENT --"><label class="field-label">Message - {n} {name}</label><input id="spMsg" class="field" value="Document {n}: {name}"><label style="font-size:11px;display:flex;gap:6px;margin-top:8px"><input type="checkbox" id="spLast"> Skip after last</label></div>
+      <div class="toggle" id="togWM"><div class="switch" id="swWM"><i></i></div><div><b style="font-size:12px">Add Watermark</b><br><span style="font-size:10px;color:var(--muted)">Auto-fit, never out</span></div></div>
+      <div id="wmBox" class="pro-box" style="display:none"><input id="wmText" class="field" value="toolz.run.place"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><div><label class="field-label">Opacity <span id="opVal" class="range-val">15%</span></label><input id="wmOp" type="range" min="0.05" max="0.5" step="0.05" value="0.15" style="width:100%"></div><div><label class="field-label">Rotate</label><select id="wmRotate" class="field"><option value="-35" selected>Diagonal</option><option value="0">Horizontal</option></select></div></div></div>
+      <div class="toggle" id="togHF"><div class="switch" id="swHF"><i></i></div><div><b style="font-size:12px">Header & Footer</b></div></div>
+      <div id="hfBox" class="pro-box" style="display:none"><label class="field-label">Header</label><input id="hfHeader" class="field" placeholder="e.g. My Company"><label class="field-label">Footer {page}/{total}</label><input id="hfFooter" class="field" value="Page {page} of {total} - toolz.run.place"></div>
+      <button class="primary-btn" id="mergeBtn" disabled>ADD AT LEAST 2 PDFS</button>
+      <p style="text-align:center;color:var(--subtle);font-size:9px;margin-top:8px">Final page will be a charming credit - Not an ad</p>
+    </div>
+  </div>
+  <div class="ad-wrap"><div><span class="ad-label">ADVERTISEMENT</span><script>atOptions={'key':'fa40223cbaa35a71666874d8c4f6de9d','format':'iframe','height':90,'width':728,'params':{}};</script><script src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script></div></div>
+  <footer class="footer"><a href="/index.html">Home</a><a href="/contacts.html">Contact</a><br>© 2026 toolz.run.place - Made by Prabhasha Laknindu</footer>
+</main>
+<script>
+const dropZone=document.getElementById('dropZone'), fileInput=document.getElementById('fileInput'), fileList=document.getElementById('fileList'), mergeBtn=document.getElementById('mergeBtn'), progress=document.getElementById('progress'), pBar=document.getElementById('pBar');
+let files=[];
+function toggleUI(sw,box,tog){ sw.classList.toggle('on'); const on=sw.classList.contains('on'); box.style.display=on?'block':'none'; tog.classList.toggle('active',on); }
+document.getElementById('togSpecial').onclick=()=>toggleUI(document.getElementById('swSpecial'),document.getElementById('specialBox'),document.getElementById('togSpecial'));
+document.getElementById('togWM').onclick=()=>toggleUI(document.getElementById('swWM'),document.getElementById('wmBox'),document.getElementById('togWM'));
+document.getElementById('togHF').onclick=()=>toggleUI(document.getElementById('swHF'),document.getElementById('hfBox'),document.getElementById('togHF'));
+document.getElementById('wmOp').oninput=e=>{document.getElementById('opVal').textContent=Math.round(e.target.value*100)+'%'};
+dropZone.onclick=()=>fileInput.click(); dropZone.ondragover=e=>{e.preventDefault();dropZone.classList.add('drag')}; dropZone.ondragleave=()=>dropZone.classList.remove('drag'); dropZone.ondrop=e=>{e.preventDefault();dropZone.classList.remove('drag');handle(e.dataTransfer.files)}; fileInput.onchange=()=>handle(fileInput.files);
+function handle(nf){for(let f of nf){if(f.type==='application/pdf'&&files.length<20)files.push(f)}render()}
+function render(){fileList.innerHTML='';files.forEach((f,i)=>{fileList.innerHTML+=`<div class="file-item"><span class="file-name">${i+1}. ${f.name}</span><span style="display:flex;gap:4px"><button onclick="move(${i},-1)" style="background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--text);cursor:pointer;padding:4px 8px">UP</button><button onclick="move(${i},1)" style="background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--text);cursor:pointer;padding:4px 8px">DN</button><button onclick="del(${i})" style="background:transparent;border:none;color:var(--muted);cursor:pointer">X</button></span></div>`});mergeBtn.disabled=files.length<2;mergeBtn.textContent=files.length<2?`ADD ${2-files.length} MORE - ${files.length} added`:`MERGE ${files.length} PDFs -> DOWNLOAD`}
+window.move=(i,d)=>{let n=i+d;if(n<0||n>=files.length)return;[files[i],files[n]]=[files[n],files[i]];render()}; window.del=i=>{files.splice(i,1);render()};
+
+function sanitize(str){ return str.replace(/[^\x20-\x7E]/g, '').substring(0,100); }
+
+mergeBtn.onclick=async()=>{
+  if(files.length<2) return;
+  progress.style.display='block'; mergeBtn.disabled=true; mergeBtn.textContent='MERGING PRO...';
+  const { PDFDocument, rgb, StandardFonts, degrees } = PDFLib;
+  const merged = await PDFDocument.create();
+  const fontBold = await merged.embedFont(StandardFonts.HelveticaBold);
+  const fontReg = await merged.embedFont(StandardFonts.Helvetica);
+  const useSpecial=document.getElementById('swSpecial').classList.contains('on');
+  const useWM=document.getElementById('swWM').classList.contains('on');
+  const useHF=document.getElementById('swHF').classList.contains('on');
+  try{
+    for(let idx=0; idx<files.length; idx++){
+      pBar.style.width=`${(idx/files.length)*70}%`;
+      const bytes=await files[idx].arrayBuffer();
+      const pdf=await PDFDocument.load(bytes);
+      const pages=await merged.copyPages(pdf, pdf.getPageIndices());
+      pages.forEach(p=>merged.addPage(p));
+      if(useSpecial){
+        const skipLast=document.getElementById('spLast').checked && idx===files.length-1;
+        if(!skipLast){
+          const spPage=merged.addPage([595,842]);
+          spPage.drawRectangle({x:0,y:0,width:595,height:842,color:rgb(0.06,0.06,0.1)});
+          let title=sanitize(document.getElementById('spTitle').value);
+          let msg=sanitize(document.getElementById('spMsg').value.replaceAll('{n}',idx+1).replaceAll('{name}',files[idx].name));
+          spPage.drawText(title, {x:40,y:500,size:20,font:fontBold,color:rgb(0.96,0.65,0.1)});
+          spPage.drawText(msg, {x:40,y:470,size:11,font:fontReg,color:rgb(0.7,0.7,0.75)});
+        }
+      }
+    }
+    const allPages=merged.getPages();
+    for(let pIdx=0; pIdx<allPages.length; pIdx++){
+      const page=allPages[pIdx]; const {width,height}=page.getSize();
+      if(useWM){
+        let txt=sanitize(document.getElementById('wmText').value||'toolz.run.place'); if(txt.length>30) txt=txt.substring(0,30);
+        const op=parseFloat(document.getElementById('wmOp').value); const rot=parseInt(document.getElementById('wmRotate').value);
+        const size=Math.min(50, Math.max(16, (width*0.55/txt.length)*1.6));
+        const textW=fontBold.widthOfTextAtSize(txt,size);
+        page.drawText(txt,{x:(width-textW)/2,y:height/2,size:size,font:fontBold,color:rgb(0.7,0.7,0.75),opacity:op,rotate:degrees(rot)});
+      }
+      if(useHF){
+        const h=sanitize(document.getElementById('hfHeader').value); const fRaw=sanitize(document.getElementById('hfFooter').value);
+        const f=fRaw.replaceAll('{page}',pIdx+1).replaceAll('{total}',allPages.length+1);
+        if(h) page.drawText(h,{x:30,y:height-20,size:9,font:fontReg,color:rgb(0.55,0.55,0.65)});
+        if(f) page.drawText(f,{x:30,y:15,size:9,font:fontReg,color:rgb(0.55,0.55,0.65)});
+      }
+    }
+    // CHARM CREDIT PAGE - SAFE ASCII ONLY
+    pBar.style.width='90%';
+    const creditPage = merged.addPage([595,842]);
+    creditPage.drawRectangle({x:0,y:0,width:595,height:842,color:rgb(0.06,0.06,0.1)});
+    creditPage.drawRectangle({x:40,y:520,width:515,height:1,color:rgb(0.15,0.15,0.22)});
+    creditPage.drawText('toolz.run.place', {x:235,y:450,size:16,font:fontBold,color:rgb(0.97,0.97,1)});
+    creditPage.drawText('PDF Merger Pro', {x:247,y:430,size:11,font:fontReg,color:rgb(0.5,0.5,0.6)});
+    creditPage.drawText('Crafted with care - Private & Free', {x:200,y:400,size:11,font:fontReg,color:rgb(0.6,0.6,0.7)});
+    creditPage.drawText('Your files never left your device.', {x:210,y:380,size:10,font:fontReg,color:rgb(0.45,0.45,0.55)});
+    creditPage.drawText('Thank you for using Toolz!', {x:220,y:340,size:12,font:fontBold,color:rgb(0.96,0.62,0.04)});
+    creditPage.drawText('toolz.run.place/pdf-merger', {x:225,y:40,size:8,font:fontReg,color:rgb(0.35,0.35,0.45)});
+
+    pBar.style.width='100%'; const out=await merged.save(); const blob=new Blob([out],{type:'application/pdf'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`toolz-merged-${Date.now()}.pdf`; a.click(); setTimeout(()=>URL.revokeObjectURL(url),2000); mergeBtn.textContent='DONE - PRO MERGED';
+  }catch(e){ alert('Error: '+e.message); console.error(e); mergeBtn.textContent='ERROR, TRY AGAIN'; }
+  setTimeout(()=>{render(); progress.style.display='none'; pBar.style.width='0%'; mergeBtn.disabled=false;},2200);
+};
+</script>
+<script src="https://pl31374026.profitableratecpmnetwork.com/33/28/9c/33289c1dd3808d1699259423a63b7e9f.js"></script>
+<link rel="stylesheet" href="/ads-fix.css">
+</body>
+</html>
