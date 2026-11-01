@@ -116,6 +116,9 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 .video-js{width:100%;height:100%;background:#030306}
 .video-js.vjs-big-play-button{background:linear-gradient(135deg,var(--accent),var(--accent2))!important;border:none!important;border-radius:18px!important;width:68px!important;height:68px!important;line-height:68px!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;margin:0!important}
 .vjs-watermark{position:absolute;top:10px;right:10px;z-index:5;background:rgba(0,0,0,.6);padding:5px 9px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:1px;color:#fff;pointer-events:none;border:1px solid rgba(255,255,255,.12)}
+/* ONLY NEW - for VAST */
+.vast-skip{position:absolute;bottom:20px;right:20px;z-index:10;background:rgba(0,0,0,.85);color:#fff;border:1px solid rgba(255,255,255,.3);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;display:none}
+.vast-label{position:absolute;top:15px;left:15px;z-index:10;background:rgba(0,0,0,.75);color:var(--accent);padding:5px 10px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:1px;display:none;border:1px solid rgba(255,255,255,.15)}
 </style>
 </head>
 <body>
@@ -152,6 +155,8 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
     <div class="player-frame">
       <video id="player" class="video-js vjs-big-play-centered" controls playsinline preload="none" aria-label="Live TV player"></video>
       <div class="vjs-watermark">TOOLZ • FREE TV</div>
+      <div id="vastLabel" class="vast-label">AD • TOOLZ</div>
+      <button id="skipBtn" class="vast-skip">Skip Ad ▶</button>
       <div id="playerEmpty" class="player-empty">
         <div class="play-symbol" aria-hidden="true">▶</div>
         <strong>Your next channel is waiting</strong>
@@ -170,9 +175,6 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
 <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
-<!-- VAST Plugin -->
-<script src="https://cdn.jsdelivr.net/npm/videojs-vast-vpaid@2.0.2/bin/videojs_5.vast.vpaid.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/videojs-vast-vpaid@2.0.2/bin/videojs.vast.vpaid.min.css" rel="stylesheet">
 
 <script>
 (() => {
@@ -181,7 +183,6 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
   
   const html = document.documentElement;
   const themeBtn = document.getElementById('themeToggle');
-  const player = document.getElementById('player');
   const playerEmpty = document.getElementById('playerEmpty');
   const listEl = document.getElementById('channelList');
   const statusEl = document.getElementById('status');
@@ -195,12 +196,15 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
   const loadMoreWrap = document.getElementById('loadMoreWrap');
   const heroCount = document.getElementById('heroCount');
   const resultSummary = document.getElementById('resultSummary');
+  const skipBtn = document.getElementById('skipBtn');
+  const vastLabel = document.getElementById('vastLabel');
 
   let allChannels = [];
   let filtered = [];
   let hls = null;
   let vjsPlayer = null;
   let pendingChannelUrl = null;
+  let isAdPlaying = false;
   const PAGE_SIZE = 48;
   let showCount = PAGE_SIZE;
   let requestId = 0;
@@ -214,38 +218,44 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
       preload: 'none',
       html5: { vhs: { overrideNative: true } }
     });
-
-    // Setup VAST once
-    vjsPlayer.vastClient({
-      adTagUrl: VAST_TAG,
-      playAdAlways: false,
-      adCancelTimeout: 7000,
-      adsEnabled: true,
-      vpaidEnabled: true
-    });
-
-    // When ad finishes -> play real channel
-    vjsPlayer.on('vast.adEnd', () => {
-      if(pendingChannelUrl) playRealStream(pendingChannelUrl);
-    });
-    vjsPlayer.on('vast.adSkip', () => {
-      if(pendingChannelUrl) playRealStream(pendingChannelUrl);
-    });
-    vjsPlayer.on('vast.adError', () => {
-      if(pendingChannelUrl) playRealStream(pendingChannelUrl);
-    });
-    vjsPlayer.on('vast.adsCancel', () => {
-      if(pendingChannelUrl) playRealStream(pendingChannelUrl);
-    });
-
   } catch(e) { console.log('VideoJS error', e); }
 
+  // --- NEW VAST FETCHER - FIX FOR CORS ---
+  async function fetchVastAdUrl(tag){
+    try{
+      const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(tag + (tag.includes('?')?'&':'?') + 'cb='+Date.now());
+      const res = await fetch(proxy);
+      const xmlText = await res.text();
+      const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
+      const mediaFiles = xml.getElementsByTagName('MediaFile');
+      let best = null;
+      for(let mf of mediaFiles){
+        const url = mf.textContent.trim();
+        if(url && url.startsWith('http')){
+          if(!best || mf.getAttribute('type')==='video/mp4') best = url;
+        }
+      }
+      if(!best){
+        const wrapper = xml.getElementsByTagName('VASTAdTagURI');
+        if(wrapper.length>0){
+          const wUrl = wrapper[0].textContent.trim();
+          if(wUrl) return await fetchVastAdUrl(wUrl);
+        }
+      }
+      return best;
+    }catch(e){ console.log('VAST parse fail', e); return null; }
+  }
+
   function playRealStream(url){
+    isAdPlaying = false;
     pendingChannelUrl = null;
+    vastLabel.style.display = 'none';
+    skipBtn.style.display = 'none';
     nowSub.textContent = 'Live · Playing';
     if (hls) { try { hls.destroy(); } catch (_) {} hls = null; }
     const type = url.includes('.m3u8') ? 'application/x-mpegURL' : 'video/mp4';
     if(vjsPlayer){
+      vjsPlayer.off('ended');
       vjsPlayer.src({ src: url, type: type });
       vjsPlayer.play().catch(() => {
         nowSub.textContent = 'Press play to start. Your browser may block autoplay.';
@@ -274,33 +284,39 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
     countEl.textContent=`${filtered.length.toLocaleString()} found`;resultSummary.textContent=`Showing ${Math.min(showCount,filtered.length).toLocaleString()} of ${filtered.length.toLocaleString()} matching channels`;heroCount.textContent=`${allChannels.length.toLocaleString()} loaded`;loadMoreWrap.hidden=filtered.length<=showCount;loadMoreBtn.textContent=`Load more channels (${Math.min(PAGE_SIZE,filtered.length-showCount)}+)`;
   }
 
-  // UPDATED FUNCTION WITH VAST
-  function playChannel(channel) {
+  // --- ONLY CHANGED FUNCTION ---
+  async function playChannel(channel) {
     nowText.textContent = channel.name;
-    nowSub.textContent = `Ad · Playing ad then live`;
+    nowSub.textContent = `Loading ad...`;
     playerEmpty.classList.add('hidden');
     pendingChannelUrl = channel.url;
 
     if (hls) { try { hls.destroy(); } catch (_) {} hls = null; }
 
-    if (vjsPlayer) {
-      try{
-        // trigger VAST ad
-        vjsPlayer.vastClient({
-          adTagUrl: VAST_TAG + (VAST_TAG.includes('?') ? '&' : '?') + '_cb=' + Date.now(),
-          playAdAlways: true,
-          adCancelTimeout: 7000,
-          adsEnabled: true,
-          vpaidEnabled: true
-        });
-        vjsPlayer.play().catch(()=>{});
-      }catch(e){
-        // if VAST fails, play directly
-        playRealStream(channel.url);
-      }
-    } else {
+    const adUrl = await fetchVastAdUrl(VAST_TAG);
+
+    if(adUrl){
+      isAdPlaying = true;
+      vastLabel.style.display = 'block';
+      skipBtn.style.display = 'block';
+      skipBtn.textContent = 'Skip Ad ▶';
+      nowSub.textContent = `Ad · Playing - Your channel after ad`;
+      
+      vjsPlayer.src({ src: adUrl, type: 'video/mp4' });
+      vjsPlayer.play().catch(()=>{ playRealStream(channel.url); });
+
+      let canSkip = false;
+      setTimeout(()=>{ canSkip = true; skipBtn.textContent = 'Skip Ad (Ready) ▶'; }, 5000);
+
+      vjsPlayer.off('ended');
+      vjsPlayer.on('ended', ()=>{ if(isAdPlaying) playRealStream(channel.url); });
+
+      skipBtn.onclick = ()=>{ if(isAdPlaying) playRealStream(channel.url); };
+
+    }else{
       playRealStream(channel.url);
     }
+
     if (window.matchMedia('(max-width:760px)').matches) { document.querySelector('.player-card').scrollIntoView({behavior:'smooth',block:'start'}); }
   }
 
@@ -320,4 +336,4 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 })();
 </script>
 </body>
-                                                                                                                                                                                                                </html>
+                                                                                                                                                                          </html>
