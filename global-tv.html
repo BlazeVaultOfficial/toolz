@@ -20,9 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/videojs-contrib-ads@7.5.2/dist/videojs-contrib-ads.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/videojs-ima@2.6.0/dist/videojs.ima.css" rel="stylesheet">
+
 <style>
 :root{
   color-scheme:dark;--bg:#08080d;--surface:#101019;--surface2:#141421;--surface3:#19192a;
@@ -68,6 +66,8 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 .player-head small{color:var(--subtle);font-size:11px}
 .player-frame{position:relative;aspect-ratio:16/9;background:#030306;border-radius:15px;overflow:hidden}
 #player{width:100%;height:100%;display:block;background:#030306}
+.player-frame .fluid-player{width:100%!important;height:100%!important}
+.player-frame .fluid_player_layout{border-radius:15px;overflow:hidden}
 .player-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;pointer-events:none;background:radial-gradient(ellipse at center,#171323 0%,#07070b 68%)}
 .play-symbol{width:58px;height:58px;border:1px solid #343047;background:#191626;border-radius:18px;display:grid;place-items:center;font-size:23px;margin-bottom:15px;color:var(--accent)}
 .player-empty strong{font-size:16px}.player-empty span{font-size:12px;color:#9290a4;margin-top:7px}
@@ -146,7 +146,7 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
  <section class="player-card" aria-label="TV player">
   <div class="player-head"><span class="live-label"><span class="live-dot"></span> Player</span><small>Choose a channel below to start watching</small></div>
   <div class="player-frame">
-   <video id="player" class="video-js vjs-big-play-centered" controls playsinline preload="none" aria-label="Live TV player"></video>
+   <video id="player" controls playsinline webkit-playsinline preload="none" aria-label="Live TV player"></video>
    <div class="vjs-watermark">TOOLZ • FREE TV</div>
    <div id="vastLabel" class="vast-label">ADVERTISEMENT</div>
    <div id="playerEmpty" class="player-empty"><div class="play-symbol" aria-hidden="true">▶</div><strong>Your next channel is waiting</strong><span>Select any channel card below to start playback</span></div>
@@ -171,19 +171,15 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
  <footer class="footer"><a href="/index.html">Home</a><a href="/contacts.html">Contact</a><br>© 2026 toolz.run.place · Made by Prabhasha Laknindu · Private & Free</footer>
 </main>
 
-<!-- Required player libraries. Order matters: Video.js, IMA SDK, contrib-ads, then videojs-ima. -->
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
-<script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
-<script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-ads@7.5.2/dist/videojs-contrib-ads.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/videojs-ima@2.6.0/dist/videojs.ima.min.js"></script>
+<!-- Fluid Player: native VAST support and HLS livestream playback. -->
+<script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
 
 <script>
 (() => {
  'use strict';
 
- // HilltopAds VAST tag supplied by the site owner.
- const VAST_TAG = 'https://nautical-hand.com/dEmhF.zIdkGwNAvnZlGeUs/lecmQ9HuvZrUcl/kAPiTHcD1CODDvQqxHMnjEEGtZNsz_Un4-N/DLEDyuNQQg';
+ // New HilltopAds VAST tag.
+ const VAST_TAG = 'https://nautical-hand.com/dHmfFLz.djGRNiv/ZHG/UQ/oeomU9OuYZhUYlskVPsTLc-1SOwDmQ/xjMUjQEptCN_zZUu4dNmDvEey/NyQS';
 
  const html = document.documentElement;
  const themeBtn = document.getElementById('themeToggle');
@@ -204,80 +200,145 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 
  let allChannels = [];
  let filtered = [];
- let vjsPlayer = null;
- let imaReady = false;
- let imaInitialized = false;
+ let fluidPlayerInstance = null;
+ let playerElement = document.getElementById('player');
  let adAttemptId = 0;
- let adStarted = false;
  let currentChannel = null;
+ let mediaStarted = false;
  const PAGE_SIZE = 48;
  let showCount = PAGE_SIZE;
  let requestId = 0;
  let playlistController = null;
 
- // Initialize Video.js and its IMA plugin once.
- try {
-  vjsPlayer = videojs('player', {
-   fluid: false,
-   fill: true,
-   liveui: true,
-   controls: true,
-   preload: 'none',
-   html5: { vhs: { overrideNative: true } }
-  });
+ // Rebuild the player cleanly for each channel.
+ function buildFluidPlayer(channel, withAds) {
+  const frame = document.querySelector('.player-frame');
 
-  if (typeof vjsPlayer.ima === 'function') {
-   vjsPlayer.ima({
-    adTagUrl: VAST_TAG,
-    vastLoadTimeout: 5000,
-    numRedirects: 4,
-    showCountdown: true,
-    disableFlashAds: true
-   });
-   imaReady = true;
-  } else {
-   console.error('Video.js IMA plugin did not load.');
+  if (fluidPlayerInstance && typeof fluidPlayerInstance.destroy === 'function') {
+   try {
+    fluidPlayerInstance.destroy();
+   } catch (error) {
+    console.warn('Fluid Player cleanup:', error);
+   }
+   fluidPlayerInstance = null;
   }
 
-  // The IMA plugin resumes content after a completed ad.
-  vjsPlayer.on('ads-ad-started', () => {
-   adStarted = true;
-   vastLabel.style.display = 'block';
-   nowSub.textContent = 'Advertisement playing…';
+  frame.querySelectorAll('.fluid_player_layout, .fluid-player, #player').forEach(node => {
+   if (node.parentNode) node.parentNode.removeChild(node);
   });
 
-  vjsPlayer.on('contentresumed', () => {
-   if (currentChannel && adStarted) {
-    vastLabel.style.display = 'none';
-    nowSub.textContent = 'Live · Playing';
+  const freshVideo = document.createElement('video');
+  freshVideo.id = 'player';
+  freshVideo.controls = true;
+  freshVideo.playsInline = true;
+  freshVideo.setAttribute('playsinline', '');
+  freshVideo.setAttribute('webkit-playsinline', '');
+  freshVideo.setAttribute('preload', 'metadata');
+  freshVideo.setAttribute('aria-label', 'Live TV player');
+
+  if (channel && channel.url) {
+   const source = document.createElement('source');
+   source.src = channel.url;
+   const isHls = /\.m3u8(?:$|[?#])/i.test(channel.url);
+   source.type = isHls ? 'application/x-mpegURL' : 'video/mp4';
+   freshVideo.appendChild(source);
+  }
+
+  frame.insertBefore(freshVideo, frame.firstChild);
+  playerElement = freshVideo;
+
+  const options = {
+   layoutControls: {
+    fillToContainer: true,
+    autoPlay: false,
+    mute: false,
+    allowDownload: false,
+    playbackRateEnabled: false,
+    allowTheatre: true,
+    playButtonShowing: true,
+    preload: 'metadata',
+    controlBar: {
+     autoHide: true,
+     autoHideTimeout: 3,
+     animated: true
+    }
+   },
+   vastOptions: {
+    adList: withAds ? [
+     {
+      roll: 'preRoll',
+      vastTag: VAST_TAG
+     }
+    ] : [],
+    adCTAText: false,
+    vastTimeout: 7000,
+    maxAllowedVastTagRedirects: 3,
+    vastAdvanced: {
+     noVastVideoCallback: () => {
+      if (currentChannel) {
+       nowSub.textContent = 'Advertisement unavailable · Starting channel';
+      }
+     }
+    }
+   }
+  };
+
+  fluidPlayerInstance = window.fluidPlayer(freshVideo, options);
+  mediaStarted = false;
+
+  freshVideo.addEventListener('playing', () => {
+   mediaStarted = true;
+   if (currentChannel) {
+    nowSub.textContent = 'Live · ' + currentChannel.name;
    }
   });
 
-  // If the ad provider reports an error, return to the selected channel.
-  vjsPlayer.on('adserror', () => {
-   const failedChannel = currentChannel;
-   const failedAttempt = adAttemptId;
-   if (failedChannel) fallbackToChannel(failedChannel, failedAttempt, 'Ad unavailable · Playing channel');
+  freshVideo.addEventListener('error', () => {
+   const mediaError = freshVideo.error;
+
+   console.error('Channel media error:', mediaError ? {
+    code: mediaError.code,
+    message: mediaError.message,
+    source: freshVideo.currentSrc
+   } : 'Unknown media error');
+
+   if (currentChannel) {
+    nowSub.textContent = 'This stream cannot play in this browser or is currently offline.';
+   }
   });
 
+  return fluidPlayerInstance;
+ }
+
+ try {
+  buildFluidPlayer(null, true);
  } catch (error) {
-  console.error('Video.js initialization failed:', error);
+  console.error('Fluid Player initialization failed:', error);
+  nowSub.textContent = 'Player could not initialize. Please refresh the page.';
  }
 
  function setTheme(theme) {
   html.setAttribute('data-theme', theme);
-  try { localStorage.setItem('gtv-theme', theme); } catch (_) {}
+  try {
+   localStorage.setItem('gtv-theme', theme);
+  } catch (_) {}
   themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
  }
+
  let savedTheme = 'dark';
- try { savedTheme = localStorage.getItem('gtv-theme') || 'dark'; } catch (_) {}
+ try {
+  savedTheme = localStorage.getItem('gtv-theme') || 'dark';
+ } catch (_) {}
+
  setTheme(savedTheme === 'light' ? 'light' : 'dark');
+
  themeBtn.addEventListener('click', () => {
   setTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
  });
 
  function playlistUrl() {
   const country = countryEl.value;
+
   return country === 'all'
    ? 'https://iptv-org.github.io/iptv/index.m3u'
    : `https://iptv-org.github.io/iptv/countries/${encodeURIComponent(country)}.m3u`;
@@ -285,11 +346,19 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 
  function channelFromInfo(info, url) {
   if (!/^https?:\/\//i.test(url)) return null;
+
   const nameMatch = info.match(/,(.*)$/);
   const name = nameMatch ? nameMatch[1].trim() : 'Unknown channel';
   const logo = (info.match(/tvg-logo="([^"]*)"/i) || [,''])[1];
   const group = (info.match(/group-title="([^"]*)"/i) || [,'General'])[1] || 'General';
-  return { name, logo, group, groupLower: group.toLowerCase(), url };
+
+  return {
+   name,
+   logo,
+   group,
+   groupLower: group.toLowerCase(),
+   url
+  };
  }
 
  async function parseM3UStream(response) {
@@ -298,15 +367,19 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
    const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/);
    const channels = [];
    let info = null;
+
    for (const raw of lines) {
     const line = raw.trim();
-    if (line.startsWith('#EXTINF')) info = line;
-    else if (info && line && !line.startsWith('#')) {
+
+    if (line.startsWith('#EXTINF')) {
+     info = line;
+    } else if (info && line && !line.startsWith('#')) {
      const channel = channelFromInfo(info, line);
      if (channel) channels.push(channel);
      info = null;
     }
    }
+
    return channels;
   }
 
@@ -319,7 +392,12 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
   function processLine(raw) {
    const line = raw.trim();
    if (!line) return;
-   if (line.startsWith('#EXTINF')) { pendingInfo = line; return; }
+
+   if (line.startsWith('#EXTINF')) {
+    pendingInfo = line;
+    return;
+   }
+
    if (pendingInfo && !line.startsWith('#')) {
     const channel = channelFromInfo(pendingInfo, line);
     if (channel) channels.push(channel);
@@ -331,18 +409,22 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
    while (true) {
     const { value, done } = await reader.read();
     if (done) break;
+
     carry += decoder.decode(value, { stream: true });
+
     let newline;
     while ((newline = carry.indexOf('\n')) !== -1) {
      processLine(carry.slice(0, newline).replace(/\r$/, ''));
      carry = carry.slice(newline + 1);
     }
    }
+
    carry += decoder.decode();
    if (carry) processLine(carry);
   } finally {
    reader.releaseLock();
   }
+
   return channels;
  }
 
@@ -355,13 +437,18 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
  function applyFilters() {
   const q = searchEl.value.trim().toLocaleLowerCase();
   const category = categoryEl.value.toLowerCase();
+
   filtered = allChannels.filter(channel => {
    const matchesQuery = !q ||
     channel.name.toLocaleLowerCase().includes(q) ||
     channel.groupLower.includes(q);
-   const matchesCategory = category === 'all' || channel.groupLower.includes(category);
+
+   const matchesCategory = category === 'all' ||
+    channel.groupLower.includes(category);
+
    return matchesQuery && matchesCategory;
   });
+
   showCount = PAGE_SIZE;
   render();
  }
@@ -375,6 +462,7 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 
   const logoBox = document.createElement('span');
   logoBox.className = 'logo-box';
+
   const fallback = document.createElement('span');
   fallback.className = 'logo-fallback';
   fallback.textContent = '▶';
@@ -387,8 +475,10 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
    img.alt = '';
    img.referrerPolicy = 'no-referrer';
    img.src = channel.logo;
+
    img.addEventListener('load', () => fallback.remove(), { once: true });
    img.addEventListener('error', () => img.remove(), { once: true });
+
    logoBox.appendChild(img);
   }
 
@@ -402,6 +492,7 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 
   button.append(logoBox, name, group);
   button.addEventListener('click', () => playChannel(channel));
+
   return button;
  }
 
@@ -412,143 +503,147 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
    countEl.textContent = '0 channels';
    resultSummary.textContent = 'Try another search or category.';
    heroCount.textContent = `${allChannels.length.toLocaleString()} loaded`;
+
    showStatus(allChannels.length
     ? 'No channels match your filters. Try another search or category.'
     : 'No channels are available for this playlist right now.');
+
    loadMoreWrap.hidden = true;
    return;
   }
 
   statusEl.hidden = true;
+
   const fragment = document.createDocumentFragment();
-  filtered.slice(0, showCount).forEach(channel => fragment.appendChild(createChannelCard(channel)));
+
+  filtered.slice(0, showCount).forEach(channel => {
+   fragment.appendChild(createChannelCard(channel));
+  });
+
   listEl.appendChild(fragment);
 
   countEl.textContent = `${filtered.length.toLocaleString()} found`;
   resultSummary.textContent = `Showing ${Math.min(showCount, filtered.length).toLocaleString()} of ${filtered.length.toLocaleString()} matching channels`;
   heroCount.textContent = `${allChannels.length.toLocaleString()} loaded`;
+
   loadMoreWrap.hidden = filtered.length <= showCount;
   loadMoreBtn.textContent = `Load more channels (${Math.min(PAGE_SIZE, filtered.length - showCount)}+)`;
  }
 
- function setContentSource(channel) {
-  if (!vjsPlayer) return;
-  vjsPlayer.src({
-   src: channel.url,
-   type: /\.m3u8(?:$|\?)/i.test(channel.url)
-    ? 'application/x-mpegURL'
-    : 'video/mp4'
-  });
- }
+ function playWithoutAds(channel, attemptId, message) {
+  if (!channel || attemptId !== adAttemptId) return;
 
- function fallbackToChannel(channel, attemptId, message) {
-  if (!channel || attemptId !== adAttemptId || !vjsPlayer) return;
-  adStarted = false;
-  vastLabel.style.display = 'none';
-  nowSub.textContent = message || 'Advertisement unavailable · Playing channel';
-  setContentSource(channel);
-  const playPromise = vjsPlayer.play();
-  if (playPromise && typeof playPromise.catch === 'function') {
-   playPromise.catch(() => {
-    nowSub.textContent = 'Press play to start the channel.';
-   });
+  nowSub.textContent = message || 'Advertisement unavailable · Starting channel';
+
+  try {
+   buildFluidPlayer(channel, false);
+
+   const result = fluidPlayerInstance.play();
+
+   if (result && typeof result.catch === 'function') {
+    result.catch(error => {
+     console.warn('Fallback playback needs a user tap:', error);
+     nowSub.textContent = 'Ad unavailable · Tap Play to watch this channel';
+    });
+   }
+  } catch (error) {
+   console.error('Channel playback fallback failed:', error);
+   nowSub.textContent = 'Tap Play to retry this channel.';
   }
  }
 
- async function playChannel(channel) {
-  if (!vjsPlayer) {
-   nowSub.textContent = 'Player could not be initialized. Please refresh the page.';
+ function playChannel(channel) {
+  if (typeof window.fluidPlayer !== 'function') {
+   nowSub.textContent = 'Fluid Player did not load. Refresh the page and try again.';
+   return;
+  }
+
+  if (!channel || !channel.url) {
+   nowSub.textContent = 'This channel has no playable stream URL.';
    return;
   }
 
   currentChannel = channel;
   const thisAttempt = ++adAttemptId;
-  adStarted = false;
+
   nowText.textContent = channel.name;
-  nowSub.textContent = 'Preparing advertisement…';
+  nowSub.textContent = 'Starting channel…';
   playerEmpty.classList.add('hidden');
   vastLabel.style.display = 'none';
 
-  // Set the requested channel as the content source first.
-  setContentSource(channel);
-
-  // If the IMA scripts are blocked or unavailable, do not block TV playback.
-  if (!imaReady || typeof vjsPlayer.ima !== 'function') {
-   fallbackToChannel(channel, thisAttempt, 'Ads unavailable · Playing channel');
-   return;
-  }
-
   try {
-   // Mobile browsers require this initialization to happen from the channel-card click.
-   if (!imaInitialized) {
-    vjsPlayer.ima.initializeAdDisplayContainer();
-    imaInitialized = true;
-   }
+   buildFluidPlayer(channel, true);
 
-   nowSub.textContent = 'Loading advertisement…';
-   vjsPlayer.ima.requestAds();
+   // The user clicked the channel card, so attempt playback immediately.
+   fluidPlayerInstance.play();
 
-   // If no ad starts within this period, abandon the ad attempt and play the channel.
-   // The attempt ID prevents an older timeout from interrupting a newer channel.
+   // If the ad request stalls or no ad is returned, retry the channel
+   // without an ad. This timeout is a fallback, not an ad guarantee.
    window.setTimeout(() => {
-    if (thisAttempt === adAttemptId && !adStarted) {
-     fallbackToChannel(channel, thisAttempt, 'No ad available · Playing channel');
+    if (thisAttempt === adAttemptId && !mediaStarted) {
+     playWithoutAds(
+      channel,
+      thisAttempt,
+      'Ad unavailable · Tap Play if the channel does not start'
+     );
     }
-   }, 10000);
+   }, 9000);
 
-   const playPromise = vjsPlayer.play();
-   if (playPromise && typeof playPromise.catch === 'function') {
-    playPromise.catch(() => {
-     if (thisAttempt === adAttemptId && !adStarted) {
-      fallbackToChannel(channel, thisAttempt, 'Tap play to start the channel.');
-     }
+   if (window.matchMedia('(max-width:760px)').matches) {
+    document.querySelector('.player-card').scrollIntoView({
+     behavior: 'smooth',
+     block: 'start'
     });
    }
   } catch (error) {
-   console.error('HilltopAds / IMA error:', error);
-   fallbackToChannel(channel, thisAttempt, 'Ad error · Playing channel');
-  }
-
-  if (window.matchMedia('(max-width:760px)').matches) {
-   document.querySelector('.player-card').scrollIntoView({
-    behavior: 'smooth',
-    block: 'start'
-   });
+   console.error('Fluid Player / VAST initialization failed:', error);
+   playWithoutAds(channel, thisAttempt, 'Ad error · Starting channel');
   }
  }
 
  async function loadChannels() {
   const thisRequest = ++requestId;
+
   if (playlistController) playlistController.abort();
   playlistController = new AbortController();
 
   allChannels = [];
   filtered = [];
   listEl.replaceChildren();
+
   showStatus(`Loading ${countryEl.options[countryEl.selectedIndex].text} channels…`);
   resultSummary.textContent = 'Fetching the public playlist…';
   countEl.textContent = 'Loading…';
   heroCount.textContent = 'Loading…';
   loadMoreWrap.hidden = true;
 
-  const timeout = window.setTimeout(() => playlistController?.abort(), 20000);
+  const timeout = window.setTimeout(() => {
+   playlistController?.abort();
+  }, 20000);
 
   try {
    const response = await fetch(playlistUrl(), {
     signal: playlistController.signal,
     cache: 'force-cache'
    });
-   if (!response.ok) throw new Error(`Playlist request failed (${response.status}).`);
+
+   if (!response.ok) {
+    throw new Error(`Playlist request failed (${response.status}).`);
+   }
 
    allChannels = await parseM3UStream(response);
+
    if (thisRequest !== requestId) return;
    if (!allChannels.length) throw new Error('No playable entries');
+
    applyFilters();
   } catch (error) {
    if (thisRequest !== requestId) return;
+
    const message = error.name === 'AbortError'
     ? 'Loading timed out. Please check your connection and try again.'
     : 'Could not load the playlist. The source may be temporarily unavailable or your connection may block it.';
+
    showStatus(message, true);
    resultSummary.textContent = 'Playlist unavailable.';
    countEl.textContent = '0 channels';
@@ -560,6 +655,7 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
    retry.textContent = 'Try again';
    retry.style.marginTop = '12px';
    retry.addEventListener('click', loadChannels);
+
    statusEl.append(document.createElement('br'), retry);
   } finally {
    window.clearTimeout(timeout);
@@ -570,10 +666,12 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
   showCount += PAGE_SIZE;
   render();
  });
+
  countryEl.addEventListener('change', loadChannels);
  categoryEl.addEventListener('change', applyFilters);
 
  let searchTimer;
+
  searchEl.addEventListener('input', () => {
   window.clearTimeout(searchTimer);
   searchTimer = window.setTimeout(applyFilters, 180);
