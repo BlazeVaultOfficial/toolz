@@ -20,7 +20,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- ONLY NEW: Video.js CSS -->
 <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet">
 <style>
 :root{
@@ -77,9 +76,6 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 .now-title strong{display:block;font-size:14px;overflow-wrap:anywhere}
 .now-title span{display:block;color:var(--muted);font-size:11px;margin-top:5px}
 .count-chip{flex:0 0 auto;background:var(--pill);border:1px solid var(--border);border-radius:999px;padding:7px 10px;color:var(--muted);font-size:11px;font-weight:700}
-.ad-wrap{width:100%;display:flex;justify-content:center;align-items:center;margin:18px 0;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:8px;min-height:108px;overflow:hidden}
-.ad-label{display:block;text-align:center;color:var(--subtle);font-size:9px;letter-spacing:1px;margin-bottom:5px}
-.ad-inner{width:100%;min-width:0;text-align:center;overflow:hidden}
 .section-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 13px}
 .section-heading h2{font-size:18px;letter-spacing:-.5px;margin:0}
 .section-heading p{font-size:11px;color:var(--muted);margin:5px 0 0}
@@ -115,10 +111,8 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 .channel{padding:10px;border-radius:14px}.logo-box{height:55px}.player-card{border-radius:17px;padding:7px}
 .player-head{padding:6px 5px 10px}.player-meta{padding:12px 5px 5px}
-.ad-wrap{min-height:82px;padding:5px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
-/* ONLY NEW: Custom Player Styles - does not affect UI */
 .video-js{width:100%;height:100%;background:#030306}
 .video-js.vjs-big-play-button{background:linear-gradient(135deg,var(--accent),var(--accent2))!important;border:none!important;border-radius:18px!important;width:68px!important;height:68px!important;line-height:68px!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;margin:0!important}
 .vjs-watermark{position:absolute;top:10px;right:10px;z-index:5;background:rgba(0,0,0,.6);padding:5px 9px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:1px;color:#fff;pointer-events:none;border:1px solid rgba(255,255,255,.12)}
@@ -156,7 +150,6 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
   <section class="player-card" aria-label="TV player">
     <div class="player-head"><span class="live-label"><span class="live-dot"></span> Player</span><small>Choose a channel below to start watching</small></div>
     <div class="player-frame">
-      <!-- ONLY CHANGED: added video-js class + watermark -->
       <video id="player" class="video-js vjs-big-play-centered" controls playsinline preload="none" aria-label="Live TV player"></video>
       <div class="vjs-watermark">TOOLZ • FREE TV</div>
       <div id="playerEmpty" class="player-empty">
@@ -168,11 +161,7 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
     <div class="player-meta"><div class="now-title"><strong id="nowText">No channel selected</strong><span id="nowSub">Live streams are provided by external sources.</span></div><span id="count" class="count-chip">0 channels</span></div>
   </section>
 
-  <div class="ad-wrap" aria-label="Advertisement"><div class="ad-inner"><span class="ad-label">ADVERTISEMENT</span><script>atOptions={'key':'fa40223cbaa35a71666874d8c4f6de9d','format':'iframe','height':90,'width':728,'params':{}};</script><script src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script></div></div>
-
   <section aria-labelledby="channelsTitle"><div class="section-heading"><div><h2 id="channelsTitle">Explore channels</h2><p id="resultSummary">Loading the selected country playlist…</p></div></div><div id="status" role="status" aria-live="polite">Loading channels…</div><div id="channelList" class="grid" aria-label="Available TV channels"></div><div id="loadMoreWrap" class="load-row" hidden><button id="loadMore" class="primary-btn" type="button">Load more channels</button></div></section>
-
-  <div class="ad-wrap" aria-label="Advertisement"><div class="ad-inner"><span class="ad-label">ADVERTISEMENT</span><script>atOptions={'key':'fa40223cbaa35a71666874d8c4f6de9d','format':'iframe','height':90,'width':728,'params':{}};</script><script src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script></div></div>
 
   <section class="seo-card"><h2>About Global TV</h2><p>Global TV helps you browse publicly listed IPTV streams by country and category. Channel names, logos, and stream availability are supplied by third-party playlist sources and may change without notice.</p><p>This website does not guarantee that every stream is available in every country or that every listed channel is broadcast in HD. Please use streams only where you have the right to access them.</p><div class="notice">Privacy & availability: playback requests connect to the selected third-party stream provider. Some channels may be offline, restricted by region, or unsupported by your browser. Global TV does not host the stream files.</div></section>
 
@@ -180,11 +169,16 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
-<!-- ONLY NEW: Video.js lib -->
 <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
+<!-- VAST Plugin -->
+<script src="https://cdn.jsdelivr.net/npm/videojs-vast-vpaid@2.0.2/bin/videojs_5.vast.vpaid.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/videojs-vast-vpaid@2.0.2/bin/videojs.vast.vpaid.min.css" rel="stylesheet">
+
 <script>
 (() => {
   'use strict';
+  const VAST_TAG = "https://nautical-hand.com/dEmhF.zIdkGwNAvnZlGeUs/lecmQ9HuvZrUcl/kAPiTHcD1CODDvQqxHMnjEEGtZNsz_Un4-N/DLEDyuNQQg";
+  
   const html = document.documentElement;
   const themeBtn = document.getElementById('themeToggle');
   const player = document.getElementById('player');
@@ -206,11 +200,11 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
   let filtered = [];
   let hls = null;
   let vjsPlayer = null;
+  let pendingChannelUrl = null;
   const PAGE_SIZE = 48;
   let showCount = PAGE_SIZE;
   let requestId = 0;
 
-  // INIT CUSTOM PLAYER - ONLY CHANGE
   try {
     vjsPlayer = videojs('player', {
       fluid: false,
@@ -220,7 +214,44 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
       preload: 'none',
       html5: { vhs: { overrideNative: true } }
     });
-  } catch(e) { console.log('VideoJS fallback to native', e); }
+
+    // Setup VAST once
+    vjsPlayer.vastClient({
+      adTagUrl: VAST_TAG,
+      playAdAlways: false,
+      adCancelTimeout: 7000,
+      adsEnabled: true,
+      vpaidEnabled: true
+    });
+
+    // When ad finishes -> play real channel
+    vjsPlayer.on('vast.adEnd', () => {
+      if(pendingChannelUrl) playRealStream(pendingChannelUrl);
+    });
+    vjsPlayer.on('vast.adSkip', () => {
+      if(pendingChannelUrl) playRealStream(pendingChannelUrl);
+    });
+    vjsPlayer.on('vast.adError', () => {
+      if(pendingChannelUrl) playRealStream(pendingChannelUrl);
+    });
+    vjsPlayer.on('vast.adsCancel', () => {
+      if(pendingChannelUrl) playRealStream(pendingChannelUrl);
+    });
+
+  } catch(e) { console.log('VideoJS error', e); }
+
+  function playRealStream(url){
+    pendingChannelUrl = null;
+    nowSub.textContent = 'Live · Playing';
+    if (hls) { try { hls.destroy(); } catch (_) {} hls = null; }
+    const type = url.includes('.m3u8') ? 'application/x-mpegURL' : 'video/mp4';
+    if(vjsPlayer){
+      vjsPlayer.src({ src: url, type: type });
+      vjsPlayer.play().catch(() => {
+        nowSub.textContent = 'Press play to start. Your browser may block autoplay.';
+      });
+    }
+  }
 
   function setTheme(theme){html.setAttribute('data-theme',theme);try{localStorage.setItem('gtv-theme',theme)}catch{}themeBtn.textContent=theme==='dark'?'☀️':'🌙'}
   let savedTheme='dark';try{savedTheme=localStorage.getItem('gtv-theme')||'dark'}catch{}setTheme(savedTheme==='light'?'light':'dark');
@@ -243,34 +274,32 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
     countEl.textContent=`${filtered.length.toLocaleString()} found`;resultSummary.textContent=`Showing ${Math.min(showCount,filtered.length).toLocaleString()} of ${filtered.length.toLocaleString()} matching channels`;heroCount.textContent=`${allChannels.length.toLocaleString()} loaded`;loadMoreWrap.hidden=filtered.length<=showCount;loadMoreBtn.textContent=`Load more channels (${Math.min(PAGE_SIZE,filtered.length-showCount)}+)`;
   }
 
-  // ONLY CHANGED FUNCTION: uses Video.js but keeps same UI logic
+  // UPDATED FUNCTION WITH VAST
   function playChannel(channel) {
     nowText.textContent = channel.name;
-    nowSub.textContent = `${channel.group || 'Live TV'} · Toolz Custom Player`;
+    nowSub.textContent = `Ad · Playing ad then live`;
     playerEmpty.classList.add('hidden');
+    pendingChannelUrl = channel.url;
 
     if (hls) { try { hls.destroy(); } catch (_) {} hls = null; }
 
     if (vjsPlayer) {
-      vjsPlayer.src({ src: channel.url, type: channel.url.includes('.m3u8')? 'application/x-mpegURL' : 'video/mp4' });
-      vjsPlayer.play().catch(() => {
-        nowSub.textContent = 'Press play to start. Your browser may block autoplay.';
-      });
-      vjsPlayer.off('error');
-      vjsPlayer.on('error', () => {
-        nowSub.textContent = 'Unable to play this stream. It may be offline, blocked, or unsupported.';
-      });
-    } else {
-      // fallback to original hls.js logic
-      player.pause(); player.removeAttribute('src'); player.preload='none'; player.load();
-      if (window.Hls && Hls.isSupported() && /\.m3u8($|\?)/i.test(channel.url)) {
-        hls = new Hls({enableWorker:true,maxBufferLength:10,backBufferLength:5,maxMaxBufferLength:20,capLevelToPlayerSize:true});
-        hls.loadSource(channel.url); hls.attachMedia(player);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => player.play().catch(()=>{nowSub.textContent='Press play to start.'}));
-        hls.on(Hls.Events.ERROR, (_e,d)=>{ if(d&&d.fatal) nowSub.textContent='Unable to play this stream.'; });
-      } else {
-        player.src = channel.url; player.play().catch(()=>{nowSub.textContent='Press play to start.'});
+      try{
+        // trigger VAST ad
+        vjsPlayer.vastClient({
+          adTagUrl: VAST_TAG + (VAST_TAG.includes('?') ? '&' : '?') + '_cb=' + Date.now(),
+          playAdAlways: true,
+          adCancelTimeout: 7000,
+          adsEnabled: true,
+          vpaidEnabled: true
+        });
+        vjsPlayer.play().catch(()=>{});
+      }catch(e){
+        // if VAST fails, play directly
+        playRealStream(channel.url);
       }
+    } else {
+      playRealStream(channel.url);
     }
     if (window.matchMedia('(max-width:760px)').matches) { document.querySelector('.player-card').scrollIntoView({behavior:'smooth',block:'start'}); }
   }
@@ -290,7 +319,5 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
   loadChannels();
 })();
 </script>
-<script src="https://pl31374026.profitableratecpmnetwork.com/33/28/9c/33289c1dd3808d1699259423a63b7e9f.js"></script>
-<link rel="stylesheet" href="/ads-fix.css">
 </body>
-  </html>
+                                                                                                                                                                                                                </html>
