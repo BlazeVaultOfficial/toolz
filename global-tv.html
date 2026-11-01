@@ -220,30 +220,40 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
     });
   } catch(e) { console.log('VideoJS error', e); }
 
-  // --- NEW VAST FETCHER - FIX FOR CORS ---
+  // FIXED VAST FETCHER - TRIES 3 PROXIES TO AVOID CORS
   async function fetchVastAdUrl(tag){
-    try{
-      const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(tag + (tag.includes('?')?'&':'?') + 'cb='+Date.now());
-      const res = await fetch(proxy);
-      const xmlText = await res.text();
-      const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
-      const mediaFiles = xml.getElementsByTagName('MediaFile');
-      let best = null;
-      for(let mf of mediaFiles){
-        const url = mf.textContent.trim();
-        if(url && url.startsWith('http')){
-          if(!best || mf.getAttribute('type')==='video/mp4') best = url;
+    const proxies = [
+      'https://corsproxy.io/?' + encodeURIComponent(tag + (tag.includes('?')?'&':'?') + 'cb='+Date.now()),
+      'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(tag),
+      'https://thingproxy.freeboard.io/fetch/' + tag
+    ];
+    for(let proxyUrl of proxies){
+      try{
+        const res = await fetch(proxyUrl, {cache:'no-store'});
+        if(!res.ok) continue;
+        const xmlText = await res.text();
+        if(!xmlText.includes('<VAST') && !xmlText.includes('<MediaFile')) continue;
+        const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
+        const mediaFiles = xml.getElementsByTagName('MediaFile');
+        let best = null;
+        for(let mf of mediaFiles){
+          const url = mf.textContent.trim();
+          if(url && url.startsWith('http')){
+            if(!best || mf.getAttribute('type')==='video/mp4') best = url;
+          }
         }
-      }
-      if(!best){
+        if(best) return best;
         const wrapper = xml.getElementsByTagName('VASTAdTagURI');
         if(wrapper.length>0){
           const wUrl = wrapper[0].textContent.trim();
-          if(wUrl) return await fetchVastAdUrl(wUrl);
+          if(wUrl){
+            const nested = await fetchVastAdUrl(wUrl);
+            if(nested) return nested;
+          }
         }
-      }
-      return best;
-    }catch(e){ console.log('VAST parse fail', e); return null; }
+      }catch(e){ console.log('Proxy failed', proxyUrl, e); continue; }
+    }
+    return null;
   }
 
   function playRealStream(url){
@@ -284,39 +294,28 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
     countEl.textContent=`${filtered.length.toLocaleString()} found`;resultSummary.textContent=`Showing ${Math.min(showCount,filtered.length).toLocaleString()} of ${filtered.length.toLocaleString()} matching channels`;heroCount.textContent=`${allChannels.length.toLocaleString()} loaded`;loadMoreWrap.hidden=filtered.length<=showCount;loadMoreBtn.textContent=`Load more channels (${Math.min(PAGE_SIZE,filtered.length-showCount)}+)`;
   }
 
-  // --- ONLY CHANGED FUNCTION ---
   async function playChannel(channel) {
     nowText.textContent = channel.name;
     nowSub.textContent = `Loading ad...`;
     playerEmpty.classList.add('hidden');
     pendingChannelUrl = channel.url;
-
     if (hls) { try { hls.destroy(); } catch (_) {} hls = null; }
-
     const adUrl = await fetchVastAdUrl(VAST_TAG);
-
     if(adUrl){
       isAdPlaying = true;
       vastLabel.style.display = 'block';
       skipBtn.style.display = 'block';
       skipBtn.textContent = 'Skip Ad ▶';
       nowSub.textContent = `Ad · Playing - Your channel after ad`;
-      
       vjsPlayer.src({ src: adUrl, type: 'video/mp4' });
       vjsPlayer.play().catch(()=>{ playRealStream(channel.url); });
-
-      let canSkip = false;
-      setTimeout(()=>{ canSkip = true; skipBtn.textContent = 'Skip Ad (Ready) ▶'; }, 5000);
-
+      setTimeout(()=>{ skipBtn.textContent = 'Skip Ad (Ready) ▶'; }, 5000);
       vjsPlayer.off('ended');
       vjsPlayer.on('ended', ()=>{ if(isAdPlaying) playRealStream(channel.url); });
-
       skipBtn.onclick = ()=>{ if(isAdPlaying) playRealStream(channel.url); };
-
     }else{
       playRealStream(channel.url);
     }
-
     if (window.matchMedia('(max-width:760px)').matches) { document.querySelector('.player-card').scrollIntoView({behavior:'smooth',block:'start'}); }
   }
 
@@ -336,4 +335,4 @@ h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.8px;line-height:1.08;margin:
 })();
 </script>
 </body>
-                                                                                                                                                                          </html>
+  </html>
