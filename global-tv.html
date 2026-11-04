@@ -6,6 +6,14 @@
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#08080d">
   <meta name="description" content="Browse publicly listed live TV streams by country and category. Availability depends on the broadcaster, stream provider and your location.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Toolz">
+  <meta property="og:title" content="Global TV | Live TV Channels - Toolz">
+  <meta property="og:description" content="Browse publicly listed live TV streams by country and category on Toolz Global TV.">
+  <meta property="og:url" content="https://toolz.run.place/global-tv.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Global TV | Live TV Channels - Toolz">
+  <meta name="twitter:description" content="Browse publicly listed live TV streams by country and category on Toolz Global TV.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://toolz.run.place/global-tv.html">
   <link rel="icon" href="/favicon.ico">
@@ -505,10 +513,78 @@
       return source;
     }
 
+    /*
+     * Per-channel SEO:
+     * When a channel is selected, update the browser URL and page metadata
+     * so every channel can have its own shareable, crawlable query URL.
+     * This does not change the player, playlist, ads, filters or page layout.
+     */
+    function updateChannelSEO(channel) {
+      if (!channel) return;
+
+      const channelName = String(channel.name || 'Live TV').trim().slice(0, 120);
+      const rawCountry = String(channel.countryCode || countryEl.value || 'all').trim().toLowerCase();
+      const countryCode = /^[a-z]{2}$/.test(rawCountry) ? rawCountry : 'all';
+
+      const pageUrl = new URL('https://toolz.run.place/global-tv.html');
+      pageUrl.searchParams.set('channel', String(channel.id || channel.name || channelName));
+      pageUrl.searchParams.set('country', countryCode);
+      pageUrl.hash = '';
+
+      const pageTitle = `${channelName} Live Online | Watch ${channelName} - Toolz`;
+      const pageDescription = `Watch ${channelName} live online on Toolz Global TV. Browse publicly listed TV streams. Availability depends on the broadcaster, stream provider and your location.`.slice(0, 300);
+
+      document.title = pageTitle;
+
+      const setMeta = (selector, attribute, value) => {
+        const element = document.querySelector(selector);
+        if (element) element.setAttribute(attribute, value);
+      };
+
+      setMeta('meta[name="description"]', 'content', pageDescription);
+      setMeta('meta[property="og:title"]', 'content', pageTitle);
+      setMeta('meta[property="og:description"]', 'content', pageDescription);
+      setMeta('meta[property="og:url"]', 'content', pageUrl.href);
+      setMeta('meta[name="twitter:title"]', 'content', pageTitle);
+      setMeta('meta[name="twitter:description"]', 'content', pageDescription);
+
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) canonical.href = pageUrl.href;
+
+      // Keep the URL in sync when a visitor selects a channel manually.
+      // replaceState avoids filling browser history with every channel click.
+      if (location.href !== pageUrl.href) {
+        try { history.replaceState(null, '', pageUrl.href); }
+        catch (error) { console.warn('Could not update channel URL:', error); }
+      }
+
+      // Keep structured WebPage metadata aligned with the selected channel.
+      let structuredData = document.getElementById('channelSeoJsonLd');
+      if (!structuredData) {
+        structuredData = document.createElement('script');
+        structuredData.id = 'channelSeoJsonLd';
+        structuredData.type = 'application/ld+json';
+        document.head.appendChild(structuredData);
+      }
+      structuredData.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: pageTitle,
+        description: pageDescription,
+        url: pageUrl.href,
+        isPartOf: {
+          '@type': 'WebSite',
+          name: 'Toolz',
+          url: 'https://toolz.run.place/'
+        }
+      }).replace(/</g, '\\u003c');
+    }
+
     async function playChannel(channel) {
       if (!channel || !channel.url) return;
       const id = ++playbackId;
       currentChannel = channel;
+      updateChannelSEO(channel);
       isPlaying = false;
       playerFrame.classList.remove('is-playing');
       isMuted = true;
