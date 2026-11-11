@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#08080d">
+  <meta name="description" content="Watch publicly available live TV streams from multiple free IPTV directories. Browse channels by country and category.">
+  <title>Global TV | Toolz</title>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdn.bitmovin.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+  <!-- Bitmovin Player SDK. Add your own licensed Bitmovin Player Web key below. -->
+  <script src="https://cdn.bitmovin.com/player/web/8/bitmovinplayer.js"></script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#08080d; --panel:#11111a; --panel2:#171722; --line:#282838;
+      --text:#f4f4fa; --muted:#9999ad; --accent:#ff6b35; --accent2:#ff3d81;
+      --good:#3bd69a; --bad:#ff647c; --radius:18px;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse at 70% -15%,#35172b 0,transparent 38%),var(--bg);color:var(--text);min-height:100vh}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;border-bottom:1px solid #ffffff12;background:#090910dd;position:sticky;top:0;z-index:20;backdrop-filter:blur(16px)}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:.3px}
+    .brand-mark{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 5px 24px #ff4b573d}
+    .brand small{display:block;color:var(--muted);font-size:10px;font-weight:600;letter-spacing:1.7px;margin-top:1px}
+    .top-actions{display:flex;align-items:center;gap:10px}
+    .pill{border:1px solid var(--line);background:#15151e;color:var(--text);padding:9px 13px;border-radius:999px;font-size:12px}
+    .hero{padding:34px 5% 20px;max-width:1500px;margin:auto}
+    .eyebrow{color:#ff936d;font-size:11px;letter-spacing:2.4px;font-weight:800}
+    h1{font-size:clamp(28px,4vw,44px);margin:9px 0 8px;letter-spacing:-1.5px}
+    .sub{color:var(--muted);font-size:14px;max-width:650px;line-height:1.6;margin:0}
+    .layout{max-width:1500px;margin:0 auto;padding:0 5% 48px;display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px}
+    .main{min-width:0}
+    .player-shell{background:#000;border:1px solid #ffffff16;border-radius:22px;overflow:hidden;box-shadow:0 20px 65px #0008}
+    #player{width:100%;aspect-ratio:16/9;background:#000;position:relative}
+    #player video{width:100%;height:100%;object-fit:contain}
+    .player-placeholder{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#a5a5b7;background:radial-gradient(ellipse,#1b1822,#050507 70%);padding:20px}
+    .player-placeholder i{font-size:46px;color:var(--accent);margin-bottom:14px}
+    .player-placeholder strong{display:block;color:#fff;font-size:17px;margin-bottom:6px}
+    .nowbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;background:#101018}
+    .now-meta{min-width:0}
+    .now-meta strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+    .now-meta span{font-size:11px;color:var(--muted)}
+    .controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .control{width:36px;height:36px;border:1px solid #ffffff1c;border-radius:11px;background:#1a1a25;color:#eee}
+    .control:hover,.control.active{background:#34202a;border-color:#ff6b35;color:#ff9a75}
+    .control.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:0;color:white}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:26px 0 13px}
+    .section-head h2{font-size:17px;margin:0}
+    .muted{color:var(--muted);font-size:12px}
+    .filters{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}
+    .search{flex:1;min-width:180px;position:relative}
+    .search i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#888}
+    .search input,.filters select{width:100%;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);outline:none;padding:0 13px}
+    .search input{padding-left:38px}
+    .filters select{width:auto;min-width:130px}
+    .channel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px}
+    .channel{border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#171722,#101018);padding:12px;text-align:left;color:var(--text);min-width:0;transition:.18s}
+    .channel:hover{transform:translateY(-2px);border-color:#ff784e88}
+    .channel.selected{border-color:var(--accent);background:linear-gradient(145deg,#30202a,#17131b)}
+    .channel-top{display:flex;align-items:center;gap:10px}
+    .logo{width:42px;height:42px;border-radius:12px;background:#242431;display:grid;place-items:center;overflow:hidden;flex:none;color:#ff9b77;font-size:17px}
+    .logo img{width:100%;height:100%;object-fit:contain;background:#fff}
+    .channel-name{font-weight:750;font-size:12px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+    .channel-info{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-top:11px;color:var(--muted);font-size:10px}
+    .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#777;margin-right:5px}
+    .dot.good{background:var(--good)} .dot.bad{background:var(--bad)}
+    .sidebar{background:var(--panel);border:1px solid var(--line);border-radius:19px;padding:17px;height:max-content;position:sticky;top:86px}
+    .sidebar h3{font-size:14px;margin:0 0 14px}
+    .source-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #ffffff10;font-size:12px}
+    .source-row:last-child{border:0}
+    .source-state{font-size:10px;color:var(--muted)}
+    .source-state.ok{color:var(--good)}
+    .source-state.fail{color:var(--bad)}
+    .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}
+    .stat{background:#191923;border-radius:12px;padding:12px}
+    .stat b{display:block;font-size:20px}.stat span{font-size:10px;color:var(--muted)}
+    .side-note{font-size:11px;line-height:1.55;color:var(--muted);margin-top:12px}
+    .load-line{height:3px;background:#242430;border-radius:4px;overflow:hidden;margin-top:13px}
+    .load-line span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+    .empty{grid-column:1/-1;padding:30px;text-align:center;border:1px dashed var(--line);border-radius:15px;color:var(--muted);font-size:13px}
+    .toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#242431;border:1px solid #ffffff20;padding:11px 16px;border-radius:12px;font-size:12px;z-index:50;transition:.2s}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+    footer{border-top:1px solid #ffffff12;padding:23px 5%;color:#77778b;text-align:center;font-size:11px}
+    footer b{color:#bbb}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:static;grid-row:1}.stat-grid{grid-template-columns:repeat(4,1fr)}}
+    @media(max-width:560px){.topbar{padding:0 4%;height:60px}.hero{padding:25px 4% 16px}.layout{padding:0 4% 35px;gap:15px}.nowbar{align-items:flex-start;flex-direction:column}.controls{justify-content:flex-start}.channel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-grid{grid-template-columns:1fr 1fr}.filters select{flex:1}.sidebar{padding:14px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark"><i class="fa-solid fa-satellite-dish"></i></div><div>GLOBAL TV<small>PUBLIC STREAM DIRECTORY</small></div></div>
+    <div class="top-actions"><span class="pill" id="headerCount">Loading channels…</span><button class="pill" id="refreshBtn"><i class="fa-solid fa-rotate"></i> Refresh</button></div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">LIVE TELEVISION · WORLDWIDE</div>
+    <h1>One world. <span style="color:#ff8058">More channels.</span></h1>
+    <p class="sub">Explore publicly listed free-to-watch streams from multiple IPTV directories. Stream availability depends on the original broadcaster and provider.</p>
+  </section>
+
+  <main class="layout">
+    <section class="main">
+      <div class="player-shell">
+        <div id="player">
+          <div class="player-placeholder" id="placeholder"><div><i class="fa-solid fa-play-circle"></i><strong>Your screen is ready</strong><span>Select a channel to start watching</span></div></div>
+        </div>
+        <div class="nowbar">
+          <div class="now-meta"><strong id="nowTitle">No channel selected</strong><span id="nowDetail">Choose a channel from the directory</span></div>
+          <div class="controls">
+            <button class="control" id="prevBtn" title="Previous channel"><i class="fa-solid fa-backward-step"></i></button>
+            <button class="control primary" id="playBtn" title="Play"><i class="fa-solid fa-play"></i></button>
+            <button class="control" id="nextBtn" title="Next channel"><i class="fa-solid fa-forward-step"></i></button>
+            <button class="control" id="shuffleBtn" title="Shuffle"><i class="fa-solid fa-shuffle"></i></button>
+            <button class="control" id="favBtn" title="Favorite"><i class="fa-regular fa-heart"></i></button>
+            <button class="control" id="muteBtn" title="Mute"><i class="fa-solid fa-volume-high"></i></button>
+            <button class="control" id="pipBtn" title="Picture in Picture"><i class="fa-regular fa-clone"></i></button>
+            <button class="control" id="fullBtn" title="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head"><h2>Channel directory</h2><span class="muted" id="resultCount">Preparing playlists…</span></div>
+      <div class="filters">
+        <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="searchInput" type="search" placeholder="Search channels, countries…"></div>
+        <select id="countryFilter"><option value="">All countries</option></select>
+        <select id="categoryFilter"><option value="">All categories</option></select>
+        <select id="sourceFilter"><option value="">All sources</option><option value="Old Code Channel List (Backup)">Old Code Channel List (Backup)</option><option value="Free-TV IPTV">Free-TV IPTV</option><option value="iptv-org">iptv-org</option><option value="Legal Free IPTV">Legal Free IPTV</option></select>
+      </div>
+      <div class="channel-grid" id="channelGrid"><div class="empty">Loading public channel lists…</div></div>
+      <div class="load-line"><span id="loadProgress"></span></div>
+    </section>
+
+    <aside class="sidebar">
+      <h3><i class="fa-solid fa-tower-broadcast" style="color:#ff8058;margin-right:7px"></i>Stream directory status</h3>
+      <div class="source-row"><span>Free-TV IPTV</span><span class="source-state" id="status-free">Waiting</span></div>
+      <div class="source-row"><span>iptv-org</span><span class="source-state" id="status-org">Waiting</span></div>
+      <div class="source-row"><span>Legal Free IPTV</span><span class="source-state" id="status-legal">Waiting</span></div>
+      <div class="stat-grid">
+        <div class="stat"><b id="statTotal">0</b><span>Channels</span></div>
+        <div class="stat"><b id="statCountries">0</b><span>Countries</span></div>
+        <div class="stat"><b id="statSources">0</b><span>Sources online</span></div>
+        <div class="stat"><b id="statFav">0</b><span>Favorites</span></div>
+      </div>
+      <div class="side-note">If a stream fails, Global TV automatically tries another matching stream from the other loaded directories. Some broadcasters may block playback outside their own websites.</div>
+    </aside>
+  </main>
+
+  <footer>GLOBAL TV <span>·</span> Part of <b>Toolz</b> <span>·</span> Public stream directory. Streams remain the property of their respective broadcasters and providers.</footer>
+  <div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  // IMPORTANT: Insert the same Bitmovin Web Player key and VAST tag used by your previous page.
+  // The values were not included in the available source excerpt, so they are intentionally not fabricated.
+  const BITMOVIN_KEY = "PASTE_YOUR_BITMOVIN_WEB_PLAYER_KEY_HERE";
+  const VAST_TAG_URL = "PASTE_YOUR_EXISTING_VAST_TAG_URL_HERE";
+
+  const PLAYLISTS = [
+    { id:"free", name:"Free-TV IPTV", urls:[
+      "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8",
+      "https://cdn.jsdelivr.net/gh/Free-TV/IPTV@master/playlist.m3u8"
+    ]},
+    { id:"org", name:"iptv-org + Old Code Backups", urls:[
+      "https://iptv-org.github.io/iptv/index.m3u",
+      "https://cdn.jsdelivr.net/gh/iptv-org/iptv@gh-pages/index.m3u",
+      "https://raw.githubusercontent.com/iptv-org/iptv/gh-pages/index.m3u"
+    ]},
+    { id:"legal", name:"Legal Free IPTV", urls:[
+      "https://biskyt.github.io/legalFreeIPTVplaylist/live.m3u"
+    ]}
+  ];
+
+  const $ = id => document.getElementById(id);
+  let channels = [], filtered = [], currentIndex = -1, player = null, currentVideo = null;
+  let sourceOnline = 0, favorites = new Set();
+  try { favorites = new Set(JSON.parse(localStorage.getItem("globaltv-favorites") || "[]")); } catch {}
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const norm = s => String(s || "").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+  const showToast = msg => { const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(showToast.timer); showToast.timer=setTimeout(()=>t.classList.remove("show"),2600); };
+
+  function parseM3U(text, sourceName) {
+    const lines = text.replace(/^\uFEFF/,"").split(/\r?\n/);
+    const out=[]; let meta=null;
+    for (const raw of lines) {
+      const line=raw.trim();
+      if (!line) continue;
+      if (line.startsWith("#EXTINF")) {
+        const attrs={};
+        for (const m of line.matchAll(/([\w-]+)="([^"]*)"/g)) attrs[m[1].toLowerCase()]=m[2];
+        const comma=line.indexOf(",");
+        meta={ name:comma>=0?line.slice(comma+1).trim():(attrs["tvg-name"]||"Unknown channel"),
+          logo:attrs["tvg-logo"]||"", country:attrs["tvg-country"]||"", group:attrs["group-title"]||"",
+          id:attrs["tvg-id"]||"", language:attrs["tvg-language"]||"" };
+      } else if (!line.startsWith("#") && /^https?:\/\//i.test(line)) {
+        if (!meta) meta={name:line};
+        out.push({...meta,url:line,source:sourceName});
+        meta=null;
+      }
+    }
+    return out;
+  }
+
+  function channelKey(c) {
+    const identity=norm(c.id || c.name);
+    const country=norm(c.country);
+    return identity + "|" + country;
+  }
+
+  function mergeChannels(all) {
+    const map=new Map();
+    for (const c of all) {
+      const key=channelKey(c);
+      if (!key || key==="|") continue;
+      if (!map.has(key)) map.set(key,{...c,streams:[{url:c.url,source:c.source}],sources:[c.source]});
+      else {
+        const old=map.get(key);
+        if (!old.logo && c.logo) old.logo=c.logo;
+        if (!old.country && c.country) old.country=c.country;
+        if (!old.group && c.group) old.group=c.group;
+        if (!old.language && c.language) old.language=c.language;
+        if (!old.streams.some(s=>s.url===c.url)) old.streams.push({url:c.url,source:c.source});
+        if (!old.sources.includes(c.source)) old.sources.push(c.source);
+      }
+    }
+    return [...map.values()].sort((a,b)=>a.name.localeCompare(b.name));
+  }
+
+  async function readPlaylistFast(response, signal, maxBytes=12*1024*1024, maxChannels=6000) {
+    if (!response.body || !response.body.getReader) {
+      const text = await response.text();
+      if (text.length > maxBytes) throw new Error("Playlist exceeded the 12 MB loading limit");
+      return text;
+    }
+    const reader=response.body.getReader();
+    const decoder=new TextDecoder("utf-8");
+    let text="", bytes=0, extCount=0, carry="";
+    try {
+      while (true) {
+        if (signal.aborted) throw new DOMException("Request timed out","AbortError");
+        const {value,done}=await reader.read();
+        if (done) break;
+        bytes += value.byteLength;
+        if (bytes > maxBytes) { try { await reader.cancel(); } catch {} break; }
+        const chunk=decoder.decode(value,{stream:true});
+        text += chunk;
+        const lines=(carry+chunk).split(/\r?\n/);
+        carry=lines.pop() || "";
+        for (const line of lines) if (line.trimStart().startsWith("#EXTINF")) extCount++;
+        if (extCount >= maxChannels) { try { await reader.cancel(); } catch {} break; }
+      }
+      text += decoder.decode();
+      return text;
+    } finally { try { reader.releaseLock(); } catch {} }
+  }
+
+  async function fetchPlaylist(source) {
+    let lastError;
+    for (const url of source.urls) {
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),8500);
+      try {
+        const res=await fetch(url,{signal:controller.signal,cache:"force-cache",credentials:"omit"});
+        if (!res.ok) throw new Error("HTTP "+res.status);
+        const text=await readPlaylistFast(res,controller.signal);
+        if (!text.includes("#EXTM3U")) throw new Error("Invalid M3U");
+        const list=parseM3U(text,source.name).slice(0,6000);
+        if (!list.length) throw new Error("No channel entries found");
+        return list;
+      } catch(e) { lastError=e; }
+      finally { clearTimeout(timer); }
+    }
+    throw lastError || new Error("Could not load playlist");
+  }
+
+  async function loadAll() {
+    $("channelGrid").innerHTML='<div class="empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading channel lists…</div>';
+    $("loadProgress").style.width="8%";
+    let loadDone=0;
+    const results=await Promise.all(PLAYLISTS.map(async (source,i)=>{
+      try {
+        const list=await fetchPlaylist(source);
+        setSourceStatus(source.id,`Loaded ${list.length.toLocaleString()}`,"ok");
+        return {source,list};
+      } catch(e) {
+        setSourceStatus(source.id,"Unavailable","fail");
+        return {source,list:[],error:e.message};
+      } finally { loadDone++; $("loadProgress").style.width=(10+loadDone/PLAYLISTS.length*75)+"%"; }
+    }));
+    sourceOnline=results.filter(r=>r.list.length).length;
+    channels=mergeChannels(results.flatMap(r=>r.list));
+    $("statTotal").textContent=channels.length.toLocaleString();
+    $("statCountries").textContent=new Set(channels.map(c=>c.country).filter(Boolean)).size.toLocaleString();
+    $("statSources").textContent=sourceOnline;
+    $("headerCount").textContent=channels.length.toLocaleString()+" channels";
+    $("loadProgress").style.width="100%";
+    populateFilters();
+    applyFilters();
+    if (!channels.length) $("channelGrid").innerHTML='<div class="empty">No playlists could be loaded. Check the playlist URLs, hosting CORS rules, or try Refresh.</div>';
+    showToast(channels.length ? `Loaded ${channels.length.toLocaleString()} channels` : "No channel lists were available");
+  }
+
+  function setSourceStatus(id,text,kind) {
+    const el=$("status-"+id); el.textContent=text; el.className="source-state "+(kind||"");
+  }
+
+  function populateFilters() {
+    const countries=[...new Set(channels.map(c=>c.country).filter(Boolean))].sort();
+    const cats=[...new Set(channels.map(c=>c.group).filter(Boolean))].sort();
+    $("countryFilter").innerHTML='<option value="">All countries</option>'+countries.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
+    $("categoryFilter").innerHTML='<option value="">All categories</option>'+cats.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
+  }
+
+  function applyFilters() {
+    const q=norm($("searchInput").value), country=$("countryFilter").value, cat=$("categoryFilter").value, source=$("sourceFilter").value;
+    filtered=channels.filter(c=>(!q||norm([c.name,c.country,c.group,c.language].join(" ")).includes(q))&&(!country||c.country===country)&&(!cat||c.group===cat)&&(!source||c.sources.includes(source)));
+    $("resultCount").textContent=`${filtered.length.toLocaleString()} channels`;
+    $("statFav").textContent=favorites.size;
+    renderChannels();
+  }
+
+  function renderChannels() {
+    if (!filtered.length) { $("channelGrid").innerHTML='<div class="empty">No channels match your search.</div>'; return; }
+    $("channelGrid").innerHTML=filtered.slice(0,240).map((c,i)=>{
+      const selected=channels.indexOf(c)===channels.indexOf(channels[currentIndex]);
+      const logo=c.logo?`<img loading="lazy" src="${esc(c.logo)}" alt="" onerror="this.remove()">`:'<i class="fa-solid fa-tv"></i>';
+      return `<button class="channel ${selected?"selected":""}" data-index="${i}">
+        <div class="channel-top"><div class="logo">${logo}</div><div class="channel-name">${esc(c.name)}</div></div>
+        <div class="channel-info"><span>${esc(c.country||c.group||"Live TV")}</span><span><i class="dot good"></i>${c.streams.length>1?c.streams.length+" streams": "Listed"}</span></div>
+      </button>`;
+    }).join("");
+    $("channelGrid").querySelectorAll(".channel").forEach(btn=>btn.addEventListener("click",()=>playChannel(Number(btn.dataset.index))));
+  }
+
+  function getVideoElement() { return document.querySelector("#player video"); }
+  function resetPlayerArea() {
+    if (player) { try { player.destroy(); } catch {} player=null; }
+    $("player").innerHTML='<div class="player-placeholder" id="placeholder"><div><i class="fa-solid fa-circle-notch fa-spin"></i><strong>Connecting to stream…</strong><span>Trying available channel sources</span></div></div>';
+  }
+
+  function buildPlayer(url) {
+    resetPlayerArea();
+    const config={key:BITMOVIN_KEY, playback:{autoplay:true,muted:false}, style:{width:"100%",aspectratio:"16:9"}};
+    if (VAST_TAG_URL.startsWith("http")) {
+      config.advertising={adBreaks:[{tag:VAST_TAG_URL,position:"pre"}]};
+    }
+    if (window.bitmovin && BITMOVIN_KEY && !BITMOVIN_KEY.includes("PASTE_")) {
+      try {
+        player=new bitmovin.player.Player($("player"),config);
+        player.load({hls:{url}}).catch(()=>fallbackNative(url));
+        player.on("play",hidePlaceholder);
+        player.on("playing",hidePlaceholder);
+        player.on("error",()=>hidePlaceholder());
+      } catch { fallbackNative(url); }
+    } else fallbackNative(url);
+  }
+
+  function hidePlaceholder() {
+    const p=$("placeholder"); if(p) p.style.display="none";
+  }
+
+  function fallbackNative(url) {
+    resetPlayerArea();
+    const video=document.createElement("video");
+    video.controls=true; video.autoplay=true; video.playsInline=true; video.preload="auto";
+    $("player").appendChild(video); currentVideo=video;
+    video.src=url;
+    video.addEventListener("playing",hidePlaceholder);
+    video.addEventListener("error",()=>showToast("This stream could not be played in this browser"));
+    video.play().catch(()=>{});
+  }
+
+  async function tryStream(channel, startAt=0) {
+    const streams=channel.streams;
+    for (let i=startAt;i<streams.length;i++) {
+      $("nowDetail").textContent=`Trying ${streams[i].source} · source ${i+1}/${streams.length}`;
+      buildPlayer(streams[i].url);
+      await new Promise(resolve=>setTimeout(resolve,1800));
+      const video=getVideoElement();
+      if (video && (video.readyState>=2 || !video.error)) {
+        // Allow a short startup window before moving to the next mirror.
+        const ok=await new Promise(resolve=>{
+          let done=false; const finish=v=>{if(!done){done=true;resolve(v)}};
+          const v=getVideoElement();
+          if(!v){finish(false);return}
+          v.addEventListener("playing",()=>finish(true),{once:true});
+          v.addEventListener("error",()=>finish(false),{once:true});
+          setTimeout(()=>finish(v.readyState>=2),5500);
+        });
+        if(ok) return true;
+      }
+    }
+    $("nowDetail").textContent="No working stream found in the loaded directories";
+    showToast("No working stream found for this channel");
+    return false;
+  }
+
+  async function playChannel(index) {
+    if (!filtered.length) return;
+    index=(index+filtered.length)%filtered.length;
+    currentIndex=channels.indexOf(filtered[index]);
+    const c=filtered[index];
+    $("nowTitle").textContent=c.name;
+    $("nowDetail").textContent=`${c.country||"Worldwide"} · ${c.sources.join(", ")}`;
+    $("playBtn").innerHTML='<i class="fa-solid fa-pause"></i>';
+    renderChannels();
+    await tryStream(c,0);
+  }
+
+  function stepChannel(delta) {
+    if (!filtered.length) return;
+    const visibleIndex=filtered.findIndex(c=>channels.indexOf(c)===currentIndex);
+    playChannel((visibleIndex<0?0:visibleIndex+delta+filtered.length)%filtered.length);
+  }
+
+  $("searchInput").addEventListener("input",applyFilters);
+  $("countryFilter").addEventListener("change",applyFilters);
+  $("categoryFilter").addEventListener("change",applyFilters);
+  $("sourceFilter").addEventListener("change",applyFilters);
+  $("refreshBtn").addEventListener("click",loadAll);
+  $("prevBtn").addEventListener("click",()=>stepChannel(-1));
+  $("nextBtn").addEventListener("click",()=>stepChannel(1));
+  $("shuffleBtn").addEventListener("click",()=>playChannel(Math.floor(Math.random()*filtered.length)));
+  $("playBtn").addEventListener("click",()=>{
+    const v=getVideoElement();
+    if(v){if(v.paused)v.play().catch(()=>{});else v.pause();}
+    else if(filtered.length)playChannel(0);
+  });
+  $("favBtn").addEventListener("click",()=>{
+    if(currentIndex<0)return showToast("Choose a channel first");
+    const key=channelKey(channels[currentIndex]);
+    if(favorites.has(key))favorites.delete(key);else favorites.add(key);
+    localStorage.setItem("globaltv-favorites",JSON.stringify([...favorites]));
+    $("favBtn").innerHTML=favorites.has(key)?'<i class="fa-solid fa-heart"></i>':'<i class="fa-regular fa-heart"></i>';
+    $("statFav").textContent=favorites.size;
+  });
+  $("muteBtn").addEventListener("click",()=>{
+    const v=getVideoElement(); if(!v)return;
+    v.muted=!v.muted; $("muteBtn").innerHTML=v.muted?'<i class="fa-solid fa-volume-xmark"></i>':'<i class="fa-solid fa-volume-high"></i>';
+  });
+  $("pipBtn").addEventListener("click",async()=>{
+    const v=getVideoElement(); if(!v)return;
+    try { if(document.pictureInPictureElement)await document.exitPictureInPicture();else await v.requestPictureInPicture(); }
+    catch { showToast("Picture in Picture is not available for this stream"); }
+  });
+  $("fullBtn").addEventListener("click",()=>{
+    const p=$("player"); if(!document.fullscreenElement)p.requestFullscreen?.();else document.exitFullscreen?.();
+  });
+  loadAll();
+})();
+</script>
+</body>
+</html>
