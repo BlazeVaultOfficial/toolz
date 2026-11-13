@@ -5,458 +5,358 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#08080d">
   <meta name="color-scheme" content="dark">
-  <title>Toolz | Free Online Tools &amp; Utilities</title>
-  <meta name="description" content="Use free online tools from Toolz to merge PDFs, check supported IDs, compress images, extract text, create QR codes and more. Simple, useful and no signup required.">
-  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+  <title>Toolz | Online Tools for Everyday Work</title>
+  <meta name="description" content="Discover free online tools for PDFs, images, text, media, privacy and everyday digital tasks. No Toolz account required.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="author" content="Prabhasha Laknindu">
   <link rel="canonical" href="https://toolz.run.place/">
-
-  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="manifest" href="/site.webmanifest">
-
-  <meta property="og:title" content="Toolz | Free Online Tools &amp; Utilities">
-  <meta property="og:description" content="Free browser tools for PDFs, images, OCR, QR codes, media utilities and more. No Toolz account required.">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:title" content="Toolz | Online Tools for Everyday Work">
+  <meta property="og:description" content="A practical collection of free online tools. Find a tool, get your task done.">
   <meta property="og:url" content="https://toolz.run.place/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Toolz">
   <meta property="og:image" content="https://toolz.run.place/android-chrome-512x512.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Toolz | Free Online Tools">
-  <meta name="twitter:description" content="Useful free online tools for everyday tasks. No signup required.">
+  <meta name="twitter:title" content="Toolz | Online Tools">
+  <meta name="twitter:description" content="Free online tools for everyday digital tasks.">
   <meta name="twitter:image" content="https://toolz.run.place/android-chrome-512x512.png">
-
-  <!-- Adsterra only. No Google AdSense code is included on this page. -->
-
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","name":"Toolz","alternateName":"Toolz.run.place","url":"https://toolz.run.place/"}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":"Toolz","url":"https://toolz.run.place/","logo":"https://toolz.run.place/android-chrome-512x512.png","founder":{"@type":"Person","name":"Prabhasha Laknindu"}}
+  </script>
   <style>
-    :root {
-      --bg:#08080d; --panel:#101017; --panel2:#15151d; --line:#302838;
-      --text:#fff; --muted:#938a9b; --orange:#f59e0b; --purple:#a855f7;
+    :root{
+      --bg:#08080d;--surface:#101017;--surface2:#15151d;--surface3:#1b1922;
+      --line:#302838;--line2:#403348;--text:#fff;--muted:#938a9b;--dim:#716879;
+      --orange:#f59e0b;--purple:#a855f7;--sidebar:238px;--content:1220px;
+      --radius:15px;
     }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body {
-      margin:0; min-width:320px; background:var(--bg); color:var(--text);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-      line-height:1.5; overflow-x:hidden;
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:88px}
+    body{margin:0;min-width:320px;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5}
+    body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 8% 5%,rgba(168,85,247,.09),transparent 34%),radial-gradient(ellipse at 90% 16%,rgba(245,158,11,.07),transparent 32%)}
+    a{color:inherit;text-decoration:none}button,input{font:inherit}button{color:inherit}
+    .topbar{height:68px;position:sticky;top:0;z-index:40;background:rgba(9,9,14,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+    .top-inner{height:100%;max-width:1440px;margin:auto;padding:0 28px;display:flex;align-items:center;gap:36px}
+    .brand{display:flex;align-items:center;gap:10px;flex:0 0 auto;font-size:21px;font-weight:950;letter-spacing:-.8px}
+    .brand-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,var(--orange),#ffd36e);color:#17120a;font-weight:1000;box-shadow:0 5px 18px #f59e0b22}
+    .brand span:last-child b{color:var(--orange)}
+    .top-nav{height:100%;display:flex;align-items:center;gap:25px}
+    .top-nav a{height:100%;display:flex;align-items:center;color:#aaa1b0;font-size:12px;font-weight:750;border-bottom:2px solid transparent}
+    .top-nav a:hover,.top-nav a.active{color:#fff;border-color:var(--orange)}
+    .top-spacer{flex:1}
+    .top-note{padding:7px 11px;border:1px solid #49351d;border-radius:8px;background:#f59e0b12;color:#fbbf24;font-size:10px;font-weight:900;letter-spacing:.5px}
+    .top-cta{padding:9px 13px;border-radius:9px;background:var(--orange);color:#17120a;font-size:11px;font-weight:950}
+    .mobile-menu{display:none}
+    .page{max-width:1440px;margin:auto;padding:0 28px}
+    .hero{padding:67px 0 42px;text-align:center}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 11px;border:1px solid #3b2c41;border-radius:999px;background:#111118;color:#c4a9d7;font-size:9px;font-weight:950;letter-spacing:1.25px;text-transform:uppercase}
+    .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 10px #f59e0b99}
+    h1{margin:19px 0 0;font-size:clamp(39px,6vw,65px);line-height:1.03;letter-spacing:-3.6px;font-weight:1000}
+    h1 span{background:linear-gradient(100deg,#ffc34d 0%,var(--orange) 48%,#c084fc 100%);background-clip:text;-webkit-background-clip:text;color:transparent}
+    .hero-copy{max-width:590px;margin:17px auto 0;color:var(--muted);font-size:14px;line-height:1.8}
+    .hero-search{max-width:700px;margin:27px auto 0;display:flex;align-items:center;gap:11px;padding:0 15px;height:58px;border:1px solid var(--line2);border-radius:13px;background:#111118;box-shadow:0 12px 38px #0005}
+    .hero-search:focus-within{border-color:#a16207;box-shadow:0 0 0 4px #f59e0b0d}
+    .search-icon{font-size:20px;color:#b99acb}
+    .hero-search input{width:100%;border:0;outline:0;background:transparent;color:#fff;font-size:13px}
+    .hero-search input::placeholder{color:#777080}
+    .search-hint{padding:4px 7px;border:1px solid #39313f;border-radius:5px;color:#84798c;font-size:9px;white-space:nowrap}
+    .quick-links{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:15px;color:#8e8495;font-size:10px}
+    .quick-links strong{color:#b9afbf}
+    .quick-links a{padding:4px 8px;border:1px solid transparent;border-radius:6px}
+    .quick-links a:hover{border-color:var(--line);background:var(--surface);color:var(--orange)}
+    .content-layout{display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr);gap:27px;align-items:start;margin-top:13px}
+    .sidebar{position:sticky;top:88px;padding:17px 13px;border:1px solid var(--line);border-radius:14px;background:rgba(16,16,23,.92)}
+    .side-label{padding:3px 10px 10px;color:#746a7d;font-size:9px;font-weight:950;letter-spacing:1.3px;text-transform:uppercase}
+    .side-link{width:100%;display:flex;align-items:center;gap:11px;padding:10px;border:0;border-radius:9px;background:transparent;color:#a9a0b0;text-align:left;font-size:11px;font-weight:750;cursor:pointer}
+    .side-link .ico{width:20px;text-align:center;font-size:14px}
+    .side-link:hover,.side-link.active{background:#211a17;color:#fff}
+    .side-link.active{box-shadow:inset 2px 0 var(--orange)}
+    .side-count{margin-left:auto;color:#756b7d;font-size:9px}
+    .side-divider{height:1px;margin:12px 4px;background:var(--line)}
+    .side-promo{margin-top:15px;padding:13px;border:1px solid #49351f;border-radius:11px;background:linear-gradient(145deg,#f59e0b12,transparent)}
+    .side-promo strong{display:block;font-size:11px}
+    .side-promo p{margin:5px 0 10px;color:#968c9c;font-size:10px;line-height:1.6}
+    .side-promo a{color:#fbbf24;font-size:10px;font-weight:900}
+    .main-column{min-width:0}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:0 0 14px}
+    .section-title{margin:0;font-size:19px;font-weight:950;letter-spacing:-.5px}
+    .section-sub{margin-top:4px;color:var(--dim);font-size:10px}
+    .section-kicker{margin-bottom:4px;color:var(--orange);font-size:8px;font-weight:950;letter-spacing:1.5px;text-transform:uppercase}
+    .view-all{color:#d5a24d;font-size:10px;font-weight:850;white-space:nowrap}
+    .view-all:hover{color:#ffd27b}
+    .popular-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+    .popular-card{display:flex;align-items:center;gap:11px;min-width:0;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);transition:.16s}
+    .popular-card:hover{transform:translateY(-2px);border-color:#75501f;background:#14121a}
+    .popular-icon{width:39px;height:39px;display:grid;place-items:center;flex:0 0 auto;border:1px solid #49364e;border-radius:11px;background:#1b1522;font-size:19px}
+    .popular-card strong{display:block;font-size:11px;font-weight:900;line-height:1.35}
+    .popular-card small{display:block;margin-top:4px;color:#817788;font-size:9px}
+    .directory{margin-top:37px}
+    .directory-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .directory-toolbar .section-head{margin:0}
+    .count{color:#8e8495;font-size:10px;font-weight:800;white-space:nowrap}
+    .tool-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .tool-card{display:flex;flex-direction:column;min-width:0;min-height:206px;padding:17px;border:1px solid var(--line);border-radius:13px;background:var(--surface);transition:transform .16s,border-color .16s,background .16s}
+    .tool-card:hover{transform:translateY(-3px);border-color:#69471f;background:#14121a}
+    .tool-card[hidden]{display:none}
+    .tool-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+    .tool-icon{width:39px;height:39px;display:grid;place-items:center;border:1px solid #443449;border-radius:11px;background:#1a1520;font-size:19px}
+    .tool-badge{padding:4px 7px;border:1px solid #47331d;border-radius:5px;background:#24190f;color:#efb34c;font-size:7px;font-weight:950;letter-spacing:.6px;text-transform:uppercase}
+    .tool-card h3{margin:0 0 6px;font-size:12px;font-weight:900;letter-spacing:-.1px}
+    .tool-card p{flex:1;margin:0;color:#8e8494;font-size:10px;line-height:1.7}
+    .tool-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;padding-top:11px;border-top:1px solid var(--line)}
+    .tool-category{color:#807587;font-size:8px;font-weight:850;text-transform:uppercase;letter-spacing:.6px}
+    .tool-open{color:#c4a06a;font-size:15px}
+    .empty-state{display:none;grid-column:1/-1;padding:35px 15px;border:1px dashed #49394f;border-radius:12px;color:#968c9c;text-align:center;font-size:11px}
+    .empty-state strong{display:block;margin-bottom:4px;color:#fff;font-size:13px}
+    .feature-banner{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:27px;padding:18px;border:1px solid #4a351f;border-radius:13px;background:linear-gradient(100deg,#f59e0b10,transparent 55%),var(--surface)}
+    .feature-left{display:flex;align-items:center;gap:13px;min-width:0}
+    .feature-symbol{width:44px;height:44px;display:grid;place-items:center;flex:0 0 auto;border:1px solid #59402a;border-radius:12px;background:#211a17;font-size:21px}
+    .feature-banner h3{margin:0;font-size:12px;font-weight:950}
+    .feature-banner p{margin:4px 0 0;color:#8f8595;font-size:10px;line-height:1.6}
+    .feature-button{padding:9px 12px;border-radius:8px;background:var(--orange);color:#17120a;font-size:9px;font-weight:950;white-space:nowrap}
+    .below-sections{margin:54px 0 0}
+    .benefit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .benefit{padding:19px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+    .benefit-icon{margin-bottom:11px;font-size:21px}
+    .benefit h3{margin:0 0 5px;font-size:12px;font-weight:950}
+    .benefit p{margin:0;color:#8e8494;font-size:10px;line-height:1.7}
+    .about{margin-top:45px;padding:25px;border:1px solid var(--line);border-radius:15px;background:var(--surface);color:#968c9c;font-size:11px;line-height:1.8}
+    .about h2{margin:0 0 8px;color:#fff;font-size:18px}
+    .about h3{margin:18px 0 6px;color:#e7dfea;font-size:12px}
+    .about p{margin:0}
+    .about strong{color:#eee}
+    .about-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 18px;margin-top:8px}
+    .ad-wrap{display:flex;justify-content:center;margin:28px auto;overflow:hidden}
+    .ad-inner{width:100%;max-width:728px;min-height:90px;text-align:center}
+    .ad-label{margin-bottom:5px;color:#62566b;font-size:8px;font-weight:800;letter-spacing:.8px}
+    #ad-bottom{max-width:100%;overflow:hidden}#ad-bottom iframe{max-width:100%}
+    .footer{margin-top:55px;padding:34px 28px 26px;border-top:1px solid var(--line);background:#09090e}
+    .footer-inner{max-width:1220px;margin:auto}
+    .footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:30px;padding-bottom:28px}
+    .footer-brand p{max-width:250px;color:#817788;font-size:10px;line-height:1.8}
+    .footer-col h4{margin:2px 0 12px;color:#e9e2ed;font-size:10px}
+    .footer-col a{display:block;margin:8px 0;color:#817788;font-size:10px}
+    .footer-col a:hover{color:var(--orange)}
+    .footer-bottom{display:flex;justify-content:space-between;gap:15px;padding-top:17px;border-top:1px solid var(--line);color:#716879;font-size:9px}
+    .footer-bottom strong{color:#c7b9cc}
+    .coffee{position:fixed;right:17px;bottom:16px;z-index:35;padding:10px 14px;border:1px solid #000;border-radius:999px;background:#ffdd00;color:#17120a;box-shadow:0 6px 22px #0007;font-size:10px;font-weight:950}
+    .coffee:hover{transform:translateY(-2px)}
+    :focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+    @media(max-width:1120px){.tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.popular-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:850px){
+      .top-inner{padding:0 18px;gap:18px}.top-nav{gap:13px}.top-nav a{font-size:10px}
+      .page{padding:0 18px}.content-layout{grid-template-columns:1fr;gap:20px}
+      .sidebar{position:static;display:flex;align-items:center;gap:5px;overflow-x:auto;padding:8px}
+      .side-label,.side-divider,.side-promo{display:none}
+      .side-link{width:auto;flex:0 0 auto;padding:9px 11px;white-space:nowrap}
+      .side-count{display:none}
+      .side-link.active{box-shadow:inset 0 -2px var(--orange)}
+      .footer-top{grid-template-columns:repeat(2,1fr)}
     }
-    body::before {
-      content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
-      background:radial-gradient(ellipse at 8% 7%,rgba(168,85,247,.09),transparent 34%),
-                 radial-gradient(ellipse at 92% 20%,rgba(245,158,11,.075),transparent 31%);
+    @media(max-width:600px){
+      .topbar{height:60px}.top-inner{padding:0 14px}.top-nav{display:none}.top-note{display:none}
+      .top-cta{margin-left:auto}.brand{font-size:18px}.brand-mark{width:31px;height:31px}
+      .page{padding:0 14px}.hero{padding:48px 0 30px}h1{letter-spacing:-2.4px}
+      .hero-copy{font-size:12px}.search-hint{display:none}
+      .popular-grid{grid-template-columns:1fr}.tool-grid{grid-template-columns:1fr}
+      .tool-card{min-height:178px}.benefit-grid{grid-template-columns:1fr}
+      .feature-banner{align-items:flex-start;flex-direction:column}.feature-button{width:100%;text-align:center}
+      .about{padding:20px 17px}.about-list{grid-template-columns:1fr}
+      .footer{padding:30px 17px 22px}.footer-top{gap:20px}.footer-bottom{flex-direction:column}
+      .coffee{right:11px;bottom:11px}
     }
-    a { color:inherit; text-decoration:none; }
-    button,input { font:inherit; }
-    .top { position:sticky; top:0; z-index:20; background:rgba(9,9,14,.96); border-bottom:1px solid var(--line); }
-    .nav { max-width:1100px; margin:auto; padding:13px 24px; display:flex; justify-content:space-between; align-items:center; gap:16px; }
-    .logo { font-size:22px; font-weight:900; letter-spacing:-.7px; }
-    .logo span,.accent { color:var(--orange); }
-    .nav-right { display:flex; align-items:center; gap:9px; }
-    .nav-pill,.nav-link { border:1px solid #332b3c; background:#111118; border-radius:9px; padding:8px 12px; font-size:11px; font-weight:800; }
-    .nav-pill { color:#fbbf24; }
-    .nav-link { color:#fff; }
-    .nav-link:hover { border-color:#80551c; color:#ffb52f; }
-    .hero { max-width:900px; margin:auto; padding:62px 24px 26px; text-align:center; }
-    .eyebrow { display:inline-flex; align-items:center; gap:7px; padding:7px 12px; margin-bottom:18px; border:1px solid #3b2c41; border-radius:999px; background:#111118; color:#c1a7d4; font-size:11px; font-weight:800; }
-    .dot { width:7px; height:7px; border-radius:50%; background:var(--orange); box-shadow:0 0 9px rgba(245,158,11,.6); }
-    h1 { margin:0; font-size:clamp(36px,7vw,58px); font-weight:900; letter-spacing:-3px; line-height:1.04; }
-    .hero p { max-width:680px; margin:18px auto 0; color:var(--muted); font-size:17px; line-height:1.7; }
-    .search-wrap { max-width:760px; margin:18px auto 0; padding:0 24px; }
-    .tool-search { position:relative; }
-    .tool-search input { width:100%; height:54px; padding:0 50px 0 18px; border:1px solid #332b3c; border-radius:13px; outline:none; background:#111118; color:#fff; font-size:14px; font-weight:600; }
-    .tool-search input:focus { border-color:#a16207; }
-    .tool-search input::placeholder { color:#777080; }
-    .search-icon { position:absolute; right:18px; top:50%; transform:translateY(-50%); color:#a78bb7; pointer-events:none; font-size:18px; }
-    .stats { max-width:760px; margin:16px auto 0; padding:0 24px; display:flex; justify-content:center; flex-wrap:wrap; gap:8px; }
-    .stat { display:flex; align-items:center; gap:7px; padding:8px 12px; border:1px solid var(--line); border-radius:999px; background:#111118; color:#a39aa9; font-size:11px; font-weight:800; }
-    .stat b { color:#eee; }
-    .section { max-width:1100px; margin:42px auto 0; padding:0 24px; }
-    .section-head { display:flex; justify-content:space-between; align-items:end; gap:16px; margin-bottom:15px; }
-    .section-title { margin:0; font-size:19px; font-weight:900; letter-spacing:-.5px; }
-    .section-sub { margin-top:4px; color:#877d8d; font-size:11px; }
-    .featured { display:flex; justify-content:space-between; align-items:center; gap:22px; padding:21px; border:1px solid var(--line); border-radius:17px; background:var(--panel); transition:transform .15s,border-color .15s; }
-    .featured:hover { transform:translateY(-2px); border-color:#80551c; }
-    .featured-main { display:flex; align-items:center; gap:16px; min-width:0; }
-    .featured-icon,.card-icon { display:grid; place-items:center; flex:0 0 auto; border:1px solid #403044; background:#1a1520; }
-    .featured-icon { width:55px; height:55px; border-radius:14px; font-size:26px; }
-    .featured h3 { margin:0; font-size:17px; font-weight:900; }
-    .featured p { margin:4px 0 0; color:#8b8292; font-size:12px; line-height:1.6; }
-    .open-btn { flex:0 0 auto; padding:10px 14px; border-radius:10px; background:var(--orange); color:#111; font-size:11px; font-weight:900; }
-    .categories { display:flex; flex-wrap:wrap; gap:8px; }
-    .category { cursor:pointer; padding:9px 13px; border:1px solid #332b3c; border-radius:999px; background:#111118; color:#a39aa9; font-size:11px; font-weight:800; }
-    .category:hover,.category.active { border-color:#8b5e22; background:#211a17; color:#fff; }
-    .grid { max-width:1100px; margin:0 auto; padding:0 24px; display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:14px; }
-    .card { display:flex; min-width:0; min-height:205px; flex-direction:column; padding:20px; border:1px solid var(--line); border-radius:17px; background:var(--panel); overflow:hidden; transition:transform .15s,border-color .15s; }
-    .card:hover { transform:translateY(-3px); border-color:#66441e; background:#13121a; }
-    .card-icon { width:43px; height:43px; margin-bottom:16px; border-radius:12px; font-size:21px; }
-    .card h3 { margin:0 0 7px; font-size:15px; font-weight:800; letter-spacing:-.2px; }
-    .card p { flex:1; margin:0; color:#8b8292; font-size:12px; line-height:1.6; overflow-wrap:anywhere; }
-    .card-bottom { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:16px; }
-    .tag { display:inline-block; padding:5px 8px; border:1px solid #352b3b; border-radius:999px; background:#19151f; color:#b0a4b8; font-size:9px; font-weight:900; }
-    .tag.hot { border-color:#5a3a1b; background:#24190f; color:#f7b23c; }
-    .card-arrow { color:#9b8da2; font-size:17px; }
-    .empty-state { display:none; grid-column:1/-1; padding:30px; color:#8b8292; text-align:center; font-size:12px; }
-    .info-grid,.steps { max-width:1100px; margin:0 auto; padding:0 24px; display:grid; grid-template-columns:repeat(3,1fr); gap:13px; }
-    .info-card,.step { padding:20px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
-    .info-icon { margin-bottom:12px; font-size:22px; }
-    .info-card h3,.step h3 { margin:0 0 6px; font-size:14px; font-weight:900; }
-    .info-card p,.step p { margin:0; color:#8b8292; font-size:12px; line-height:1.65; }
-    .step-number { margin-bottom:13px; color:var(--orange); font-size:10px; font-weight:900; letter-spacing:1px; }
-    .seo { max-width:1052px; margin:42px auto 20px; padding:26px 28px; border:1px solid var(--line); border-radius:18px; background:var(--panel); color:#9990a0; font-size:13px; line-height:1.85; }
-    .seo h2 { margin:0 0 10px; color:#fff; font-size:21px; font-weight:900; }
-    .seo h3 { margin:20px 0 7px; color:#e5dce9; font-size:14px; }
-    .seo b { color:#eee; }
-    .seo-list { display:grid; grid-template-columns:repeat(2,1fr); gap:7px 20px; margin-top:8px; }
-    .seo-list span { color:#8b8292; }
-    .ad-box { max-width:1100px; margin:24px auto; padding:0 24px; display:flex; justify-content:center; overflow:hidden; }
-    .ad-inner { width:100%; max-width:728px; min-height:90px; text-align:center; }
-    .ad-note { margin-bottom:5px; color:#62566b; font-size:9px; font-weight:700; letter-spacing:.6px; }
-    #ad-bottom { max-width:100%; overflow:hidden; }
-    #ad-bottom iframe { max-width:100%; }
-    .footer { margin-top:46px; padding:42px 24px 30px; border-top:1px solid var(--line); background:#09090e; color:#716879; text-align:center; font-size:11px; }
-    .footer-links { margin-bottom:25px; color:#a39aa9; line-height:2; }
-    .footer-links a { margin:0 8px; text-decoration:underline; }
-    .special-bottom { max-width:520px; margin:0 auto; padding:17px 21px; display:flex; justify-content:space-between; align-items:center; gap:16px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
-    .special-bottom .item { text-align:left; }
-    .special-bottom .label { color:#756b7d; font-size:9px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; }
-    .special-bottom .value { margin-top:3px; color:#eee; font-size:12px; font-weight:800; }
-    .special-bottom .value span { color:var(--orange); }
-    .special-bottom .divider { width:1px; height:35px; background:#352b3b; }
-    .special-bottom .flag { font-size:23px; }
-    @media(max-width:760px) {
-      .hero { padding-top:48px; }
-      .hero p { font-size:15px; }
-      .featured { align-items:flex-start; flex-direction:column; }
-      .open-btn { width:100%; text-align:center; }
-      .info-grid,.steps { grid-template-columns:1fr; }
-      .seo-list { grid-template-columns:1fr; }
-      .nav-pill { display:none; }
-    }
-    @media(max-width:520px) {
-      .nav { padding:12px 16px; }
-      .logo { font-size:19px; }
-      .nav-link { padding:7px 10px; font-size:10px; }
-      .hero { padding:42px 16px 25px; }
-      h1 { letter-spacing:-2px; }
-      .search-wrap,.stats,.grid,.section,.info-grid,.steps,.ad-box { padding-left:16px; padding-right:16px; }
-      .section { margin-top:34px; }
-      .grid { grid-template-columns:1fr; }
-      .card { min-height:190px; }
-      .seo { margin-left:16px; margin-right:16px; padding:22px 18px; }
-      .special-bottom { padding:16px; gap:10px; }
-      .special-bottom .value { font-size:10.5px; }
-    }
-    @media(max-width:380px) {
-      .special-bottom .flag { display:none; }
-      .special-bottom .value { font-size:10px; }
-    }
-    @media(prefers-reduced-motion:reduce) {
-      html { scroll-behavior:auto; }
-      *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
-    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
   </style>
-
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebSite",
-    "name":"Toolz",
-    "alternateName":"Toolz.run.place",
-    "url":"https://toolz.run.place/"
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"Toolz",
-    "url":"https://toolz.run.place/",
-    "logo":"https://toolz.run.place/android-chrome-512x512.png",
-    "founder":{"@type":"Person","name":"Prabhasha Laknindu"}
-  }
-  </script>
 </head>
 <body>
-  <div class="top">
-    <nav class="nav" aria-label="Main navigation">
-      <a href="/" class="logo" aria-label="Toolz home">toolz<span>.run.place</span></a>
-      <div class="nav-right">
-        <div class="nav-pill">12 FREE TOOLS</div>
-        <a href="#tools" class="nav-link">Explore Tools →</a>
-      </div>
-    </nav>
-  </div>
-
-  <header class="hero">
-    <div class="eyebrow"><span class="dot" aria-hidden="true"></span> FREE ONLINE TOOLKIT</div>
-    <h1>Simple. Fast. <span class="accent">Useful.</span></h1>
-    <p>Free browser tools for everyday tasks, students, creators and professionals, with no signup required.</p>
+  <header class="topbar">
+    <div class="top-inner">
+      <a class="brand" href="/" aria-label="Toolz home"><span class="brand-mark">T</span><span>toolz<b>.run.place</b></span></a>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a href="#tools" class="active">Tools</a>
+        <a href="#categories">Categories</a>
+        <a href="#why-toolz">Why Toolz</a>
+        <a href="#about-toolz">About</a>
+      </nav>
+      <div class="top-spacer"></div>
+      <span class="top-note">12 TOOLS · FREE</span>
+      <a class="top-cta" href="#tools">Explore tools ↗</a>
+    </div>
   </header>
 
-  <div class="search-wrap">
-    <div class="tool-search">
-      <input type="search" id="toolSearch" placeholder="Search tools..." autocomplete="off" aria-label="Search tools">
-      <span class="search-icon" aria-hidden="true">⌕</span>
-    </div>
-  </div>
-
-  <div class="stats" aria-label="Toolz features">
-    <div class="stat">✓ <b>Free</b></div>
-    <div class="stat">⚡ <b>Fast</b></div>
-    <div class="stat">🔒 <b>Privacy-focused</b></div>
-    <div class="stat">✓ <b>No signup</b></div>
-  </div>
-
   <main>
-    <section class="section" aria-labelledby="featured-title">
-      <div class="section-head">
-        <div>
-          <h2 class="section-title" id="featured-title">✨ Featured Tool</h2>
-          <div class="section-sub">A privacy-focused utility from Toolz</div>
-        </div>
-      </div>
-      <a href="/image-privacy-scanner-pro.html" class="featured">
-        <div class="featured-main">
-          <div class="featured-icon" aria-hidden="true">🔐</div>
-          <div>
-            <h3>Image Privacy Scanner</h3>
-            <p>Inspect supported EXIF, GPS, camera and other image metadata, then clean supported metadata locally.</p>
+    <section class="hero page">
+      <div class="eyebrow"><i></i> THE EVERYDAY ONLINE TOOLKIT</div>
+      <h1>One place for your<br><span>everyday digital tasks.</span></h1>
+      <p class="hero-copy">Useful online tools, thoughtfully organized. Work with PDFs, images, text, media and more, all from one simple destination.</p>
+      <label class="hero-search" for="toolSearch">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="toolSearch" type="search" placeholder="What do you need to do? Try “compress image” or “PDF”..." autocomplete="off">
+        <span class="search-hint">SEARCH TOOLS</span>
+      </label>
+      <div class="quick-links"><strong>Popular:</strong><a href="/pdf-merger.html">Merge PDF</a><a href="/imagecom.html">Compress image</a><a href="/qrcode.html">Create QR code</a><a href="/ocr.html">Image to text</a></div>
+    </section>
+
+    <div class="page content-layout">
+      <aside class="sidebar" id="categories" aria-label="Tool categories">
+        <div class="side-label">Browse directory</div>
+        <button class="side-link active" type="button" data-category="all"><span class="ico">▦</span> All tools <span class="side-count">12</span></button>
+        <button class="side-link" type="button" data-category="pdf"><span class="ico">📄</span> PDF tools <span class="side-count">1</span></button>
+        <button class="side-link" type="button" data-category="images"><span class="ico">▧</span> Image tools <span class="side-count">3</span></button>
+        <button class="side-link" type="button" data-category="media"><span class="ico">▶</span> Media tools <span class="side-count">3</span></button>
+        <button class="side-link" type="button" data-category="utilities"><span class="ico">⚙</span> Utilities <span class="side-count">7</span></button>
+        <button class="side-link" type="button" data-category="privacy"><span class="ico">◇</span> Privacy &amp; security <span class="side-count">3</span></button>
+        <div class="side-divider"></div>
+        <div class="side-promo"><strong>Built for everyday use</strong><p>Quick access to practical tools, without creating a Toolz account.</p><a href="#about-toolz">Discover Toolz →</a></div>
+      </aside>
+
+      <div class="main-column">
+        <section aria-labelledby="popular-title">
+          <div class="section-head">
+            <div><div class="section-kicker">Quick access</div><h2 class="section-title" id="popular-title">Popular tools</h2><div class="section-sub">Jump into a frequently used utility</div></div>
+            <a class="view-all" href="#tools">View directory ↓</a>
           </div>
-        </div>
-        <span class="open-btn">Open Tool →</span>
-      </a>
-    </section>
+          <div class="popular-grid">
+            <a class="popular-card" href="/pdf-merger.html"><span class="popular-icon">📄</span><span><strong>PDF Merger Pro</strong><small>Combine PDF documents</small></span></a>
+            <a class="popular-card" href="/imagecom.html"><span class="popular-icon">🖼️</span><span><strong>Image Compressor</strong><small>Reduce image file size</small></span></a>
+            <a class="popular-card" href="/qrcode.html"><span class="popular-icon">▦</span><span><strong>QR Code Generator</strong><small>Create QR codes</small></span></a>
+          </div>
+        </section>
 
-    <section class="section" aria-labelledby="categories-title">
-      <div class="section-head">
-        <div>
-          <h2 class="section-title" id="categories-title">Categories</h2>
-          <div class="section-sub">Find the type of tool you need</div>
-        </div>
-      </div>
-      <div class="categories" id="categories" aria-label="Filter tools by category">
-        <button type="button" class="category active" data-category="all" aria-pressed="true">All</button>
-        <button type="button" class="category" data-category="privacy" aria-pressed="false">Privacy</button>
-        <button type="button" class="category" data-category="images" aria-pressed="false">Images</button>
-        <button type="button" class="category" data-category="media" aria-pressed="false">Media</button>
-        <button type="button" class="category" data-category="utilities" aria-pressed="false">Utilities</button>
-        <button type="button" class="category" data-category="pdf" aria-pressed="false">PDF Tools</button>
-      </div>
-    </section>
+        <section class="directory" id="tools" aria-labelledby="tools-title">
+          <div class="directory-toolbar">
+            <div class="section-head"><div><div class="section-kicker">Explore the collection</div><h2 class="section-title" id="tools-title">All tools</h2><div class="section-sub">Choose a tool to get started</div></div></div>
+            <span class="count" id="resultCount" aria-live="polite">12 tools</span>
+          </div>
 
-    <section class="section" id="tools" aria-labelledby="tools-title">
-      <div class="section-head">
-        <div>
-          <h2 class="section-title" id="tools-title">All Tools</h2>
-          <div class="section-sub">Choose a tool and get started</div>
-        </div>
-      </div>
-    </section>
+          <div class="tool-grid" id="toolsGrid">
+            <a href="/pdf-merger.html" class="tool-card" data-category="pdf utilities" data-search="pdf merge combine divider watermark header footer documents">
+              <div class="tool-card-top"><span class="tool-icon">📄</span><span class="tool-badge">New</span></div><h3>PDF Merger Pro</h3><p>Merge PDF files with divider pages, watermark, header and footer options. Features depend on browser support.</p><div class="tool-card-bottom"><span class="tool-category">PDF · Documents</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/nic-checker.html" class="tool-card" data-category="privacy utilities" data-search="global id checker nic identity number format validation">
+              <div class="tool-card-top"><span class="tool-icon">🪪</span><span class="tool-badge">Global</span></div><h3>Global ID Checker</h3><p>Check supported ID formats and decode only details that are actually encoded in the ID.</p><div class="tool-card-bottom"><span class="tool-category">Utilities · Privacy</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/country-analytics.html" class="tool-card" data-category="utilities" data-search="country analytics travel planner countries information">
+              <div class="tool-card-top"><span class="tool-icon">🗺️</span></div><h3>Country Analytics &amp; Travel Planners</h3><p>Explore country information and useful travel-planning details without creating an account.</p><div class="tool-card-bottom"><span class="tool-category">Utilities · Travel</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/imagecom.html" class="tool-card" data-category="images" data-search="image compressor jpg png webp reduce file size photo">
+              <div class="tool-card-top"><span class="tool-icon">🖼️</span><span class="tool-badge">Popular</span></div><h3>Image Compressor</h3><p>Compress JPG, PNG and WEBP images directly in your browser with a simple workflow.</p><div class="tool-card-bottom"><span class="tool-category">Images · Optimization</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/ocr.html" class="tool-card" data-category="images utilities" data-search="image to text OCR extract Sinhala English recognize text">
+              <div class="tool-card-top"><span class="tool-icon">🔍</span><span class="tool-badge">Sinhala + English</span></div><h3>Image to Text (OCR)</h3><p>Extract text from supported images with Sinhala and English recognition options.</p><div class="tool-card-bottom"><span class="tool-category">Images · Text</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/mp4mp3.html" class="tool-card" data-category="media" data-search="mp4 to mp3 converter video audio extract sound">
+              <div class="tool-card-top"><span class="tool-icon">🎬</span></div><h3>MP4 to MP3 Converter</h3><p>Convert supported MP4 video files to MP3 audio with a straightforward workflow.</p><div class="tool-card-bottom"><span class="tool-category">Media · Converter</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/global-tv.html" class="tool-card" data-category="media" data-search="global tv live television channels stream">
+              <div class="tool-card-top"><span class="tool-icon">📺</span><span class="tool-badge">Live</span></div><h3>Global TV</h3><p>Explore publicly listed live TV channels from around the world. Availability may vary by region.</p><div class="tool-card-bottom"><span class="tool-category">Media · Television</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/ip-checker.html" class="tool-card" data-category="utilities privacy" data-search="ip address checker public ip network information">
+              <div class="tool-card-top"><span class="tool-icon">🌐</span></div><h3>IP Address Checker</h3><p>Check your public IP address and view useful network information.</p><div class="tool-card-bottom"><span class="tool-category">Utilities · Network</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/qrcode.html" class="tool-card" data-category="utilities" data-search="qr code generator link text wifi">
+              <div class="tool-card-top"><span class="tool-icon">📱</span><span class="tool-badge">Popular</span></div><h3>QR Code Generator</h3><p>Create QR codes for links, text and Wi-Fi details without an account.</p><div class="tool-card-bottom"><span class="tool-category">Utilities · Generator</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/youtube-download.html" class="tool-card" data-category="media" data-search="youtube downloader video download formats media">
+              <div class="tool-card-top"><span class="tool-icon">▶️</span></div><h3>YouTube Downloader</h3><p>Open the Toolz video utility for content and formats that are supported and permitted.</p><div class="tool-card-bottom"><span class="tool-category">Media · Video</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/url-encoder-decoder.html" class="tool-card" data-category="utilities" data-search="url encoder decoder encode decode query parameters special characters">
+              <div class="tool-card-top"><span class="tool-icon">🔗</span></div><h3>URL Encoder &amp; Decoder</h3><p>Encode and decode URLs, query parameters and special characters.</p><div class="tool-card-bottom"><span class="tool-category">Utilities · Developer</span><span class="tool-open">↗</span></div>
+            </a>
+            <a href="/image-privacy-scanner-pro.html" class="tool-card" data-category="privacy images" data-search="image privacy scanner exif gps metadata camera remove clean">
+              <div class="tool-card-top"><span class="tool-icon">🔐</span><span class="tool-badge">Privacy</span></div><h3>Image Privacy Scanner</h3><p>Inspect supported EXIF, GPS, camera and other image metadata and remove supported private metadata locally.</p><div class="tool-card-bottom"><span class="tool-category">Privacy · Images</span><span class="tool-open">↗</span></div>
+            </a>
+            <div class="empty-state" id="emptyState"><strong>No matching tools</strong>Try another search or choose a different category.</div>
+          </div>
+        </section>
 
-    <div class="grid" id="toolsGrid" aria-label="Available online tools">
-      <a href="/pdf-merger.html" class="card" data-category="utilities pdf">
-        <div class="card-icon" aria-hidden="true">📄</div><h3>PDF Merger Pro</h3>
-        <p>Merge PDFs with divider pages, watermark, header and footer options. Files are processed in your browser where supported.</p>
-        <div class="card-bottom"><span class="tag hot">NEW • PRO FEATURES</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/nic-checker.html" class="card" data-category="privacy utilities">
-        <div class="card-icon" aria-hidden="true">🪪</div><h3>Global ID Checker</h3>
-        <p>Check supported ID formats and decode only details that are actually encoded in the ID.</p>
-        <div class="card-bottom"><span class="tag hot">MOST POPULAR • GLOBAL</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/country-analytics.html" class="card" data-category="utilities">
-        <div class="card-icon" aria-hidden="true">🗺️</div><h3>Country Analytics &amp; Travel Planners</h3>
-        <p>Explore country information and useful travel-planning details without creating an account.</p>
-        <div class="card-bottom"><span class="tag">FREE</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/imagecom.html" class="card" data-category="images">
-        <div class="card-icon" aria-hidden="true">🖼️</div><h3>Image Compressor</h3>
-        <p>Compress JPG, PNG and WEBP images directly in your browser with a simple workflow.</p>
-        <div class="card-bottom"><span class="tag">FREE • BROWSER TOOL</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/ocr.html" class="card" data-category="images utilities">
-        <div class="card-icon" aria-hidden="true">🔍</div><h3>Image to Text (OCR)</h3>
-        <p>Extract text from supported images with Sinhala and English recognition options.</p>
-        <div class="card-bottom"><span class="tag hot">SINHALA • ENGLISH</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/mp4mp3.html" class="card" data-category="media">
-        <div class="card-icon" aria-hidden="true">🎬</div><h3>MP4 to MP3 Converter</h3>
-        <p>Convert supported MP4 video files to MP3 audio with a simple browser-based workflow.</p>
-        <div class="card-bottom"><span class="tag">FREE</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/global-tv.html" class="card" data-category="media">
-        <div class="card-icon" aria-hidden="true">📺</div><h3>Global TV</h3>
-        <p>Explore free live TV channels from around the world. Channel and stream availability may vary by region.</p>
-        <div class="card-bottom"><span class="tag hot">FREE • LIVE TV</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/ip-checker.html" class="card" data-category="utilities privacy">
-        <div class="card-icon" aria-hidden="true">🌐</div><h3>IP Address Checker</h3>
-        <p>Check your public IP address and view useful network information.</p>
-        <div class="card-bottom"><span class="tag">FREE • NETWORK</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/qrcode.html" class="card" data-category="utilities">
-        <div class="card-icon" aria-hidden="true">📱</div><h3>QR Code Generator</h3>
-        <p>Create QR codes for links, text and Wi-Fi details without an account.</p>
-        <div class="card-bottom"><span class="tag">FREE</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/youtube-download.html" class="card" data-category="media">
-        <div class="card-icon" aria-hidden="true">🎬</div><h3>YouTube Downloader</h3>
-        <p>Open the Toolz video utility for supported content and available formats.</p>
-        <div class="card-bottom"><span class="tag hot">NEW</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/url-encoder-decoder.html" class="card" data-category="utilities">
-        <div class="card-icon" aria-hidden="true">🔗</div><h3>URL Encoder &amp; Decoder</h3>
-        <p>Encode and decode URLs, query parameters and special characters.</p>
-        <div class="card-bottom"><span class="tag">FREE • BROWSER TOOL</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <a href="/image-privacy-scanner-pro.html" class="card" data-category="privacy images">
-        <div class="card-icon" aria-hidden="true">🔐</div><h3>Image Privacy Scanner</h3>
-        <p>Inspect supported EXIF, GPS, camera and other image metadata and remove supported private metadata locally.</p>
-        <div class="card-bottom"><span class="tag hot">PRIVACY TOOL</span><span class="card-arrow" aria-hidden="true">→</span></div>
-      </a>
-      <div class="empty-state" id="emptyState" role="status" aria-live="polite">No matching tools found.</div>
+        <a href="/image-privacy-scanner-pro.html" class="feature-banner">
+          <span class="feature-left"><span class="feature-symbol">🔐</span><span><h3>Featured: Image Privacy Scanner</h3><p>Review supported image metadata and remove supported private metadata locally.</p></span></span>
+          <span class="feature-button">Explore tool ↗</span>
+        </a>
+      </div>
     </div>
 
-    <section class="section" aria-labelledby="why-title">
-      <div class="section-head">
-        <div><h2 class="section-title" id="why-title">Why Toolz?</h2><div class="section-sub">Built for quick everyday tasks</div></div>
+    <section class="page below-sections" id="why-toolz">
+      <div class="section-head"><div><div class="section-kicker">The Toolz approach</div><h2 class="section-title">A better way to get small tasks done</h2><div class="section-sub">Simple utilities, organized around what you need to do</div></div></div>
+      <div class="benefit-grid">
+        <article class="benefit"><div class="benefit-icon">🔒</div><h3>Privacy-aware by design</h3><p>Some utilities process files locally in your browser. Check each tool page for its exact processing method before using sensitive files.</p></article>
+        <article class="benefit"><div class="benefit-icon">⚡</div><h3>Clear and focused</h3><p>Each tool is designed around a specific task, helping you find the right utility without a complicated workflow.</p></article>
+        <article class="benefit"><div class="benefit-icon">✓</div><h3>No Toolz account</h3><p>Use the public tools without creating a Toolz account. Individual third-party services may have separate requirements.</p></article>
       </div>
     </section>
-    <div class="info-grid">
-      <article class="info-card"><div class="info-icon" aria-hidden="true">🔒</div><h3>Privacy-focused</h3><p>Some utilities process files locally in your browser, helping reduce unnecessary uploads. Check each tool for its exact processing method.</p></article>
-      <article class="info-card"><div class="info-icon" aria-hidden="true">⚡</div><h3>Simple &amp; Fast</h3><p>Clean interfaces designed to help you complete common tasks without unnecessary steps.</p></article>
-      <article class="info-card"><div class="info-icon" aria-hidden="true">✓</div><h3>No Signup</h3><p>Use the public tools without creating a Toolz account.</p></article>
-    </div>
 
-    <section class="section" aria-labelledby="steps-title">
-      <div class="section-head">
-        <div><h2 class="section-title" id="steps-title">How It Works</h2><div class="section-sub">Three simple steps</div></div>
-      </div>
-    </section>
-    <div class="steps">
-      <article class="step"><div class="step-number">01 — CHOOSE</div><h3>Select a tool</h3><p>Find the utility you need from the categories or search box.</p></article>
-      <article class="step"><div class="step-number">02 — USE</div><h3>Enter your data</h3><p>Upload a file or enter the information required by the selected tool.</p></article>
-      <article class="step"><div class="step-number">03 — GET RESULT</div><h3>Finish your task</h3><p>Review the result and use the available download or copy options.</p></article>
-    </div>
-
-    <section class="seo" aria-labelledby="about-toolz">
-      <h2 id="about-toolz">About Toolz — Free Online Tools for Everyone</h2>
-      <p><b>Toolz.run.place</b> is a collection of online utilities for students, professionals, creators and everyday users. The site provides tools for PDFs, IDs, images, OCR, QR codes, media conversion, URLs and image privacy.</p>
-      <h3>Popular Tool Categories</h3>
-      <div class="seo-list">
-        <span>✓ PDF Merger Pro</span><span>✓ Global ID Checker</span>
-        <span>✓ Image Compressor</span><span>✓ Image Privacy Scanner</span>
-        <span>✓ Image to Text OCR</span><span>✓ MP4 to MP3 Converter</span>
-        <span>✓ Global TV</span><span>✓ QR Code Generator</span>
-        <span>✓ YouTube Downloader</span><span>✓ URL Encoder &amp; Decoder</span>
-      </div>
-      <h3>Privacy &amp; Browser Processing</h3>
-      <p>Some Toolz utilities are designed to process files directly in the browser. Where a tool performs local processing, files can remain on your device. Check the individual tool page for its specific processing behavior.</p>
+    <section class="about page" id="about-toolz">
+      <h2>About Toolz — Free Online Tools &amp; Utilities</h2>
+      <p><strong>Toolz.run.place</strong> is a collection of online utilities for students, professionals, creators and everyday users. Explore tools for PDFs, ID formats, images, OCR, QR codes, media, URLs, network information and image privacy.</p>
+      <h3>Tools for everyday digital tasks</h3>
+      <div class="about-list"><span>✓ PDF Merger Pro</span><span>✓ Global ID Checker</span><span>✓ Image Compressor</span><span>✓ Image Privacy Scanner</span><span>✓ Image to Text OCR</span><span>✓ MP4 to MP3 Converter</span><span>✓ Global TV</span><span>✓ QR Code Generator</span><span>✓ YouTube Downloader</span><span>✓ URL Encoder &amp; Decoder</span></div>
+      <h3>Privacy and processing</h3>
+      <p>Some Toolz utilities are designed to process files directly in the browser. Where local processing is used, files can remain on your device. Processing methods vary by tool, so review the individual tool page for details.</p>
     </section>
 
-    <!-- Adsterra ad placement. Keep your Adsterra publisher code unchanged. -->
-    <div class="ad-box" data-nosnippet>
-      <div class="ad-inner">
-        <div class="ad-note">ADVERTISEMENT</div>
-        <div id="ad-bottom">
-          <script>
-            var atOptions = {
-              'key': 'fa40223cbaa35a71666874d8c4f6de9d',
-              'format': 'iframe',
-              'height': 90,
-              'width': 728,
-              'params': {}
-            };
-          </script>
-          <script async src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script>
-        </div>
-      </div>
+    <!-- Adsterra placement. Keep the existing publisher key unchanged. -->
+    <div class="ad-wrap page" data-nosnippet>
+      <div class="ad-inner"><div class="ad-label">ADVERTISEMENT</div><div id="ad-bottom">
+        <script>
+          var atOptions={'key':'fa40223cbaa35a71666874d8c4f6de9d','format':'iframe','height':90,'width':728,'params':{}};
+        </script>
+        <script async src="https://www.highrevenueformat.com/fa40223cbaa35a71666874d8c4f6de9d/invoke.js"></script>
+      </div></div>
     </div>
   </main>
 
   <footer class="footer">
-    <div class="footer-links">
-      © 2026 toolz.run.place | Free Online Tools<br>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/contacts.html">Contact</a>
-      <a href="/about-developer.html">About the Developer</a>
-    </div>
-    <div class="special-bottom">
-      <div class="item"><div class="label">Made In</div><div class="value">🇱🇰 Southern Province, <span>Sri Lanka</span></div></div>
-      <div class="divider" aria-hidden="true"></div>
-      <div class="item"><div class="label">Created By</div><div class="value"><span>Prabhasha Laknindu</span></div></div>
-      <div class="flag" aria-hidden="true">🌴</div>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">T</span><span>toolz<b>.run.place</b></span></a><p>A practical collection of online tools for everyday digital tasks. Made in Sri Lanka.</p></div>
+        <div class="footer-col"><h4>Explore</h4><a href="#tools">All tools</a><a href="#categories">Categories</a><a href="/global-tv.html">Global TV</a></div>
+        <div class="footer-col"><h4>Toolz</h4><a href="#about-toolz">About Toolz</a><a href="/about-developer.html">About the Developer</a><a href="/contacts.html">Contact</a></div>
+        <div class="footer-col"><h4>Information</h4><a href="/privacy.html">Privacy Policy</a><a href="/contacts.html">Support &amp; feedback</a></div>
+      </div>
+      <div class="footer-bottom"><span>© <span id="year">2026</span> <strong>toolz.run.place</strong>. All rights reserved.</span><span>Created by <strong>Prabhasha Laknindu</strong> · 🇱🇰 Sri Lanka</span></div>
     </div>
   </footer>
+
+  <a class="coffee" href="https://buymeacoffee.com/lakninduky" target="_blank" rel="noopener noreferrer">☕ Support Toolz</a>
 
   <script>
     (() => {
       "use strict";
+      const input=document.getElementById("toolSearch");
+      const cards=[...document.querySelectorAll(".tool-card")];
+      const empty=document.getElementById("emptyState");
+      const filters=[...document.querySelectorAll(".side-link[data-category]")];
+      const count=document.getElementById("resultCount");
+      let active="all";
 
-      const searchInput = document.getElementById("toolSearch");
-      const cards = Array.from(document.querySelectorAll("#toolsGrid .card"));
-      const emptyState = document.getElementById("emptyState");
-      const categoryButtons = Array.from(document.querySelectorAll(".category"));
-      let activeCategory = "all";
-
-      function filterTools() {
-        const query = searchInput.value.toLocaleLowerCase().trim();
-        let visibleCount = 0;
-
-        cards.forEach((card) => {
-          const searchableText = card.textContent.toLocaleLowerCase();
-          const categories = (card.dataset.category || "").split(/\s+/);
-          const matchesSearch = !query || searchableText.includes(query);
-          const matchesCategory = activeCategory === "all" || categories.includes(activeCategory);
-          const visible = matchesSearch && matchesCategory;
-
-          card.hidden = !visible;
-          if (visible) visibleCount += 1;
+      function applyFilters(){
+        const query=input.value.toLocaleLowerCase().trim();
+        let shown=0;
+        cards.forEach(card=>{
+          const haystack=(card.textContent+" "+(card.dataset.search||"")).toLocaleLowerCase();
+          const categories=(card.dataset.category||"").split(/\s+/);
+          const visible=(!query||haystack.includes(query))&&(active==="all"||categories.includes(active));
+          card.hidden=!visible;
+          if(visible)shown++;
         });
-
-        emptyState.style.display = visibleCount ? "none" : "block";
+        empty.style.display=shown?"none":"block";
+        count.textContent=shown+" "+(shown===1?"tool":"tools");
       }
 
-      searchInput.addEventListener("input", filterTools);
-
-      categoryButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          activeCategory = button.dataset.category || "all";
-
-          categoryButtons.forEach((item) => {
-            const selected = item === button;
-            item.classList.toggle("active", selected);
-            item.setAttribute("aria-pressed", String(selected));
-          });
-
-          filterTools();
-        });
-      });
-
-      filterTools();
-    })();
-  </script>
-
-  <script>
-    // Lightweight external-link helper for the optional Buy Me a Coffee button.
-    (() => {
-      const style = document.createElement("style");
-      style.textContent =
-        "#toolz-bmc{position:fixed;right:16px;bottom:16px;z-index:30;display:flex;align-items:center;gap:8px;padding:12px 18px;border:2px solid #000;border-radius:999px;background:#ffdd00;color:#000;font:900 13px sans-serif;box-shadow:0 4px 12px rgba(0,0,0,.3)}" +
-        "#toolz-bmc:hover{background:#000;color:#ffdd00}";
-      document.head.appendChild(style);
-
-      const button = document.createElement("a");
-      button.id = "toolz-bmc";
-      button.href = "https://buymeacoffee.com/lakninduky";
-      button.target = "_blank";
-      button.rel = "noopener noreferrer";
-      button.textContent = "☕ Buy me a coffee";
-      document.body.appendChild(button);
+      input.addEventListener("input",applyFilters);
+      filters.forEach(button=>button.addEventListener("click",()=>{
+        active=button.dataset.category||"all";
+        filters.forEach(item=>item.classList.toggle("active",item===button));
+        applyFilters();
+      }));
+      document.getElementById("year").textContent=new Date().getFullYear();
+      applyFilters();
     })();
   </script>
 </body>
