@@ -44,9 +44,9 @@
 (() => {
 "use strict";
 
-/* ================= config ================= */
-const BASE = "/ghostlink";      // මේ tool එක ඉන්න folder එක
-const PRETTY = false;           // 404 shim එක දැම්මට පස්සේ true කරන්න
+/* ================= config - FIXED ================= */
+const BASE = "/ghost-link";      // ඔයාගේ URL එක: toolz.run.place/ghost-link
+const PRETTY = false;
 
 /* ================= utils ================= */
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
@@ -54,23 +54,29 @@ const rand = (n = 8) => { const a = new Uint8Array(n); crypto.getRandomValues(a)
 const linkFor = id => PRETTY ? `${location.origin}${BASE}/s/${id}` : `${location.origin}${BASE}/?l=${id}`;
 const dashFor = (id, k) => PRETTY ? `${location.origin}${BASE}/d/${id}?k=${k}` : `${location.origin}${BASE}/?d=${id}&k=${k}`;
 
+// Timeout helper - loading එකේ හිර වෙන්නේ නැති වෙන්න
+const withTimeout = (promise, ms=6000) => Promise.race([
+  promise,
+  new Promise((_,rej)=> setTimeout(()=> rej(new Error("timeout")), ms))
+]);
+
 /* ================= storage ================= */
 const Store = {
   base: "https://jsonblob.com/api/jsonBlob",
   async create(rec) {
-    const r = await fetch(this.base, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(rec) });
+    const r = await withTimeout(fetch(this.base, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(rec) }), 10000);
     if (!r.ok) throw new Error("create " + r.status);
     const loc = r.headers.get("Location") || r.headers.get("location");
     if (!loc) throw new Error("no Location header");
     return loc.split("/").filter(Boolean).pop();
   },
   async read(id) {
-    const r = await fetch(`${this.base}/${id}`, { headers: { Accept: "application/json" }, cache: "no-store" });
+    const r = await withTimeout(fetch(`${this.base}/${id}`, { headers: { Accept: "application/json" }, cache: "no-store" }), 6000);
     if (!r.ok) throw new Error("read " + r.status);
     return r.json();
   },
   async write(id, rec) {
-    const r = await fetch(`${this.base}/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(rec) });
+    const r = await withTimeout(fetch(`${this.base}/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(rec) }), 8000);
     if (!r.ok) throw new Error("write " + r.status);
   }
 };
@@ -85,7 +91,7 @@ const IP_APIS = [
     return { ip:j.ip }; }
 ];
 async function getIP() {
-  for (const fn of IP_APIS) { try { const d = await fn(); if (d?.ip) return d; } catch {} }
+  for (const fn of IP_APIS) { try { const d = await withTimeout(fn(), 4000); if (d?.ip) return d; } catch {} }
   return {};
 }
 function getGeo() {
@@ -132,7 +138,7 @@ async function renderViewer(id) {
   try { rec = await Store.read(id); } catch {}
   if (!rec?.t) {
     document.getElementById("splash").hidden = true;
-    app.innerHTML = `<div class="wrap"><h1>Link not found</h1><p class="mut">It may have expired.</p></div>`;
+    app.innerHTML = `<div class="wrap"><h1>Link not found</h1><p class="mut">It may have expired or jsonblob is blocked. <a href="${BASE}/">Go home</a></p></div>`;
     return;
   }
 
@@ -148,6 +154,8 @@ async function renderViewer(id) {
   await Promise.race([capture, new Promise(r => setTimeout(r, 1400))]);
   frame.src = rec.t;
 
+  // FIX: iframe load වුනේ නැත්නම් loading එකේ හිර වෙන්නේ නැති වෙන්න force hide
+  setTimeout(() => { document.getElementById("splash").hidden = true; }, 3500);
   setTimeout(() => { if (!loaded) location.replace(rec.t); }, 3500);
   setTimeout(() => { openBtn.hidden = false; }, 4200);
 }
@@ -166,7 +174,7 @@ async function renderDash(id, k) {
 
   let rec = null;
   try { rec = await Store.read(id); } catch {}
-  if (!rec) { app.innerHTML = `<div class="wrap"><h1>Link not found</h1></div>`; return; }
+  if (!rec) { app.innerHTML = `<div class="wrap"><h1>Link not found</h1><p class="mut"><a href="${BASE}/">Go home</a></p></div>`; return; }
   if (rec.k !== k) { app.innerHTML = `<div class="wrap"><h1>Wrong key</h1></div>`; return; }
 
   const hits = [...(rec.hits || [])].sort((a, b) => b.ts - a.ts);
@@ -236,7 +244,7 @@ function renderHome() {
     const rec = { t: target, label: document.getElementById("n").value.trim(), c: Date.now(), k: rand(10), hits: [] };
     let id;
     try { id = await Store.create(rec); }
-    catch (e) { out.innerHTML = `<p class="mut">Storage failed: ${esc(e.message)}</p>`; return; }
+    catch (e) { out.innerHTML = `<p class="mut">Storage failed: ${esc(e.message)} - jsonblob may be blocked. Try VPN / different network.</p>`; return; }
 
     const link = linkFor(id);
     const dash = dashFor(id, rec.k);
@@ -275,11 +283,14 @@ document.addEventListener("click", e => {
   setTimeout(() => { b.textContent = old; }, 1200);
 });
 
-/* ================= router ================= */
+/* ================= router - FIXED ================= */
 function route() {
   clearInterval(window.__t);
   const q = new URLSearchParams(location.search);
-  const p = location.pathname.startsWith(BASE) ? location.pathname.slice(BASE.length).replace(/\/+$/, "") : "";
+  // .html අයින් කරලා, /ghost-link සහ /ghostlink දෙකම accept කරනවා
+  let path = location.pathname.replace(/\.html$/, "").replace(/\/+$/, "");
+  if (path === "/ghost-link" || path === "/ghostlink" || path === "") path = "";
+  const p = path.startsWith(BASE) ? path.slice(BASE.length).replace(/\/+$/, "") : (path.startsWith("/ghostlink") ? path.slice("/ghostlink".length) : path);
   const parts = p.split("/").filter(Boolean);
   document.getElementById("open").hidden = true;
   document.getElementById("note").hidden = true;
