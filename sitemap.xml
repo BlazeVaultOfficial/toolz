@@ -1,118 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
-    <loc>https://www.toolz.run.place/</loc>
-    <lastmod>2026-09-21</lastmod>
+    <loc>https://toolz.run.place/</loc>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
   <url>
-    <loc>https://www.toolz.run.place/nic-checker.html</loc>
+    <loc>https://toolz.run.place/nic-checker.html</loc>
     <lastmod>2026-09-16</lastmod>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.toolz.run.place/qrcode.html</loc>
+    <loc>https://toolz.run.place/qrcode.html</loc>
     <lastmod>2026-09-16</lastmod>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.toolz.run.place/imagecom.html</loc>
+    <loc>https://toolz.run.place/imagecom.html</loc>
     <lastmod>2026-09-16</lastmod>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.toolz.run.place/mp4mp3.html</loc>
+    <loc>https://toolz.run.place/mp4mp3.html</loc>
     <lastmod>2026-09-16</lastmod>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.toolz.run.place/youtube-download.html</loc>
+    <loc>https://toolz.run.place/youtube-download.html</loc>
     <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://www.toolz.run.place/url-encoder-decoder.html</loc>
+    <loc>https://toolz.run.place/url-encoder-decoder.html</loc>
     <lastmod>2026-09-21</lastmod>
     <priority>0.8</priority>
   </url>
-
   <url>
-  <loc>https://toolz.run.place/privacy.html</loc>
-  <lastmod>2026-09-21</lastmod>
-  <priority>0.5</priority>
-</url>
-
+    <loc>https://toolz.run.place/privacy.html</loc>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.5</priority>
+  </url>
   <url>
-  <loc>https://toolz.run.place/contacts.html</loc>
-  <lastmod>2026-09-21</lastmod>
-  <priority>0.5</priority>
-</url>
-
+    <loc>https://toolz.run.place/contacts.html</loc>
+    <lastmod>2026-09-21</lastmod>
+    <priority>0.5</priority>
+  </url>
   <url>
-  <loc>https://toolz.run.place/ip-checker.html</loc>
-  <lastmod>2026-09-30</lastmod>
-  <priority>0.5</priority>
-</url>
-
+    <loc>https://toolz.run.place/ip-checker.html</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
   <url>
-  <loc>https://toolz.run.place/ocr.html</loc>
-  <lastmod>2026-09-30</lastmod>
-  <priority>0.5</priority>
-</url>
-  
+    <loc>https://toolz.run.place/ocr.html</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
   <url>
-  <loc>https://toolz.run.place/image-privacy-scanner-pro.html</loc>
-  <lastmod>2026-09-30</lastmod>
-  <priority>0.5</priority>
-</url>
-
-
+    <loc>https://toolz.run.place/image-privacy-scanner-pro.html</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.5</priority>
+  </url>
   <url>
-  <loc>https://toolz.run.place/url-encoder-decoder.html</loc>
-  <lastmod>2026-09-30</lastmod>
-  <priority>0.5</priority>
-</url>
-
-
+    <loc>https://toolz.run.place/country-analytics.html</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
   <url>
-  <loc>https://toolz.run.place/country-analytics.html</loc>
-  <lastmod>2026-09-30</lastmod>
-  <priority>0.5</priority>
-</url>
-
-
-  
-  <url>
-    <loc>https://www.toolz.run.place/global-tv.html</loc>
+    <loc>https://toolz.run.place/global-tv.html</loc>
     <lastmod>2026-10-14</lastmod>
     <priority>0.8</priority>
   </url>
-
   <url>
     <loc>https://toolz.run.place/pdf-merger.html</loc>
     <lastmod>2026-11-03</lastmod>
     <priority>0.8</priority>
   </url>
-
-  <url>
-    <loc>https://toolz.run.place/global-tv.html?channel=HiruTV.lk%40SD&country=lk</loc>
-    <lastmod>2026-10-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-
   <url>
     <loc>https://toolz.run.place/global-radio/</loc>
     <lastmod>2026-11-18</lastmod>
     <priority>0.8</priority>
   </url>
-  
-
 </urlset>
